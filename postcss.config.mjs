@@ -10,7 +10,7 @@ const config = {
         'mantine-breakpoint-xl': '88em',
       },
     },
-    '@tailwindcss/postcss': {}, // Tailwind plugin as object, not just string
+    '@tailwindcss/postcss': {},
   },
 };
 
