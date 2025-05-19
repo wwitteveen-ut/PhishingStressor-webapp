@@ -3,6 +3,7 @@
 import { Button, Container, PasswordInput, TextInput, Title } from '@mantine/core';
 import Link from "next/link";
 import { ArrowRight, Key, Mail } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 interface ILoginFormProps {
     variant?: "participant" | "researcher";
@@ -11,6 +12,13 @@ interface ILoginFormProps {
 export default function LoginForm({
     variant = "participant",
 }: ILoginFormProps) {
+    const router = useRouter();
+    
+    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+        router.push("/mail");
+    }
+        
+
     return (
         <Container size="xs" className="w-100 space-y-8">
             <div>
@@ -22,7 +30,7 @@ export default function LoginForm({
                 </Title>
             </div>
 
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleLogin}>
                 <div className="space-y-4">
                     <TextInput
                         leftSection={<Mail size={16} />}

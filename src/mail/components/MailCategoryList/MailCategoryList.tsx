@@ -1,0 +1,71 @@
+import {
+  InboxIcon,
+  SendIcon,
+  ArchiveIcon,
+  TrashIcon,
+  FileIcon,
+  StarIcon,
+  SettingsIcon,
+  PlusCircleIcon,
+} from 'lucide-react'
+
+export default function MailCategoryList() {
+      const menuItems = [
+    {
+      id: 'inbox',
+      label: 'Inbox',
+      icon: InboxIcon,
+      count: 12,
+    },
+    {
+      id: 'starred',
+      label: 'Starred',
+      icon: StarIcon,
+    },
+    {
+      id: 'sent',
+      label: 'Sent',
+      icon: SendIcon,
+    },
+    {
+      id: 'drafts',
+      label: 'Drafts',
+      icon: FileIcon,
+      count: 2,
+    },
+    {
+      id: 'archive',
+      label: 'Archive',
+      icon: ArchiveIcon,
+    },
+    {
+      id: 'trash',
+      label: 'Trash',
+      icon: TrashIcon,
+    },
+  ]
+  const activePage: string = 'inbox'; 
+    return (
+        <nav className="mt-6 flex-1 overflow-y-auto">
+        <ul>
+          {menuItems.map((item) => (
+             <li key={item.id}>
+                <button
+                className={`flex items-center w-full px-4 py-2 text-sm ${activePage === item.id ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
+                >
+                <item.icon size={18} className="mr-3" />
+                <span>{item.label}</span>
+                {item.count && (
+                    <span
+                    className={`ml-auto px-2 py-0.5 rounded-full text-xs ${activePage === item.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-600'}`}
+                    >
+                    {item.count}
+                    </span>
+                )}
+                </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    );
+}
