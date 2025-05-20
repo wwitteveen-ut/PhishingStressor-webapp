@@ -13,33 +13,12 @@ export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
   const activePage: string = useEmailClientStore((state) => state.selectedCategory);
 
-      const menuItems = [
+  const menuItems = [
     {
       id: 'inbox',
       label: 'Inbox',
       icon: InboxIcon,
       count: 12,
-    },
-    {
-      id: 'starred',
-      label: 'Starred',
-      icon: StarIcon,
-    },
-    {
-      id: 'sent',
-      label: 'Sent',
-      icon: SendIcon,
-    },
-    {
-      id: 'drafts',
-      label: 'Drafts',
-      icon: FileIcon,
-      count: 2,
-    },
-    {
-      id: 'archive',
-      label: 'Archive',
-      icon: ArchiveIcon,
     },
     {
       id: 'trash',
