@@ -3,7 +3,7 @@ import type { Email } from "@/mail/store/types";
 import EmailListFilters from "../EmailListFilters";
 import EmailListItem from "../EmailListItem";
 
-export default function EmailList({emails = []} : {emails: Email[]}) {
+export default function EmailList({emails = []} : {emails?: Email[]}) {
   const emailList: Email[] = [
     {
       id: 1,

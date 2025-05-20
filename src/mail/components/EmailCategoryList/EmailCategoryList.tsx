@@ -1,3 +1,5 @@
+"use client"
+import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import {
   InboxIcon,
   SendIcon,
@@ -8,6 +10,9 @@ import {
 } from 'lucide-react'
 
 export default function EmailCategoryList() {
+  const selectCategory = useEmailClientStore((state) => state.selectCategory);
+  const activePage: string = useEmailClientStore((state) => state.selectedCategory);
+
       const menuItems = [
     {
       id: 'inbox',
@@ -42,13 +47,14 @@ export default function EmailCategoryList() {
       icon: TrashIcon,
     },
   ]
-  const activePage: string = 'inbox'; 
+
     return (
         <nav className="mt-6 flex-1 overflow-y-auto">
         <ul>
           {menuItems.map((item) => (
              <li key={item.id}>
                 <button
+                onClick={() => selectCategory(item.id)}
                 className={`flex items-center w-full px-4 py-2 text-sm ${activePage === item.id ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
                 >
                 <item.icon size={18} className="mr-3" />
