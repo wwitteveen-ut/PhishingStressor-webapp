@@ -2,11 +2,7 @@
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import {
   InboxIcon,
-  SendIcon,
-  ArchiveIcon,
   TrashIcon,
-  FileIcon,
-  StarIcon,
 } from 'lucide-react'
 
 export default function EmailCategoryList() {
