@@ -1,5 +1,7 @@
 export default function Page() {
+    //Return MailView component
+    
     return (
-        <p>Select an email to view</p>
+        <></>
     );
 }

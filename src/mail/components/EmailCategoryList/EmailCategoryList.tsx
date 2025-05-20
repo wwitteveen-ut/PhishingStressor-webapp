@@ -5,11 +5,9 @@ import {
   TrashIcon,
   FileIcon,
   StarIcon,
-  SettingsIcon,
-  PlusCircleIcon,
 } from 'lucide-react'
 
-export default function MailCategoryList() {
+export default function EmailCategoryList() {
       const menuItems = [
     {
       id: 'inbox',

@@ -1,4 +1,4 @@
-import MailCategoryList from '@/mail/components/MailCategoryList/MailCategoryList'
+import MailCategoryList from '@/mail/components/EmailCategoryList/EmailCategoryList'
 import React from 'react'
 
 export function Sidebar() {
