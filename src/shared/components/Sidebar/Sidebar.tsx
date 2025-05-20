@@ -1,7 +1,7 @@
 import MailCategoryList from '@/mail/components/EmailCategoryList/EmailCategoryList'
 import React from 'react'
 
-export function Sidebar() {
+export default function Sidebar() {
 
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
