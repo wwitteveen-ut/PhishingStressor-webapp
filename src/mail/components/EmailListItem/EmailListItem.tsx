@@ -2,6 +2,7 @@ import { Email } from '@/mail/store/types';
 import { PaperclipIcon } from 'lucide-react';
 
 export default function EmailListItem({email}: {email:Email}) {
+  console.log('email', email);
   return (
     <div
       className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100`}
@@ -16,7 +17,7 @@ export default function EmailListItem({email}: {email:Email}) {
             </p>
           </div>
         </div>
-        <div className="text-xs text-gray-500">{email.scheduledFor.toUTCString()}</div>
+        <div className="text-xs text-gray-500">{email.scheduledFor.toString()}</div>
       </div>
       <div className="mt-1">
         <p

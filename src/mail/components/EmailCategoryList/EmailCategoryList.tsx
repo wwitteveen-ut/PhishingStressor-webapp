@@ -24,7 +24,7 @@ export default function EmailCategoryList() {
   ]
 
     return (
-        <nav className="mt-6 flex-1 overflow-y-auto">
+      <nav className="mt-6 flex-1 overflow-y-auto">
         <ul>
           {menuItems.map((item) => (
              <li key={item.id}>
