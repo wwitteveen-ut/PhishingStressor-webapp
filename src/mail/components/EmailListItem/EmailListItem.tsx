@@ -1,12 +1,14 @@
+import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import { Email } from '@/mail/store/types';
-import Link from "next/link";
 
 
 export default function EmailListItem({email}: {email:Email}) {
+  const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
+
   return (
-    <Link href={`/mail/${email.id}`}>
       <div
         className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100`}
+        onClick={() => selectEmailId(email.id)}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center">
@@ -44,6 +46,5 @@ export default function EmailListItem({email}: {email:Email}) {
           </div>
         </div>
       </div>
-    </Link>
   )
 }

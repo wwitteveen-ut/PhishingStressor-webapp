@@ -1,10 +1,13 @@
 import { StateCreator } from 'zustand/vanilla';
 import { EmailClientStore } from './EmailClientStore';
+import { Email } from './types';
 
 export interface UISlice {
   selectedCategory: string;
-  selectedEmail: number | null;
-  selectEmail: (emailId: number) => void;
+  emails: Email[];
+  setEmails: (emails: Email[]) => void;
+  selectedEmail: Email | null;
+  selectEmailId: (emailId: number) => void;
   selectCategory: (category: string) => void;
 }
 
@@ -15,9 +18,12 @@ export const createUISlice: StateCreator<
   UISlice
 > = (set) => ({
   selectedCategory: 'inbox',
+  emails: [],
   selectedEmail: null,
-  selectEmail: (emailId: number) =>
-    set({ selectedEmail: emailId }, undefined, 'ui/selectEmail'),
+  setEmails: (emails: Email[]) => 
+    set({ emails }, undefined, 'ui/setEmails'),
+  selectEmailId: (emailId: number) =>
+    set((state) => ({ selectedEmail: state.emails.find((email) => email.id === emailId) }), undefined, 'ui/selectEmail'),
   selectCategory: (category: string) =>
     set({ selectedCategory: category }, undefined, 'ui/selectCategory'),
 });

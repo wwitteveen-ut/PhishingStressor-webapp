@@ -1,12 +1,15 @@
+"use client";
 import {
   ArrowLeftIcon,
   ArchiveIcon,
   TrashIcon,
   ChevronDownIcon,
 } from 'lucide-react'
-import { Email } from '@/mail/store/types'
+import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 
-export default function EmailView({ email }: {email?: Email}) {
+export default function EmailView() {
+  const email = useEmailClientStore((state) => state.selectedEmail);
+  
   if (!email) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gray-50 text-gray-500">
@@ -14,6 +17,7 @@ export default function EmailView({ email }: {email?: Email}) {
       </div>
     )
   }
+
   return (
     <div className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">

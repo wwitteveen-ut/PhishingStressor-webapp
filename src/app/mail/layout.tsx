@@ -13,9 +13,9 @@ export default async function Layout({ children } : {
         <EmailClientStoreProvider>
           <Sidebar />
           <div className="flex flex-1 overflow-hidden">
-            <EmailList emails={emails}/>
+            <EmailList initialEmails={emails}/>
             {children}
-            </div>
+          </div>
         </EmailClientStoreProvider>
       </div>
     </>
