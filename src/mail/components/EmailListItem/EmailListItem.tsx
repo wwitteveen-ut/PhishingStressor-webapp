@@ -1,5 +1,6 @@
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import { Email, ZustandEmail } from '@/mail/store/types';
+import { PaperclipIcon } from 'lucide-react';
 
 
 export default function EmailListItem({email, isSelected}: {email:ZustandEmail, isSelected: boolean}) {
@@ -20,29 +21,31 @@ export default function EmailListItem({email, isSelected}: {email:ZustandEmail, 
               </p>
             </div>
           </div>
-          <div className="text-xs text-gray-500">{new Date(email.scheduledFor).toLocaleString([], {
+          <div className="text-xs text-gray-500">
+            {new Date(Date.now() + email.scheduledFor * 60 * 1000).toLocaleString([], {
               weekday: 'short',
               month: 'short',
               day: 'numeric',
               hour: '2-digit',
               minute: '2-digit',
-            })}</div>
+            })}
+          </div>
         </div>
         <div className="mt-1">
           <p
             className={`text-sm truncate`}
           >
-            {email.subject}
+            {email.title}
           </p>
           <div className="flex items-center mt-1">
             <p className="text-xs text-gray-500 truncate flex-1">
               {email.content}
             </p>
-            {/* <div className="flex items-center ml-2">
-              {email.hasAttachment && (
+            <div className="flex items-center ml-2">
+              {email.attachments.length > 0 && (
                 <PaperclipIcon size={14} className="text-gray-400" />
               )}
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

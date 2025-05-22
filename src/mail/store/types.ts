@@ -1,10 +1,19 @@
+export interface EmailAttachmentData {
+  filename: string;
+  id: string;
+}
+
 export interface Email {
-    id: string;
-    senderEmail: string;
-    senderName: string;
-    content: string;
-    subject: string;
-    scheduledFor: Date;
+  id: string;
+  createdAt: string;
+  isPhishing: boolean;
+  senderName: string;
+  senderAddress: string;
+  title: string;
+  content: string;
+  scheduledFor: number;
+  experimentId: string;
+  attachments: EmailAttachmentData[];
 }
 
 export interface EmailProperties {

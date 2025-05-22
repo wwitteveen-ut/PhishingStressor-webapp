@@ -20,10 +20,12 @@ export const createParticipantSlice: StateCreator<
   setEmails: (emails: ZustandEmail[]) =>
     set(
       (state) => ({
-        emails: emails.map((email) => ({
-          ...email,
-          isRead: state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
-        })),
+        emails: emails
+          .map((email) => ({
+            ...email,
+            isRead: state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
+          }))
+          .sort((a, b) => a.scheduledFor - b.scheduledFor),
         emailProperties: state.emailProperties,
       }),
       undefined,

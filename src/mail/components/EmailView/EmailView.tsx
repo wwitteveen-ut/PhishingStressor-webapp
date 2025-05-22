@@ -4,6 +4,7 @@ import {
   ChevronDownIcon,
 } from 'lucide-react'
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
+import EmailAttachmentListItem from '../EmailAttachmentList';
 
 export default function EmailView() {
   const emailId = useEmailClientStore((state) => state.selectedEmailId);
@@ -28,7 +29,7 @@ export default function EmailView() {
             <ArrowLeftIcon size={20} />
           </button>
           <h2 className="text-xl font-medium text-gray-800 truncate">
-            {email.subject}
+            {email.title}
           </h2>
         </div>
         <div className="flex items-center space-x-2">
@@ -40,11 +41,11 @@ export default function EmailView() {
       <div className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="ml-4">
+            <div>
               <div className="flex items-center">
                 <p className="font-medium text-gray-900">{email.senderName}</p>
                 <span className="mx-2 text-gray-500">&#8226;</span>
-                <p className="text-sm text-gray-500">{email.senderEmail}</p>
+                <p className="text-sm text-gray-500">{email.senderAddress}</p>
               </div>
               <div className="flex items-center text-sm text-gray-500">
                 <p>To: me</p>
@@ -72,6 +73,7 @@ export default function EmailView() {
           <p>Best regards,</p>
           <p>{email.senderName}</p>
         </div>
+        <EmailAttachmentListItem attachments={email.attachments}/>
       </div>
     </div>
   )
