@@ -8,6 +8,7 @@ import {
 export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
   const activeCategory: string = useEmailClientStore((state) => state.selectedCategory);
+  const unreadCount = useEmailClientStore((state) => state.getUnreadCount());
   const emails = useEmailClientStore((state) => state.emails);
 
 
@@ -16,7 +17,7 @@ export default function EmailCategoryList() {
       id: 'inbox',
       label: 'Inbox',
       icon: InboxIcon,
-      count: emails.length,
+      count: unreadCount,
     },
     {
       id: 'trash',
@@ -36,13 +37,13 @@ export default function EmailCategoryList() {
                 >
                 <item.icon size={18} className="mr-3" />
                 <span>{item.label}</span>
-                {item.count && (
-                    <span
-                    className={`ml-auto px-2 py-0.5 rounded-full text-xs ${activeCategory === item.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-600'}`}
-                    >
-                    {item.count}
-                    </span>
-                )}
+                {item.count && item.count > 0 ? (
+                  <span
+                  className={`ml-auto px-2 py-0.5 rounded-full text-xs ${activeCategory === item.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-600'}`}
+                  >
+                  {item.count}
+                  </span>
+                ) : null}
                 </button>
             </li>
           ))}

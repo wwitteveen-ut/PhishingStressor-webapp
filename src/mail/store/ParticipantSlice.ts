@@ -1,10 +1,12 @@
 import { StateCreator } from 'zustand/vanilla';
 import { EmailClientState } from './EmailClientStore';
-import { Email } from './types';
+import { Email, EmailProperties, ZustandEmail } from './types';
 
 export interface ParticipantSlice {
-  emails: Email[];
-  setEmails: (emails: Email[]) => void;
+  emails: ZustandEmail[];
+  emailProperties: Record<string, EmailProperties>;
+  setEmails: (emails: ZustandEmail[]) => void;
+  toggleEmailRead: (emailId: string) => void;
 }
 
 export const createParticipantSlice: StateCreator<
@@ -14,6 +16,36 @@ export const createParticipantSlice: StateCreator<
   ParticipantSlice
 > = (set) => ({
   emails: [],
-  setEmails: (emails: Email[]) => 
-    set({ emails }, undefined, 'ui/setEmails'),
+  emailProperties: {},
+  setEmails: (emails: ZustandEmail[]) =>
+    set(
+      (state) => ({
+        emails: emails.map((email) => ({
+          ...email,
+          isRead: state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
+        })),
+        emailProperties: state.emailProperties,
+      }),
+      undefined,
+      'ui/setEmails'
+    ),
+    toggleEmailRead: (emailId: string) =>
+    set(
+      (state) => ({
+        emails: state.emails.map((email) =>
+          email.id === emailId
+            ? { ...email, isRead: !email.isRead }
+            : email
+        ),
+        emailProperties: {
+          ...state.emailProperties,
+          [emailId]: {
+            ...state.emailProperties[emailId] ?? { isArchived: false, isStarred: false },
+            isRead: !(state.emailProperties[emailId]?.isRead ?? false),
+          },
+        },
+      }),
+      undefined,
+      'ui/toggleEmailRead'
+    ),
 });

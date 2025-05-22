@@ -6,3 +6,9 @@ export interface Email {
     subject: string;
     scheduledFor: Date;
 }
+
+export interface EmailProperties {
+  isRead: boolean;
+}
+
+export interface ZustandEmail extends Email, EmailProperties {}
