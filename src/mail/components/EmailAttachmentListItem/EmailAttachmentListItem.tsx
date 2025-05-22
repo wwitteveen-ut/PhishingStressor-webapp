@@ -36,7 +36,6 @@ export default function EmailAttachmentListItem({
       </div>
       <div className="ml-3">
         <p className="text-sm font-medium text-gray-700">{filename}</p>
-        <p className="text-xs text-gray-500">1 MB</p>
       </div>
       <button className="ml-3 text-gray-500 hover:text-gray-700">
         <DownloadIcon size={18} />
