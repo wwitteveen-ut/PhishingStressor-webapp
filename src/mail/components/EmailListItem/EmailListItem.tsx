@@ -2,11 +2,8 @@ import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import { Email } from '@/mail/store/types';
 
 
-export default function EmailListItem({email}: {email:Email}) {
+export default function EmailListItem({email, isSelected}: {email:Email, isSelected: boolean}) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
-  const selectedEmail = useEmailClientStore((state) => state.selectedEmail);
-  
-  const isSelected = selectedEmail?.id === email.id;
 
   return (
       <div

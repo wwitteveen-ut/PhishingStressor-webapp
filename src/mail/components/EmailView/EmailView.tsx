@@ -6,7 +6,9 @@ import {
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 
 export default function EmailView() {
-  const email = useEmailClientStore((state) => state.selectedEmail);
+  const emailId = useEmailClientStore((state) => state.selectedEmailId);
+  const emails = useEmailClientStore((state) => state.emails);
+  const email = emails.find((email) => email.id === emailId);
   
   if (!email) {
     return (
