@@ -14,7 +14,7 @@ export default function LoginForm({
 }: ILoginFormProps) {
     const router = useRouter();
     
-    const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleLogin = () => {
         router.push("/mail");
     }
         

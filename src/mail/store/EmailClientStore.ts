@@ -8,8 +8,10 @@ export type EmailClientStore = UISlice;
 export const initialEmailClientState: EmailClientState = {
     selectedCategory: 'inbox',
     selectedEmail: null,
+    emails: [],
+    setEmails: () => {},
     selectCategory: () => {},
-    selectEmail: () => {},
+    selectEmailId: () => {},
 };
 
 const createEmailClientStore = () => {

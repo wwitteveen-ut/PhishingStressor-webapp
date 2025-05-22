@@ -1,8 +1,6 @@
 "use client";
 import {
   ArrowLeftIcon,
-  ArchiveIcon,
-  TrashIcon,
   ChevronDownIcon,
 } from 'lucide-react'
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';

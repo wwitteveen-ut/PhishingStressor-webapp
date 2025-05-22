@@ -7,6 +7,7 @@ export default async function Layout({ children } : {
     children: React.ReactNode;
 }) {
   const emails = await getEmails();
+  
   return (
     <>
       <div className="flex h-screen overflow-hidden">
