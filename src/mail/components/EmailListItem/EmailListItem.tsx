@@ -4,10 +4,13 @@ import { Email } from '@/mail/store/types';
 
 export default function EmailListItem({email}: {email:Email}) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
+  const selectedEmail = useEmailClientStore((state) => state.selectedEmail);
+  
+  const isSelected = selectedEmail?.id === email.id;
 
   return (
       <div
-        className={`p-3 border-b border-gray-200 cursor-pointer hover:bg-gray-100`}
+        className={`p-3 border-b border-gray-200 cursor-pointer ${isSelected ? 'bg-blue-50' : 'bg-white'} hover:bg-gray-100`}
         onClick={() => selectEmailId(email.id)}
       >
         <div className="flex items-center justify-between">

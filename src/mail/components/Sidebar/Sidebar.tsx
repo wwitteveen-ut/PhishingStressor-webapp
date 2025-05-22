@@ -3,6 +3,7 @@ import React from 'react'
 
 export default function Sidebar() {
 
+
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
       <div className="p-4">

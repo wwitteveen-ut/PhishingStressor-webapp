@@ -7,7 +7,7 @@ export interface UISlice {
   emails: Email[];
   setEmails: (emails: Email[]) => void;
   selectedEmail: Email | null;
-  selectEmailId: (emailId: number) => void;
+  selectEmailId: (emailId: string) => void;
   selectCategory: (category: string) => void;
 }
 
@@ -22,7 +22,7 @@ export const createUISlice: StateCreator<
   selectedEmail: null,
   setEmails: (emails: Email[]) => 
     set({ emails }, undefined, 'ui/setEmails'),
-  selectEmailId: (emailId: number) =>
+  selectEmailId: (emailId: string) =>
     set((state) => ({ selectedEmail: state.emails.find((email) => email.id === emailId) }), undefined, 'ui/selectEmail'),
   selectCategory: (category: string) =>
     set({ selectedCategory: category }, undefined, 'ui/selectCategory'),

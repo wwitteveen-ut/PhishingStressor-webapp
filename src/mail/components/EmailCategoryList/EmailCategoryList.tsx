@@ -8,13 +8,15 @@ import {
 export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
   const activeCategory: string = useEmailClientStore((state) => state.selectedCategory);
+  const emails = useEmailClientStore((state) => state.emails);
+
 
   const menuItems = [
     {
       id: 'inbox',
       label: 'Inbox',
       icon: InboxIcon,
-      count: 12,
+      count: emails.length,
     },
     {
       id: 'trash',
