@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import EmailAttachmentListItem from '../EmailAttachmentList';
+import EmailReplySection from '../EmailReplySection';
 
 export default function EmailView() {
   const emailId = useEmailClientStore((state) => state.selectedEmailId);
@@ -74,6 +75,7 @@ export default function EmailView() {
           <p>{email.senderName}</p>
         </div>
         <EmailAttachmentListItem attachments={email.attachments}/>
+        <EmailReplySection/>
       </div>
     </div>
   )
