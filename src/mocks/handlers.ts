@@ -13,7 +13,7 @@ export const handlers = [
     }),
     http.get(`${process.env.API_BASE_URL}/api/mails/:id`, ({ params }) => {
         const { id } = params;
-        const email = mockEmails.find(e => e.id === Number(id));
+        const email = mockEmails.find(e => e.id === id);
 
         if (email) {
             return HttpResponse.json(email);
@@ -21,4 +21,14 @@ export const handlers = [
             return new HttpResponse(null, { status: 404, statusText: 'Email not found' });
         }
     }),
+
+    http.post(`${process.env.API_BASE_URL}/api/auth/login/participant`, async ({ request }) => {
+        const body = await request.json() as { username: string, password: string };
+        console.log(body);
+        return HttpResponse.json({
+            id: 1,
+            name: 'John Doe',
+        });
+    }
+    ),
 ]
