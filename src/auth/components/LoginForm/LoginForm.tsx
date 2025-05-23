@@ -3,7 +3,7 @@
 import { Button, Container, PasswordInput, TextInput, Title } from '@mantine/core';
 import Link from "next/link";
 import { ArrowRight, Key, Mail } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { signIn } from "next-auth/react";
 
 interface ILoginFormProps {
     variant?: "participant" | "researcher";
@@ -12,10 +12,13 @@ interface ILoginFormProps {
 export default function LoginForm({
     variant = "participant",
 }: ILoginFormProps) {
-    const router = useRouter();
-    
-    const handleLogin = () => {
-        router.push("/mail");
+    const credentialsAction = (formData: FormData) => {
+        
+        signIn(variant, {
+            email: formData.get("email"),
+            password: formData.get("password"),
+            redirectTo: variant === "participant" ? "/mail" : "/researcher/dashboard",
+        });
     }
         
 
@@ -30,7 +33,7 @@ export default function LoginForm({
                 </Title>
             </div>
 
-            <form className="space-y-6" onSubmit={handleLogin}>
+            <form className="space-y-6" action={credentialsAction}>
                 <div className="space-y-4">
                     <TextInput
                         leftSection={<Mail size={16} />}
