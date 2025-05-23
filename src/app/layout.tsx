@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import { server } from '@/mocks/server';
 import "./globals.css";
 import '@mantine/core/styles.css';
+import '@mantine/tiptap/styles.css';
 
 import {ColorSchemeScript, MantineProvider, mantineHtmlProps} from '@mantine/core';
 
