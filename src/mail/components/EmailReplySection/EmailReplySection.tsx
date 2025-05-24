@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "@mantine/core";
+import { Button, Container } from "@mantine/core";
 import EmailComposer from "../EmailComposer/EmailComposer";
 import { ReplyIcon } from "lucide-react";
 
@@ -10,13 +10,12 @@ export default function EmailReplySection() {
 
 
     return (
-        <div className="mt-6 flex space-x-2">
-        
+        <Container fluid p={0}>
             {isReplying ? (
-                <EmailComposer/>
+                <EmailComposer replyTo={{subject: "hello"}}/>
             ) : (
                 <Button onClick={() => setIsReplying(true)} rightSection={<ReplyIcon size={18} className="mr-2" />}>Reply</Button>
             )}
-        </div>
+        </Container>
     );
 }
