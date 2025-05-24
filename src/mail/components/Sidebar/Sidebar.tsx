@@ -5,11 +5,10 @@ import { redirect } from 'next/navigation'
 
 export default async function Sidebar() {
   const session = await auth();
-      
-  if (!session){
-    redirect("/login")
+  if (!session) {
+    redirect('/login')
   }
-  console.log("session", session)
+  
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
       <div className="p-4">
