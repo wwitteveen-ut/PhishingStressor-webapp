@@ -1,6 +1,6 @@
 
 import { auth } from "@/auth";
-import EmailClient from "@/mail/components/EmailClient/EmailClient";
+import EmailClient from "@/mail/components/EmailClient";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
