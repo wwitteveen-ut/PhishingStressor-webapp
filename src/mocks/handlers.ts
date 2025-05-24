@@ -23,11 +23,9 @@ export const handlers = [
     }),
 
     http.post(`${process.env.API_BASE_URL}/api/auth/login/participant`, async ({ request }) => {
-        const body = await request.json() as { username: string, password: string };
-        console.log(body);
+        const body = await request.json() as { email: string, password: string };
         return HttpResponse.json({
-            id: 1,
-            name: 'John Doe',
+            email: body.email
         });
     }
     ),

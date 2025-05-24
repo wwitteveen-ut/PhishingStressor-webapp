@@ -23,6 +23,8 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
     });
 
     const credentialsAction = ({email, password}: any) => {
+        
+
         signIn(variant, {
             username: email,
             email: email,

@@ -27,11 +27,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Replace this with your actual user validation logic
  
         // Return user object with their profile data
-        return {
-          id: 1,
-          name: "a",
-          email: "a",
-        } as any
+        return token as any
       },
     }),
   Credentials({
