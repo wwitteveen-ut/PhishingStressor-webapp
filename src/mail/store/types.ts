@@ -18,6 +18,7 @@ export interface Email {
 
 export interface EmailProperties {
   isRead: boolean;
+  isTrashed: boolean;
 }
 
 export interface ZustandEmail extends Email, EmailProperties {}

@@ -4,10 +4,17 @@ import { Email, EmailProperties, ZustandEmail } from './types';
 
 export interface ParticipantSlice {
   emails: ZustandEmail[];
-  emailProperties: Record<string, EmailProperties>;
+  startedAt: Date;
   setEmails: (emails: ZustandEmail[]) => void;
-  toggleEmailRead: (emailId: string) => void;
+  setDate: (date: Date) => void;
 }
+
+export const initialParticipantState: ParticipantSlice = {
+  emails: [],
+  startedAt: new Date(),
+  setEmails: () => {},
+  setDate: () => {},
+};
 
 export const createParticipantSlice: StateCreator<
   EmailClientState,
@@ -15,8 +22,7 @@ export const createParticipantSlice: StateCreator<
   [],
   ParticipantSlice
 > = (set) => ({
-  emails: [],
-  emailProperties: {},
+  ...initialParticipantState,
   setEmails: (emails: ZustandEmail[]) =>
     set(
       (state) => ({
@@ -29,25 +35,6 @@ export const createParticipantSlice: StateCreator<
         emailProperties: state.emailProperties,
       }),
       undefined,
-      'ui/setEmails'
-    ),
-    toggleEmailRead: (emailId: string) =>
-    set(
-      (state) => ({
-        emails: state.emails.map((email) =>
-          email.id === emailId
-            ? { ...email, isRead: !email.isRead }
-            : email
-        ),
-        emailProperties: {
-          ...state.emailProperties,
-          [emailId]: {
-            ...state.emailProperties[emailId] ?? { isArchived: false, isStarred: false },
-            isRead: !(state.emailProperties[emailId]?.isRead ?? false),
-          },
-        },
-      }),
-      undefined,
-      'ui/toggleEmailRead'
+      'participant/setEmails'
     ),
 });

@@ -1,20 +1,20 @@
-import { SearchIcon, FilterIcon } from 'lucide-react';
-
+"use client";
+import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
+import { Input } from '@mantine/core';
+import { useDebouncedCallback } from '@mantine/hooks';
+import { SearchIcon } from 'lucide-react';
+import { use } from 'react';
 
 export default function EmailListFilters() {
+    const setSearchQuery = useEmailClientStore((state) => state.setSearchQuery);
+
+    const handleSearchChange = useDebouncedCallback(async (query: string) => {
+        setSearchQuery(query);
+    }, 150);
+
     return (
         <div className="p-3 border-b border-gray-200">
-            <div className="flex items-center bg-gray-100 rounded-md px-3 py-1.5">
-            <SearchIcon size={18} className="text-gray-500 mr-2" />
-            <input
-                type="text"
-                placeholder="Search emails"
-                className="bg-transparent border-none outline-none text-sm flex-1 text-gray-700 placeholder-gray-500"
-            />
-            <button className="text-gray-500 hover:text-gray-700">
-                <FilterIcon size={18} />
-            </button>
-            </div>
+            <Input variant='filled' placeholder="Search Mails" leftSection={<SearchIcon size={18} className="text-gray-500 mr-2" />} onInput={(e) => handleSearchChange(e.currentTarget.value)} />
         </div>
     );
 }

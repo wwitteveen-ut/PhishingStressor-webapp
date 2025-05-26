@@ -6,12 +6,15 @@ import { ZustandEmail } from "@/mail/store/types";
 
 export default async function EmailClient() {
     const emails = await getEmails();
+    
     let newEmails: ZustandEmail[] = emails.map((email) => {
         return {
             ...email,
-            isRead: false
+            isRead: false,
+            isTrashed: true,
         }
     });
+    
 
     return (
         <div className="flex h-screen overflow-hidden">
