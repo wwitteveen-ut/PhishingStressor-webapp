@@ -6,10 +6,12 @@ import type { Email, ZustandEmail } from "@/mail/store/types";
 import EmailListFilters from "../EmailListFilters";
 import EmailListItem from "../EmailListItem";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import { getSession } from "next-auth/react";
 
 export default function EmailList({initialEmails = []} : {initialEmails?: ZustandEmail[]}) {
   const setEmails = useEmailClientStore((state) => state.setEmails);
   const selectedEmailId = useEmailClientStore((state) => state.selectedEmailId);
+  const loggedInAt = getSession()?.then(session => session?.user?.loggedInAt);
 
    
   useEffect(() => {
@@ -33,7 +35,7 @@ export default function EmailList({initialEmails = []} : {initialEmails?: Zustan
     return true;
   });
 
-  
+
 
   return (
     <div className="w-80 border-r border-gray-200 bg-white flex flex-col h-full">

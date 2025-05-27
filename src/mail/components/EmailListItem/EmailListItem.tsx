@@ -22,7 +22,7 @@ export default function EmailListItem({email, isSelected}: {email:ZustandEmail, 
             </div>
           </div>
           <div className="text-xs text-gray-500">
-            {new Date(Date.now() + email.scheduledFor * 60 * 1000).toLocaleString([], {
+            {new Date(email.sendAt).toLocaleString([], {
               weekday: 'short',
               month: 'short',
               day: 'numeric',
