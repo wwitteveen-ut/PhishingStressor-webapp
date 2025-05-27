@@ -1,8 +1,8 @@
 "use client";
 
-import { Button, Container, PasswordInput, TextInput, Title } from '@mantine/core';
+import { Button, Container, PasswordInput, TextInput, Title, useMantineTheme } from '@mantine/core';
 import Link from "next/link";
-import { ArrowRight, Key, Mail } from 'lucide-react';
+import { ArrowRight, BeakerIcon, Key, Mail } from 'lucide-react';
 import { signIn } from "next-auth/react";
 import { useForm } from '@mantine/form';
 
@@ -11,6 +11,7 @@ interface ILoginFormProps {
 }
 
 export default function LoginForm({ variant = "participant" }: ILoginFormProps) {
+    const theme = useMantineTheme();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -23,24 +24,31 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
     });
 
     const credentialsAction = ({email, password}: any) => {
-        
-
         signIn(variant, {
             username: email,
             email: email,
             password: password,
-            redirectTo: variant === "participant" ? "/mail" : "/researcher/dashboard",
+            redirectTo: variant === "participant" ? "/mail" : "/researcher/experiments",
         });
     };
 
     return (
         <Container size="xs" className="w-100 space-y-8">
             <div>
+                    <div className="flex items-center justify-center">
+
+                { variant === "researcher" ? (
+                    <BeakerIcon className="h-12 w-12" color={theme.colors.blue[6]} />
+                ) : (
+                    <Mail className="h-12 w-12" color={theme.colors.blue[6]} />
+                )}
+                </div>
+
                 <Title order={1} className="text-center text-3xl font-bold text-gray-900">
                     PhishingStressor
                 </Title>
                 <Title order={3} className="mt-6 text-center text-2xl font-medium text-gray-500">
-                    Sign in to your account
+                    { variant === "researcher" ? "Sign in as researcher" : "Sign in as participant" }
                 </Title>
             </div>
 
@@ -70,7 +78,7 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                     className="group flex justify-center"
                     rightSection={<ArrowRight size={16} />}
                 >
-                    Sign in {variant === "researcher" && "as researcher"}
+                    Sign in
                 </Button>
             </form>
 
@@ -80,7 +88,7 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                         href="/researcher/login"
                         className="font-medium text-blue-600 hover:text-blue-500"
                     >
-                        Sign in as Experimenter
+                        Sign in as Researcher
                     </Link>
                 ) : (
                     <Link
