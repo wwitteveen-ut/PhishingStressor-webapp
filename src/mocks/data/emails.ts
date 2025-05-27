@@ -9,7 +9,7 @@ export const mockEmails: Email[] = [
     senderAddress: "jane.doe@example.com",
     title: "Meeting Next Week",
     content: "Hi there, just checking in about our meeting next week. Let me know what time works best!",
-    scheduledFor: 12,
+    scheduledFor: 0,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: [
       {
@@ -30,7 +30,7 @@ export const mockEmails: Email[] = [
     senderAddress: "newsletter@techupdates.com",
     title: "Your June Tech Newsletter",
     content: "Welcome to the June edition of our tech newsletter. This month we're covering AI trends, cloud tools, and more.",
-    scheduledFor: 7,
+    scheduledFor: 0,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: [
       {
@@ -47,7 +47,7 @@ export const mockEmails: Email[] = [
     senderAddress: "support@webapp.io",
     title: "Support Ticket Resolved",
     content: "Your ticket has been resolved. Please review the resolution and let us know if you need further assistance.",
-    scheduledFor: 3,
+    scheduledFor: 0,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: []
   },
@@ -59,7 +59,7 @@ export const mockEmails: Email[] = [
     senderAddress: "security@company.com",
     title: "Important Security Update",
     content: "Please update your account credentials immediately.",
-    scheduledFor: 9,
+    scheduledFor: 1,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: [
       {
@@ -76,7 +76,7 @@ export const mockEmails: Email[] = [
     senderAddress: "manager@company.com",
     title: "Team Meeting Tomorrow",
     content: "Reminder: Team meeting at 10 AM tomorrow.",
-    scheduledFor: 1,
+    scheduledFor: 2,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: [
       {
@@ -97,7 +97,7 @@ export const mockEmails: Email[] = [
     senderAddress: "billing@company.com",
     title: "Invoice Due",
     content: "Your invoice #12345 is due for payment.",
-    scheduledFor: 14,
+    scheduledFor: 3,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: [
       {
@@ -135,7 +135,7 @@ export const mockEmails: Email[] = [
     senderAddress: "training@skillshare.com",
     title: "New Course Available",
     content: "Check out our latest course on advanced programming techniques.",
-    scheduledFor: 11,
+    scheduledFor: 8,
     experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
     attachments: []
   },
