@@ -59,12 +59,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       id: "researcher",
       name: "researcher",
       credentials: {
-        email: { label: "Email", type: "email" },
+        username: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
+
       authorize: async (credentials) => {
         // Add your authentication logic here
-        console.log("researcher", credentials)
+        console.log("credentials", credentials)
+        const token = await authenticateParticipant(
+          credentials?.username as string,
+          credentials?.password as string
+        );
         
         // Example: validate credentials against your database
         // const user = await validateUserCredentials(credentials.email, credentials.password)
@@ -73,11 +78,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Replace this with your actual user validation logic
  
         // Return user object with their profile data
-        return {
-          id: 1,
-          name: "a",
-          email: "a",
-        } as any
+        token.loggedInAt = new Date().toUTCString();
+        console.log("token", token);
+
+        return token as any;
       },
     }),
   ],

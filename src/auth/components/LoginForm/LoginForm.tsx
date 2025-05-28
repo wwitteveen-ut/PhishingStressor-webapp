@@ -2,7 +2,7 @@
 
 import { Button, Container, PasswordInput, TextInput, Title, useMantineTheme } from '@mantine/core';
 import Link from "next/link";
-import { ArrowRight, BeakerIcon, Key, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BeakerIcon, Key, Mail } from 'lucide-react';
 import { signIn } from "next-auth/react";
 import { useForm } from '@mantine/form';
 
@@ -15,18 +15,17 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
-            email: '',
+            username: '',
             password: '',
         },
         validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            username: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
         },
     });
 
-    const credentialsAction = ({email, password}: any) => {
+    const credentialsAction = ({username, password}: any) => {
         signIn(variant, {
-            username: email,
-            email: email,
+            username: username,
             password: password,
             redirectTo: variant === "participant" ? "/mail" : "/researcher/experiments",
         });
@@ -59,8 +58,8 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                         placeholder="Email address"
                         required
                         className="w-full"
-                        key={form.key('email')}
-                        {...form.getInputProps('email')}
+                        key={form.key('username')}
+                        {...form.getInputProps('username')}
                     />
                     <PasswordInput
                         leftSection={<Key size={16} />}
@@ -84,21 +83,15 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
 
             <div className="text-center">
                 {variant === "participant" ? (
-                    <Link
-                        href="/researcher/login"
-                        className="font-medium text-blue-600 hover:text-blue-500"
-                    >
-                        Sign in as Researcher
-                    </Link>
+                    <Button variant='subtle' rightSection={<ArrowRight size={18}/>} component={Link} href="/researcher/login">
+                        Go to Researcher login
+                    </Button>
                 ) : (
-                    <Link
-                        href="/login"
-                        className="font-medium text-blue-600 hover:text-blue-500"
-                    >
-                    Back to participant login
-                </Link>) 
-            }
-                
+                    <Button leftSection={<ArrowLeft size={18}/>} variant='subtle' component={Link} href="/login">
+                         Back to participant login
+                    </Button>
+                )
+            }   
             </div>
         </Container>
     );
