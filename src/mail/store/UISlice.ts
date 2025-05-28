@@ -11,6 +11,7 @@ export interface UISlice {
   setSearchQuery: (query: string) => void;
   selectEmailId: (emailId: string) => void;
   toggleEmailRead: (emailId: string) => void;
+  toggleEmailTrashed: (emailId: string) => void;
   selectCategory: (category: string) => void;
   getUnreadCount: () => number;
 }
@@ -23,6 +24,7 @@ export const initialUISliceState: UISlice = {
   setSearchQuery: () => {},
   selectEmailId: () => {},
   toggleEmailRead: () => {},
+  toggleEmailTrashed: () => {},
   selectCategory: () => {},
   getUnreadCount: () => 0,
 };
@@ -74,12 +76,32 @@ export const createUISlice: StateCreator<
         emailProperties: {
           ...state.emailProperties,
           [emailId]: {
-            ...state.emailProperties[emailId] ?? { isArchived: false, isStarred: false },
+            ...state.emailProperties[emailId] ?? { isTrashed: false },
             isRead: !(state.emailProperties[emailId]?.isRead ?? false),
           },
         },
       }),
       undefined,
       'ui/toggleEmailRead'
+    ),
+    toggleEmailTrashed: (emailId: string) =>
+    set(
+      (state) => ({
+        emails: state.emails.map((email) =>
+          email.id === emailId
+            ? { ...email, isTrashed: !email.isTrashed }
+            : email
+        ),
+        emailProperties: {
+          ...state.emailProperties,
+          [emailId]: {
+            ...state.emailProperties[emailId] ?? { isRead: false },
+            isTrashed: !(state.emailProperties[emailId]?.isTrashed ?? false),
+          },
+        },
+        selectedEmailId: null,
+      }),
+      undefined,
+      'ui/toggleEmailTrashed'
     ),
 });
