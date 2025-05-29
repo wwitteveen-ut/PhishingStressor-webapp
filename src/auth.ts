@@ -5,21 +5,24 @@ import { authenticateParticipant } from "./auth/actions/actions"
 declare module "next-auth" {
   interface Session {
     user: {
-      loggedInAt: string
+      username: string;
+      experimentId: string;
+      loggedIn: string;
     } & DefaultSession["user"]
   }
 
   interface User {
-    id: string;
-    name?: string | null;
-    email?: string | null;
-    loggedInAt?: string | null;
+    username: string;
+    experimentId: string;
+    loggedIn: string;
   }
 }
 
 declare module "@auth/core/jwt" {  
   interface JWT {
-    loggedInAt: string;
+    username: string;
+    experimentId: string;
+    loggedIn: string;
   }
 }
 
@@ -77,8 +80,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Replace this with your actual user validation logic
  
         // Return user object with their profile data
-        token.loggedInAt = new Date().toUTCString();
-        console.log("token", token);
 
         return token;
       },
@@ -87,12 +88,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.loggedInAt = user.loggedInAt || new Date().toUTCString()
+        token.loggedIn = user.loggedIn;
+        token.experimentId = user.experimentId;
+        token.username = user.username;
       }
       return token
     },
     session({ session, token }) {
-      session.user.loggedInAt = token.loggedInAt;
+      session.user.experimentId = token.experimentId;
+      session.user.loggedIn = token.loggedIn;
+      session.user.username = token.username;
       return session
     },
   },
