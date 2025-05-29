@@ -1,5 +1,5 @@
 import type {Metadata} from "next";
-import { server } from '@/mocks/server';
+import { server } from '@/mocks';
 import "./globals.css";
 import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
