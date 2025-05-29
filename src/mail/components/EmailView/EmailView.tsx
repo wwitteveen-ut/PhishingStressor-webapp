@@ -1,18 +1,12 @@
 "use client";
 import {
   ArrowLeftIcon,
-  Box,
-  ChevronDownIcon,
-  CornerUpLeft,
-  Trash,
-  TrashIcon,
-  Undo,
 } from 'lucide-react'
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import EmailAttachmentListItem from '../EmailAttachmentList';
 import EmailReplySection from '../EmailReplySection';
-import { ActionIcon, Button, Tooltip } from '@mantine/core';
 import TrashActionButton from '../TrashActionButton';
+import { Container } from '@mantine/core';
 
 export default function EmailView() {
   const emailId = useEmailClientStore((state) => state.selectedEmailId);
@@ -44,9 +38,7 @@ export default function EmailView() {
         </div>
         <div className="flex items-center space-x-2">
 
-
         <TrashActionButton isTrashed={email.isTrashed} onClick={() => toggleEmailTrashed(email.id)} />
-
 
         </div>
       </div>
@@ -61,9 +53,9 @@ export default function EmailView() {
               </div>
               <div className="flex items-center text-sm text-gray-500">
                 <p>To: me</p>
-                <button className="ml-2 text-gray-400 hover:text-gray-600">
+                {/* <button className="ml-2 text-gray-400 hover:text-gray-600">
                   <ChevronDownIcon size={16} />
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
@@ -77,16 +69,19 @@ export default function EmailView() {
             })}
           </div>
         </div>
-        <div className="mt-6 text-gray-800 leading-relaxed">
+        <Container fluid p={0} mt={'xl'}>          
           <p>Hello,</p>
           <br />
           <p>{email.content}</p>
           <br />
           <p>Best regards,</p>
           <p>{email.senderName}</p>
-        </div>
+        </Container>
         <EmailAttachmentListItem attachments={email.attachments}/>
-        <EmailReplySection/>
+
+        { !email.isTrashed && (
+          <EmailReplySection/>
+        )}
       </div>
     </div>
   )
