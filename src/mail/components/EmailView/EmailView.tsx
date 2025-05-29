@@ -70,8 +70,6 @@ export default function EmailView() {
           </div>
         </div>
         <Container fluid p={0} mt={'xl'}>          
-          <p>Hello,</p>
-          <br />
           <p>{email.content}</p>
           <br />
           <p>Best regards,</p>
