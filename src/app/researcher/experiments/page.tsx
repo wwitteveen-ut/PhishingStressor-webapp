@@ -1,6 +1,5 @@
 "use client";
 
-import LoginForm from "@/auth/components/LoginForm/LoginForm";
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
 import { Button, Center } from "@mantine/core";
 import Link from "next/link";

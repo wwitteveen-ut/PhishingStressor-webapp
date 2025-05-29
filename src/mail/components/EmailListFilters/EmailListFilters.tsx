@@ -3,7 +3,6 @@ import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
 import { Input } from '@mantine/core';
 import { useDebouncedCallback } from '@mantine/hooks';
 import { SearchIcon } from 'lucide-react';
-import { use } from 'react';
 
 export default function EmailListFilters() {
     const setSearchQuery = useEmailClientStore((state) => state.setSearchQuery);

@@ -1,5 +1,5 @@
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
-import { Email, ZustandEmail } from '@/mail/store/types';
+import { ZustandEmail } from '@/mail/store/types';
 import { PaperclipIcon } from 'lucide-react';
 
 

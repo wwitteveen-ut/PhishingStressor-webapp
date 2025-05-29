@@ -1,50 +1,39 @@
 'use client';
 
-import {
-  IconAdjustments,
-  IconCalendarStats,
-  IconChevronRight,
-  IconFileAnalytics,
-  IconGauge,
-  IconLock,
-  IconNotes,
-  IconPresentationAnalytics,
-  IconSwitchHorizontal,
-} from '@tabler/icons-react';
-import { Avatar, Button, Code, Group, ScrollArea, Title, UnstyledButton, Text } from '@mantine/core';
+import { Button, Group, ScrollArea, Title, UnstyledButton, Text } from '@mantine/core';
 import LinksGroup from '@/shared/components/LinksGroup';
 import classes from './ResearcherSidebar.module.css';
-import { ArrowLeft, ArrowRightLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRightLeft, CalendarCheck, CircuitBoard, FileBarChart, LineChart, Lock, LucideIcon, Settings } from 'lucide-react';
 
 export default function ResearcherSidebar({experimentId}: {experimentId?: string}) {
     const experimentMenu = {
-    label: 'Experiments',
-        icon: IconGauge,
+      label: 'Experiments',
+      icon: CircuitBoard,
     }
 
-  const mockdata = [
-    {
-      label: 'Releases',
-      icon: IconCalendarStats,
-      links: [
-        { label: 'Upcoming releases', link: '/' },
-        { label: 'Previous releases', link: '/' },
-        { label: 'Releases schedule', link: '/' },
-      ],
-    },
-    { label: 'Analytics', icon: IconPresentationAnalytics },
-    { label: 'Contracts', icon: IconFileAnalytics },
-    { label: 'Settings', icon: IconAdjustments },
-    {
-      label: 'Security',
-      icon: IconLock,
-      links: [
-        { label: 'Enable 2FA', link: '/' },
-        { label: 'Change password', link: '/' },
-        { label: 'Recovery codes', link: '/' },
-      ],
-    },
-  ];
+    const mockdata = [
+      {
+        label: 'Releases',
+        icon: CalendarCheck,
+        links: [
+          { label: 'Upcoming releases', link: '/' },
+          { label: 'Previous releases', link: '/' },
+          { label: 'Releases schedule', link: '/' },
+        ],
+      },
+      { label: 'Analytics', icon: LineChart },
+      { label: 'Contracts', icon: FileBarChart },
+      { label: 'Settings', icon: Settings },
+      {
+        label: 'Security',
+        icon: Lock,
+        links: [
+          { label: 'Enable 2FA', link: '/' },
+          { label: 'Change password', link: '/' },
+          { label: 'Recovery codes', link: '/' },
+        ],
+      },
+    ];
 
   if (!experimentId) {
     return (
@@ -106,7 +95,7 @@ export default function ResearcherSidebar({experimentId}: {experimentId?: string
           {mockdata.map((item) => (
             <LinksGroup
               key={item.label}
-              icon={item.icon}
+              icon={item.icon as LucideIcon}
               label={item.label}
               initiallyOpened={false}
               links={item.links}

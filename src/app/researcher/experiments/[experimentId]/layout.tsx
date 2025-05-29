@@ -1,10 +1,14 @@
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
+import { ReactNode } from "react";
 
-export default async function Layout({ children, params }: {
-  children: React.ReactNode;
-  params: { experimentId: string };
+export default async function Layout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ experimentId: string }>;
 }) {
-  const { experimentId } = await params; 
+  const { experimentId } = await params;
 
   return (
     <div className="flex h-screen bg-gray-100">

@@ -1,7 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { authenticateParticipant } from "./auth/actions/actions"
-import { JWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
@@ -18,7 +17,7 @@ declare module "next-auth" {
   }
 }
 
-declare module "next-auth/jwt" {
+declare module "@auth/core/jwt" {  
   interface JWT {
     loggedInAt: string;
   }
@@ -52,7 +51,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.loggedInAt = new Date().toUTCString();
         console.log("token", token);
 
-        return token as any;
+        return token;
       },
     }),
   Credentials({
@@ -81,7 +80,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.loggedInAt = new Date().toUTCString();
         console.log("token", token);
 
-        return token as any;
+        return token;
       },
     }),
   ],

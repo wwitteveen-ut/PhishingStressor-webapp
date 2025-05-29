@@ -22,7 +22,7 @@ async function EmailClientContainer() {
     });
     
     
-    let newEmails: ZustandEmail[] = filteredEmails.map((email) => {
+    const newEmails: ZustandEmail[] = filteredEmails.map((email) => {
         const loggedInDate = new Date(loggedInAt);
         const scheduledTime = new Date(loggedInDate.getTime() + (email.scheduledFor * 60 * 1000));
         

@@ -9,8 +9,6 @@ export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
   const activeCategory: string = useEmailClientStore((state) => state.selectedCategory);
   const unreadCount = useEmailClientStore((state) => state.getUnreadCount());
-  const emails = useEmailClientStore((state) => state.emails);
-
 
   const menuItems = [
     {

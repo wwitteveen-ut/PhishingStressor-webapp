@@ -1,6 +1,6 @@
 import { StateCreator } from 'zustand/vanilla';
 import { EmailClientState } from './EmailClientStore';
-import { Email, EmailProperties, ZustandEmail } from './types';
+import { EmailProperties } from './types';
 
 
 export interface UISlice {

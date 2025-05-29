@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
 import { Box, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import classes from './LinksGroup.module.css';
+import { LucideIcon } from 'lucide-react';
 
 interface LinksGroupProps {
-  icon: React.FC<any>;
+  icon: LucideIcon;
   label: string;
   initiallyOpened?: boolean;
   links?: { label: string; link: string }[];
