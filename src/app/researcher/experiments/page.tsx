@@ -1,18 +1,19 @@
-"use client";
+"use server";
 
+import { getExperiments } from "@/researcher/actions/actions";
+import ExperimentList from "@/researcher/components/ExperimentList";
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
-import { Button, Center } from "@mantine/core";
-import Link from "next/link";
+import { Center } from "@mantine/core";
 
-export default function Login() {
+export default async function ExperimentsPage() {
+    const experiments = await getExperiments();
+
     return (
         <>
-            <Center flex={1}>
-                <ResearcherSidebar />
-                <Button component={Link} href="/researcher/experiments/1">
-                    Go to Experiment 1
-                </Button>
-            </Center>
+             <ResearcherSidebar />
+             <Center flex={1}>
+                <ExperimentList experiments={experiments}/> 
+             </Center>
         </>
     );
 }
