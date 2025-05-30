@@ -86,7 +86,7 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
 
             <div className="text-center">
                 {variant === "participant" ? (
-                    <Button variant='subtle' rightSection={<ArrowRight size={18}/>} component={Link} href="/researcher/login">
+                    <Button variant='subtle' rightSection={<ArrowRight size={18}/>} component={Link} href="/login/researcher">
                         Go to Researcher login
                     </Button>
                 ) : (

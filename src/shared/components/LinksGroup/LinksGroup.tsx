@@ -26,12 +26,12 @@ export default function LinksGroup({
     <>
       <UnstyledButton onClick={() => setOpened((o) => !o)} className={classes.control}>
         <Group justify="space-between" gap={0}>
-          <Box style={{ display: 'flex', alignItems: 'center' }}>
+          <Group style={{ display: 'flex', alignItems: 'center' }}>
             <ThemeIcon variant="light" size={30}>
               <Icon size={18} />
             </ThemeIcon>
-            <Box ml="md">{label}</Box>
-          </Box>
+            <Box>{label}</Box>
+          </Group>
           {hasLinks && (
             <IconChevronRight
               className={classes.chevron}

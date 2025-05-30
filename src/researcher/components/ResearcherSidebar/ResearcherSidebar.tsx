@@ -1,114 +1,175 @@
 'use client';
 
-import { Button, Group, ScrollArea, Title, UnstyledButton, Text } from '@mantine/core';
+import React from 'react';
+import { 
+  Paper, 
+  Group, 
+  Text, 
+  Title, 
+  Button, 
+  ScrollArea, 
+  Divider, 
+  ThemeIcon, 
+  UnstyledButton,
+  Stack,
+  Flex
+} from '@mantine/core';
+import { 
+  ArrowLeft, 
+  ArrowRightLeft, 
+  CalendarCheck, 
+  CircuitBoard, 
+  FileBarChart, 
+  LineChart, 
+  Lock, 
+  Settings, 
+  LayoutDashboardIcon, 
+  LucideIcon, 
+  LogOut 
+} from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
-import classes from './ResearcherSidebar.module.css';
-import { ArrowLeft, ArrowRightLeft, CalendarCheck, CircuitBoard, FileBarChart, LineChart, Lock, LucideIcon, Settings } from 'lucide-react';
+import { signOut } from '@/auth';
+import Link from 'next/link';
 
-export default function ResearcherSidebar({experimentId}: {experimentId?: string}) {
-    const experimentMenu = {
-      label: 'Experiments',
-      icon: CircuitBoard,
-    }
+interface MenuItem {
+  label: string;
+  icon: LucideIcon;
+  links?: { label: string; link: string }[];
+}
 
-    const mockdata = [
-      {
-        label: 'Releases',
-        icon: CalendarCheck,
-        links: [
-          { label: 'Upcoming releases', link: '/' },
-          { label: 'Previous releases', link: '/' },
-          { label: 'Releases schedule', link: '/' },
-        ],
-      },
-      { label: 'Analytics', icon: LineChart },
-      { label: 'Contracts', icon: FileBarChart },
-      { label: 'Settings', icon: Settings },
-      {
-        label: 'Security',
-        icon: Lock,
-        links: [
-          { label: 'Enable 2FA', link: '/' },
-          { label: 'Change password', link: '/' },
-          { label: 'Recovery codes', link: '/' },
-        ],
-      },
-    ];
+interface Experiment {
+  id: string;
+  name: string;
+  duration: number;
+  researchers: { id: string; username: string }[];
+  groups: { id: string; experimentId: string; name: string; capacity: number }[];
+}
+
+interface SidebarProps {
+  experimentId?: string;
+}
+
+export default function ResearcherSidebar({ experimentId }: SidebarProps) {
+  const experimentMenu = {
+    label: 'Experiments',
+    icon: CircuitBoard,
+  };
+
+  const mockdata: MenuItem[] = [
+    {
+      label: 'Releases',
+      icon: CalendarCheck,
+      links: [
+        { label: 'Upcoming releases', link: '/' },
+        { label: 'Previous releases', link: '/' },
+        { label: 'Releases schedule', link: '/' },
+      ],
+    },
+    { label: 'Analytics', icon: LineChart },
+    { label: 'Contracts', icon: FileBarChart },
+    { label: 'Settings', icon: Settings },
+    {
+      label: 'Security',
+      icon: Lock,
+      links: [
+        { label: 'Enable 2FA', link: '/' },
+        { label: 'Change password', link: '/' },
+        { label: 'Recovery codes', link: '/' },
+      ],
+    },
+  ];
+
+  const headerComponent = (
+    <>
+    <Group p="md" gap="xs">
+      <ThemeIcon variant="white">
+        <LayoutDashboardIcon size={24} />
+      </ThemeIcon>
+      <Title order={6}>PhishingStressor Dashboard</Title>
+    </Group>
+    <Divider/>
+    </>
+  );
+
+  const footerComponent = (
+    <>
+      <Divider />
+      <div style={{ padding: '16px' }}>
+        <Button
+          variant="subtle"
+          color="red"
+          fullWidth
+          leftSection={<LogOut size={16} />}
+          onClick={() => signOut}
+        >
+          Sign out
+        </Button>
+      </div>
+    </>
+  );
 
   if (!experimentId) {
     return (
-          <nav className={classes.navbar}>
-      <div className={classes.header}>
-        <Group justify="space-between">
-            <Title order={5}>
-                PhishingStressor dashboard
-            </Title>
-        </Group>
-      </div>
-      <div className={classes.links} style={{ flex: 1 }}>
-        <LinksGroup
-              icon={experimentMenu.icon}
-              label={experimentMenu.label}
-              initiallyOpened={false}
-            />
-    </div>
+      <Paper 
+        shadow="xs" 
+        withBorder 
+        style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
+      >
+      {headerComponent}
 
-      <div className={classes.footer}>
-        <Button variant="outline" color="red" fullWidth leftSection={<ArrowLeft size={16} />} component="a" href="/api/auth/signout">
-            Sign out
-        </Button>
-      </div>
-    </nav>
+        <div style={{ flex: 1, padding: '8px' }}>
+          <LinksGroup
+            icon={experimentMenu.icon}
+            label={experimentMenu.label}
+            initiallyOpened={false}
+          />
+        </div>
+        {footerComponent}
+      </Paper>
     );
   }
 
-
   return (
-    <nav className={classes.navbar}>
-      <div className={classes.header}>
-        <Group justify="space-between">
-            <Title order={5}>
-                PhishingStressor dashboard
-            </Title>
-        </Group>
-      </div>
-      
-      <div className={classes.footer}>
-            <UnstyledButton className={classes.user}>
-        <Group>
-            <div style={{ flex: 1 }}>
-            <Text c="dimmed" size="xs">
-                Current experiment
-            </Text>
-            <Text size="sm" fw={500}>
-                Experiment 1
-            </Text>
-            </div>
-
-            <ArrowRightLeft size={14} />
-        </Group>
-        </UnstyledButton>
-      </div>
-
-      <ScrollArea className={classes.links}>
-        <div className={classes.linksInner}>
-          {mockdata.map((item) => (
-            <LinksGroup
-              key={item.label}
-              icon={item.icon as LucideIcon}
-              label={item.label}
-              initiallyOpened={false}
-              links={item.links}
-            />
-          ))}
-        </div>
+    <Paper 
+      shadow="xs" 
+      withBorder 
+      style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
+    >
+      {headerComponent}
+      {experimentId && (
+        <>
+          <Button 
+            component={Link} 
+            href={'/researcher/experiments'}
+            fullWidth
+            variant='subtle'
+            radius={0}
+            rightSection={<ArrowRightLeft size={14} />}
+            h={60}
+            py={10}
+          >
+            <Group>
+              <Flex direction={"column"} align={"flex-start"}>
+                <Text c="dimmed" size="xs">Current Experiment</Text>
+                <Text size="sm" fw={600} c={"black.3"}>{experimentId}</Text>
+              </Flex>
+            </Group>
+          </Button>
+          <Divider />
+        </>
+      )}
+      <ScrollArea style={{ flex: 1, padding: '16px' }}>
+        {mockdata.map((item) => (
+          <LinksGroup
+            key={item.label}
+            icon={item.icon}
+            label={item.label}
+            initiallyOpened={false}
+            links={item.links}
+          />
+        ))}
       </ScrollArea>
-
-      <div className={classes.footer}>
-        <Button variant="outline" color="red" fullWidth leftSection={<ArrowLeft size={16} />} component="a" href="/api/auth/signout">
-            Sign out
-        </Button>
-      </div>
-    </nav>
+      {footerComponent}
+    </Paper>
   );
 }
