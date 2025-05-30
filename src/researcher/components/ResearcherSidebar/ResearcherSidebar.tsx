@@ -28,21 +28,13 @@ import {
   LogOut 
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
-import { signOut } from '@/auth';
+import { signOut } from "next-auth/react";
 import Link from 'next/link';
 
 interface MenuItem {
   label: string;
   icon: LucideIcon;
   links?: { label: string; link: string }[];
-}
-
-interface Experiment {
-  id: string;
-  name: string;
-  duration: number;
-  researchers: { id: string; username: string }[];
-  groups: { id: string; experimentId: string; name: string; capacity: number }[];
 }
 
 interface SidebarProps {
@@ -100,7 +92,9 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
           color="red"
           fullWidth
           leftSection={<LogOut size={16} />}
-          onClick={() => signOut}
+          onClick={() => signOut({
+            redirectTo: "/login/researcher",
+          })}
         >
           Sign out
         </Button>
@@ -112,7 +106,7 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
     return (
       <Paper 
         shadow="xs" 
-        withBorder 
+        radius={0}
         style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
       >
       {headerComponent}
