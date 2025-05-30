@@ -9,13 +9,10 @@ import {
   Button, 
   ScrollArea, 
   Divider, 
-  ThemeIcon, 
-  UnstyledButton,
-  Stack,
+  ThemeIcon,
   Flex
 } from '@mantine/core';
 import { 
-  ArrowLeft, 
   ArrowRightLeft, 
   CalendarCheck, 
   CircuitBoard, 

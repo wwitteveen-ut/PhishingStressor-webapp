@@ -1,7 +1,7 @@
 "use client";
 import { Experiment } from "@/researcher/store/types";
 import ExperimentListItem from "../ExperimentListItem";
-import { Button, Container, Grid, Group, SimpleGrid, Stack, Title } from "@mantine/core";
+import { Button, Group, SimpleGrid, Stack, Title } from "@mantine/core";
 import { PlusIcon } from "lucide-react";
 
 export default function ExperimentList({experiments}:{experiments:Experiment[]}){
