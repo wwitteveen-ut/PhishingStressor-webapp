@@ -1,9 +1,9 @@
 "use server";
+import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { Experiment } from "../store/types";
-import { getApiUrl } from "@/shared/utils/apiHelper";
 
 export const getExperiment = async (experimentId: number): Promise<Experiment> => {
-    const path = getApiUrl(`/api/experiments/${experimentId}`);
+    const path = await getExternalApiUrl(`/api/experiments/${experimentId}`);
     const response = await fetch(path);
 
     const data = await response.json();
@@ -11,7 +11,7 @@ export const getExperiment = async (experimentId: number): Promise<Experiment> =
 }
 
 export const getExperiments = async (): Promise<Experiment[]> => {
-    const path = getApiUrl(`/api/experiments`);
+    const path = await getExternalApiUrl(`/api/experiments`);
     const response = await fetch(path);
 
     const data = await response.json();

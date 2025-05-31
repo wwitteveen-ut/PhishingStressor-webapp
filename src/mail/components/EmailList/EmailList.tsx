@@ -21,7 +21,7 @@ export default function EmailList({initialEmails = []} : {initialEmails?: Zustan
   const query = useEmailClientStore((state) => state.searchQuery);
   const selectedCategory = useEmailClientStore((state) => state.selectedCategory);
 
-  emails = emails.filter((email) => email.title.startsWith(query) || email.content.search(query) !== -1 || email.senderName.search(query) !== -1 || email.senderAddress.search(query) !== -1);
+  emails = emails.filter((email) => email.title.search(query) !== -1 || email.content.search(query) !== -1 || email.senderName.search(query) !== -1 || email.senderAddress.search(query) !== -1);
   emails = emails.filter((email) => {
     if (selectedCategory === 'inbox') {
       return !email.isTrashed;
