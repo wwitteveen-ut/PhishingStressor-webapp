@@ -49,3 +49,33 @@ export const downloadAttachment = async (emailId: string, attachmentData: EmailA
         filename: attachmentData.filename
     };
 }
+
+export const sendReply = async (emailId: string, formData: FormData) => {
+  try {
+    const token = await auth();
+    if (!token) {
+      throw new Error("Authentication failed: No token received");
+    }
+
+    const path = await getExternalApiUrl(
+      `/api/experiments/${token.user.experimentId}/emails/${emailId}/replies`
+    );
+
+    const response = await fetch(path, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    const result = await response.json();
+    console.log("Reply sent successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error;
+  }
+};

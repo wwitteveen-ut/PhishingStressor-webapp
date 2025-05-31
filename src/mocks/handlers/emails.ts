@@ -3,7 +3,6 @@ import { mockEmails } from '../data/emails';
 import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 import { getApiUrl } from '@/shared/utils/apiHelper';
 
-
 export const emailsHandlers = [
   http.get(await getExternalApiUrl(`/api/experiments/:experimentId/emails`), () => {
     return HttpResponse.json(mockEmails);
@@ -30,4 +29,9 @@ export const emailsHandlers = [
       },
     });
   }),
+  http.post(await getExternalApiUrl(`/api/experiments/:experimentId/emails/:emailId/replies`), async ({request}) => {
+    const info = await request.formData();
+    console.log(info);
+    return HttpResponse.json(info);
+   }),
 ];
