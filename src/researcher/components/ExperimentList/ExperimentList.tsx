@@ -11,7 +11,6 @@ export default function ExperimentList({experiments}:{experiments:Experiment[]})
           <Title order={2}>My Experiments</Title>
           <Button
             leftSection={<PlusIcon size={16} />}
-            color="blue"
           >
             New Experiment
           </Button>

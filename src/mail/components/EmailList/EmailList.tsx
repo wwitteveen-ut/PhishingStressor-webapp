@@ -11,7 +11,6 @@ export default function EmailList({initialEmails = []} : {initialEmails?: Zustan
   const setEmails = useEmailClientStore((state) => state.setEmails);
   const selectedEmailId = useEmailClientStore((state) => state.selectedEmailId);
 
-   
   useEffect(() => {
     if (initialEmails.length > 0) {
       setEmails(initialEmails);

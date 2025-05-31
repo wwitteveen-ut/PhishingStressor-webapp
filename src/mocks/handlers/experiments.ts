@@ -1,11 +1,12 @@
 import { http, HttpResponse } from 'msw';
 import { mockExperiments } from '../data/experiments';
+import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 
 export const experimentsHandlers = [
-  http.get(`${process.env.API_BASE_URL}/api/experiments`, () => {
+    http.get(await getExternalApiUrl('/api/experiments'), () => {
     return HttpResponse.json(mockExperiments);
-  }),
-  http.get(`${process.env.API_BASE_URL}/api/experiments/:experimentId`, ({ params }) => {
+    }),
+    http.get(await getExternalApiUrl('/api/experiments/:experimentId'), ({ params }) => {
     const { experimentId } = params;
     const experiment = mockExperiments.find(e => e.id === experimentId);
 

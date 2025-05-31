@@ -1,9 +1,9 @@
 "use server";
 
-import { getApiUrl } from "@/shared/utils/apiHelper";
+import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
 export async function authenticateParticipant(username: string, password: string) {
-  const res = await fetch(getApiUrl("/api/auth/login/participant"), {
+  const res = await fetch(await getExternalApiUrl("/api/auth/login/participant"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export async function authenticateParticipant(username: string, password: string
 }
 
 export async function authenticateResearcher(username: string, password: string) {
-  const res = await fetch(getApiUrl("/api/auth/login/participant"), {
+  const res = await fetch(await getExternalApiUrl("/api/auth/login/participant"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

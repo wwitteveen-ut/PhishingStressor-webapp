@@ -3,7 +3,7 @@ import {
   ArrowLeftIcon,
 } from 'lucide-react'
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
-import EmailAttachmentListItem from '../EmailAttachmentList';
+import EmailAttachmentList from '../EmailAttachmentList';
 import EmailReplySection from '../EmailReplySection';
 import TrashActionButton from '../TrashActionButton';
 import { Container } from '@mantine/core';
@@ -75,7 +75,7 @@ export default function EmailView() {
           <p>Best regards,</p>
           <p>{email.senderName}</p>
         </Container>
-        <EmailAttachmentListItem attachments={email.attachments}/>
+        <EmailAttachmentList emailId={email.id} attachments={email.attachments}/>
 
         { !email.isTrashed && (
           <EmailReplySection/>
