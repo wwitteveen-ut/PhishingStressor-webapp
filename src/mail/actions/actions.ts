@@ -2,7 +2,6 @@
 import { auth } from "@/auth";
 import { Email, EmailAttachmentData } from "../store/types";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
-import { NextResponse } from "next/server";
 
 export const getEmail = async (id: number): Promise<Email> => {
     const token = await auth();
