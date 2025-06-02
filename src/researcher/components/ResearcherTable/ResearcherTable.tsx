@@ -26,13 +26,12 @@ export default function ResearcherList({researchers}:{researchers:ApiUser[]}){
   ));  
   
   return (
-        <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
+      <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
         <Group justify="space-between" mb="lg">
-          <Title order={2}>My Experiments</Title>
+          <Title order={2}>All researchers</Title>
           <ExperimentForm/>
         </Group>
-    <Paper flex={1} p={"md"}>
-        
+          <Paper flex={1} p={"md"}>
           <Table>
           <Table.Thead>
             <Table.Tr>

@@ -1,8 +1,18 @@
 "use client";
 
-import { Button, Container, PasswordInput, TextInput, Title, useMantineTheme } from '@mantine/core';
+import {
+    Button,
+    Container,
+    Group,
+    PasswordInput,
+    Stack,
+    TextInput,
+    ThemeIcon,
+    Title,
+    useMantineTheme,
+} from '@mantine/core';
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, BeakerIcon, Key, Mail } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Beaker, Mail, RectangleEllipsis, User } from 'lucide-react';
 import { signIn } from "next-auth/react";
 import { useForm } from '@mantine/form';
 
@@ -23,65 +33,65 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
         },
     });
 
-    const credentialsAction = ({username, password}: {
-        username: string,
-        password: string
+    const credentialsAction = ({ username, password }: {
+        username: string;
+        password: string;
     }) => {
         signIn(variant, {
-            username: username,
-            password: password,
+            username,
+            password,
             redirectTo: variant === "participant" ? "/mail" : "/researcher/experiments",
         });
     };
 
     return (
-        <Container size="xs" className="w-100 space-y-8">
-            <div>
-                    <div className="flex items-center justify-center">
-
+        <Container size="md" className="w-100">
+            <Stack gap="xs">
+                <div className="flex items-center justify-center">
+                <ThemeIcon size={60} variant='transparent'>
                 { variant === "researcher" ? (
-                    <BeakerIcon className="h-12 w-12" color={theme.colors.blue[6]} />
+                    <Beaker size={60} />
                 ) : (
-                    <Mail className="h-12 w-12" color={theme.colors.blue[6]} />
+                    <Mail size={60}/>
                 )}
+                </ThemeIcon>
                 </div>
 
                 <Title order={1} className="text-center text-3xl font-bold text-gray-900">
                     PhishingStressor
                 </Title>
-                <Title order={3} className="mt-6 text-center text-2xl font-medium text-gray-500">
+                <Title order={3} className="mt-6 text-center text-2xl font-medium text-gray-400">
                     { variant === "researcher" ? "Sign in as researcher" : "Sign in as participant" }
                 </Title>
-            </div>
+            
 
-            <form className="space-y-6" onSubmit={form.onSubmit(credentialsAction)}>
-                <div className="space-y-4">
+            <form onSubmit={form.onSubmit(credentialsAction)}>
+                <Stack gap={"md"}>
                     <TextInput
-                        leftSection={<Mail size={16} />}
-                        placeholder="Email address"
+                        leftSection={<User size={16} />}
+                        placeholder="Username"
                         required
                         className="w-full"
                         key={form.key('username')}
                         {...form.getInputProps('username')}
                     />
                     <PasswordInput
-                        leftSection={<Key size={16} />}
+                        leftSection={<RectangleEllipsis size={16} />}
                         placeholder="Password"
                         required
                         className="w-full"
                         key={form.key('password')}
                         {...form.getInputProps('password')}
                     />
-                </div>
 
-                <Button
-                    type="submit"
-                    fullWidth
-                    className="group flex justify-center"
-                    rightSection={<ArrowRight size={16} />}
-                >
-                    Sign in
-                </Button>
+                     <Button
+                        type="submit"
+                        fullWidth
+                        rightSection={<ArrowRight size={16} />}
+                        >
+                        Sign in
+                    </Button>
+                </Stack>
             </form>
 
             <div className="text-center">
@@ -90,12 +100,18 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                         Go to Researcher login
                     </Button>
                 ) : (
-                    <Button leftSection={<ArrowLeft size={18}/>} variant='subtle' component={Link} href="/login">
-                         Back to participant login
-                    </Button>
+                    <Group justify='space-between'>
+                        <Button leftSection={<ArrowLeft size={18}/>} variant='subtle' component={Link} href="/login">
+                            To participant login
+                        </Button>
+                        <Button rightSection={<ArrowRight size={18}/>} color={"gray"} variant='subtle' component={Link} href="/login/researcher/register">
+                            Or register here
+                        </Button>
+                    </Group>
                 )
             }   
             </div>
+            </Stack>
         </Container>
     );
 }
