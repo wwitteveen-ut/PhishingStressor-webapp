@@ -9,6 +9,7 @@ export default function ExperimentForm() {
     const form = useForm({
         initialValues: {
             name: '',
+            researchers: [''],
             groups: [{ name: '', capacity: 0 }],
         },
         validate: {
@@ -21,37 +22,38 @@ export default function ExperimentForm() {
     });
 
     const groups = form.getValues().groups.map((group, index) => (
-    <Group key={index} mt="xs" align="flex-end">
-      <TextInput
-        label="Group Name"
-        placeholder="e.g. Alpha Team"
-        withAsterisk
-        style={{ flex: 1 }}
-        {...form.getInputProps(`groups.${index}.name`)}
-      />
+        <Group key={index} mt="xs" align="flex-end">
+        <TextInput
+            label="Group Name"
+            placeholder="e.g. Alpha Team"
+            withAsterisk
+            style={{ flex: 1 }}
+            {...form.getInputProps(`groups.${index}.name`)}
+        />
 
-      <NumberInput
-        label="Capacity"
-        placeholder="0"
-        min={0}
-        withAsterisk
-        style={{ width: 120 }}
-        {...form.getInputProps(`groups.${index}.capacity`)}
-      />
+        <NumberInput
+            label="Capacity"
+            placeholder="0"
+            min={0}
+            withAsterisk
+            style={{ width: 120 }}
+            {...form.getInputProps(`groups.${index}.capacity`)}
+        />
 
-      <ActionIcon
-        color="red"
-        variant="outline"
-        onClick={() => form.removeListItem('groups', index)}
-        disabled={form.values.groups.length === 1}
-        mt="md"
-      >
-        <IconTrash size={16} />
-      </ActionIcon>
-    </Group>
-  ));
+        <ActionIcon
+            color="red"
+            variant="outline"
+            onClick={() => form.removeListItem('groups', index)}
+            disabled={form.values.groups.length === 1}
+            mt="md"
+        >
+            <IconTrash size={16} />
+        </ActionIcon>
+        </Group>
+    ));
+
     return (
-        <form onSubmit={form.onSubmit(() => {})}>
+        <form onSubmit={form.onSubmit((form) => {console.log(form)})}>
             <Stack>
                 <TextInput
                     data-autofocus
@@ -60,16 +62,18 @@ export default function ExperimentForm() {
                     placeholder="Experiment 1"
                     value={form.values.name}
                     onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
-                    error={form.errors.email && 'Invalid name'}
+                    error={form.errors.name && 'Invalid name'}
                     radius="md"
                 />
                 <MultiSelect
-                label="Researchers"
-                placeholder="Pick value"
-                data={['React', 'Angular', 'Vue', 'Svelte']}
-                checkIconPosition="right"
-                searchable
-                nothingFoundMessage="Nothing found..."
+                    label="Researchers"
+                    placeholder="Pick value"
+                    data={['React', 'Angular', 'Vue', 'Svelte']}
+                    checkIconPosition="right"
+                    searchable
+                    nothingFoundMessage="Nothing found..."
+                    onChange={(values) => form.setFieldValue('researchers', values)}
+                    error={form.errors.researchers && 'Invalid name'}
                 />
                 <Box>
                     <Text fw={500} size="sm" mb="xs">
