@@ -45,25 +45,25 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
     };
 
     return (
-        <Container size="md" className="w-100">
-            <Stack gap="xs">
-                <div className="flex items-center justify-center">
-                <ThemeIcon size={60} variant='transparent'>
-                { variant === "researcher" ? (
-                    <Beaker size={60} />
-                ) : (
-                    <Mail size={60}/>
-                )}
+    <Container size="md" className="w-100">
+        <Stack gap="xs">
+            <div className="flex items-center justify-center">
+                <ThemeIcon size={69} variant='transparent'>
+                    { variant === "researcher" ? (
+                        <Beaker size={69} />
+                    ) : (
+                        <Mail size={69}/>
+                    )}
                 </ThemeIcon>
-                </div>
+            </div>
 
-                <Title order={1} className="text-center text-3xl font-bold text-gray-900">
-                    PhishingStressor
-                </Title>
-                <Title order={3} className="mt-6 text-center text-2xl font-medium text-gray-400">
-                    { variant === "researcher" ? "Sign in as researcher" : "Sign in as participant" }
-                </Title>
-            
+            <Title order={1} className="text-center text-3xl font-bold text-gray-900">
+                PhishingStressor
+            </Title>
+            <Title order={4} className="text-center text-2xl font-medium text-gray-400">
+                { variant === "researcher" ? "Sign in as researcher" : "Sign in as participant" }
+            </Title>
+        
 
             <form onSubmit={form.onSubmit(credentialsAction)}>
                 <Stack gap={"md"}>
@@ -84,7 +84,7 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                         {...form.getInputProps('password')}
                     />
 
-                     <Button
+                    <Button
                         type="submit"
                         fullWidth
                         rightSection={<ArrowRight size={16} />}
@@ -111,7 +111,7 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                 )
             }   
             </div>
-            </Stack>
-        </Container>
+        </Stack>
+    </Container>
     );
 }
