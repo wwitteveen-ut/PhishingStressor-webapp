@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
-import { Box, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
+import { Box, Button, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import classes from './LinksGroup.module.css';
 import { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 interface LinksGroupProps {
   icon: LucideIcon;
   label: string;
   initiallyOpened?: boolean;
+  active?: boolean;
+  mainLink?: string;
   links?: { label: string; link: string }[];
 }
 
@@ -17,9 +20,27 @@ export default function LinksGroup({
   icon: Icon,
   label,
   initiallyOpened = false,
+  active = false,
+  mainLink,
   links = [],
 }: LinksGroupProps) {
-  const hasLinks = links.length > 0;
+
+  if (mainLink){
+    return (
+      <UnstyledButton className={`${classes.control} ${active ? classes.active : ''}`} component={Link} href={mainLink}>
+        <Group justify="space-between" gap={0}>
+          <Group style={{ display: 'flex', alignItems: 'center' }}>
+        <ThemeIcon variant="light" size={30}>
+          <Icon size={18} />
+        </ThemeIcon>
+        <Box>{label}</Box>
+          </Group>
+        </Group>
+      </UnstyledButton>
+    )
+  }
+
+  const hasLinks = !mainLink && links.length > 0;
   const [opened, setOpened] = useState(initiallyOpened);
 
   return (

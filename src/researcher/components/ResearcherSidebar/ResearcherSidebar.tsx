@@ -22,15 +22,18 @@ import {
   Settings, 
   LayoutDashboardIcon, 
   LucideIcon, 
-  LogOut 
+  LogOut, 
+  Users
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
 import { signOut } from "next-auth/react";
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 interface MenuItem {
   label: string;
   icon: LucideIcon;
+  mainLink?: string;
   links?: { label: string; link: string }[];
 }
 
@@ -39,10 +42,23 @@ interface SidebarProps {
 }
 
 export default function ResearcherSidebar({ experimentId }: SidebarProps) {
-  const experimentMenu = {
+  const pathname = usePathname();
+  const experimentMenu: MenuItem = {
     label: 'Experiments',
     icon: CircuitBoard,
+    mainLink: "/researcher/experiments"
   };
+
+  const researchersMenu: MenuItem = {
+    label: 'Researchers',
+    icon: Users,
+    mainLink: "/researcher/researchers"
+  };
+
+  const mainMenu: MenuItem[] = [
+    experimentMenu,
+    researchersMenu,
+  ];
 
   const mockdata: MenuItem[] = [
     {
@@ -99,26 +115,7 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
     </>
   );
 
-  if (!experimentId) {
-    return (
-      <Paper 
-        shadow="xs" 
-        radius={0}
-        style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
-      >
-      {headerComponent}
-
-        <div style={{ flex: 1, padding: '8px' }}>
-          <LinksGroup
-            icon={experimentMenu.icon}
-            label={experimentMenu.label}
-            initiallyOpened={false}
-          />
-        </div>
-        {footerComponent}
-      </Paper>
-    );
-  }
+  const menu = experimentId ? mockdata : mainMenu;
 
   return (
     <Paper 
@@ -149,13 +146,15 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
           <Divider />
         </>
       )}
-      <ScrollArea style={{ flex: 1, padding: '16px' }}>
-        {mockdata.map((item) => (
+      <ScrollArea style={{ flex: 1, padding: '8px' }}>
+        {menu.map((item) => (
           <LinksGroup
             key={item.label}
             icon={item.icon}
             label={item.label}
             initiallyOpened={false}
+            active={pathname === item.mainLink}
+            mainLink={item.mainLink}
             links={item.links}
           />
         ))}
