@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { IconChevronRight } from '@tabler/icons-react';
-import { Box, Button, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
+import { Box, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import classes from './LinksGroup.module.css';
 import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -24,6 +24,9 @@ export default function LinksGroup({
   mainLink,
   links = [],
 }: LinksGroupProps) {
+  
+  const hasLinks = !mainLink && links.length > 0;
+  const [opened, setOpened] = useState(initiallyOpened);
 
   if (mainLink){
     return (
@@ -39,9 +42,6 @@ export default function LinksGroup({
       </UnstyledButton>
     )
   }
-
-  const hasLinks = !mainLink && links.length > 0;
-  const [opened, setOpened] = useState(initiallyOpened);
 
   return (
     <>

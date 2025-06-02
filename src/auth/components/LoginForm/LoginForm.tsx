@@ -9,7 +9,6 @@ import {
     TextInput,
     ThemeIcon,
     Title,
-    useMantineTheme,
 } from '@mantine/core';
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, Beaker, Mail, RectangleEllipsis, User } from 'lucide-react';
@@ -21,7 +20,6 @@ interface ILoginFormProps {
 }
 
 export default function LoginForm({ variant = "participant" }: ILoginFormProps) {
-    const theme = useMantineTheme();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {

@@ -1,6 +1,6 @@
 "use client";
-import { ApiUser, Experiment } from "@/researcher/store/types";
-import { ActionIcon, Group, Paper, SimpleGrid, Stack, Table, Title } from "@mantine/core";
+import { ApiUser } from "@/researcher/store/types";
+import { ActionIcon, Group, Paper, Stack, Table, Title } from "@mantine/core";
 import { ExperimentForm } from "../ExperimentForm";
 import { TrashIcon } from "lucide-react";
 
