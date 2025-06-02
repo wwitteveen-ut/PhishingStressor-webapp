@@ -15,7 +15,7 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
           <Text size="xs" c="dimmed" fw={500} mb="xs">Groups</Text>
           <Group gap="xs">
             {experiment.groups.map((group) => (
-              <Badge key={group.id} color="gray" variant="light">
+              <Badge key={group.id} fw={600} color="gray" variant="light">
                 {group.name} ({group.capacity})
               </Badge>
             ))}
@@ -25,7 +25,7 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
           <Text size="xs" c="dimmed" fw={500} mb="xs">Team</Text>
           <Group gap="xs">
             {experiment.researchers.map((researcher) => (
-              <Badge key={researcher.id} color="blue" variant="light">
+              <Badge key={researcher.id} fw={600} color="blue" variant="light">
                 {researcher.username}
               </Badge>
             ))}
