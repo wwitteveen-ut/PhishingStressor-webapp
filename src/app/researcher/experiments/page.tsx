@@ -11,7 +11,7 @@ export default async function ExperimentsPage() {
     return (
         <>
              <ResearcherSidebar />
-             <ScrollArea>
+             <ScrollArea flex={1}>
                 <ExperimentList experiments={experiments}/> 
              </ScrollArea>
         </>

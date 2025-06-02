@@ -54,6 +54,7 @@ export default function ExperimentForm() {
         <form onSubmit={form.onSubmit(() => {})}>
             <Stack>
                 <TextInput
+                    data-autofocus
                     required
                     label="Experiment name"
                     placeholder="Experiment 1"
