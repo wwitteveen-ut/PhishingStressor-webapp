@@ -1,4 +1,5 @@
 import { Experiment } from "@/researcher/store/types";
+import { researchers } from "./accounts";
 
 export const mockExperiments: Experiment[] = [
   {
@@ -6,14 +7,8 @@ export const mockExperiments: Experiment[] = [
     name: "experiment101",
     duration: 45,
     researchers: [
-      {
-        id: "b2c3d4e5-6f7a-8b9c-0d1e-2f3a4b5c6d7e",
-        username: "researcher1"
-      },
-      {
-        id: "c3d4e5f6-7a8b-9c0d-1e2f-3a4b5c6d7e8f",
-        username: "researcher2"
-      }
+      researchers[0],
+      researchers[1]
     ],
     groups: [
       {
@@ -35,10 +30,7 @@ export const mockExperiments: Experiment[] = [
     name: "experiment102",
     duration: 90,
     researchers: [
-      {
-        id: "a7b8c9d0-1e2f-3a4b-5c6d-7e8f9a0b1c2d",
-        username: "researcher3"
-      }
+      researchers[2]
     ],
     groups: [
       {
@@ -54,14 +46,8 @@ export const mockExperiments: Experiment[] = [
     name: "experiment103",
     duration: 30,
     researchers: [
-      {
-        id: "d0e1f2a3-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
-        username: "researcher4"
-      },
-      {
-        id: "e1f2a3b4-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
-        username: "researcher5"
-      }
+      researchers[3],
+      researchers[4]
     ],
     groups: [
       {
@@ -83,10 +69,7 @@ export const mockExperiments: Experiment[] = [
     name: "experiment104",
     duration: 120,
     researchers: [
-      {
-        id: "c5d6e7f8-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
-        username: "researcher6"
-      }
+      researchers[4]
     ],
     groups: [
       {
@@ -102,14 +85,8 @@ export const mockExperiments: Experiment[] = [
     name: "experiment105",
     duration: 75,
     researchers: [
-      {
-        id: "f8a9b0c1-2d3e-4f5a-6b7c-8d9e0f1a2b3c",
-        username: "researcher7"
-      },
-      {
-        id: "a9b0c1d2-3e4f-5a6b-7c8d-9e0f1a2b3c4d",
-        username: "researcher8"
-      }
+      researchers[0],
+      researchers[1]
     ],
     groups: [
       {
@@ -131,10 +108,8 @@ export const mockExperiments: Experiment[] = [
     name: "experiment106",
     duration: 60,
     researchers: [
-      {
-        id: "e3f4a5b6-7c8d-9e0f-1a2b-3c4d5e6f7a8b",
-        username: "researcher9"
-      }
+      researchers[0],
+      researchers[1]
     ],
     groups: [
       {
