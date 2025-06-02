@@ -13,3 +13,8 @@ export interface Experiment {
     capacity: number;
   }[];
 }
+
+export interface ApiUser {
+  id: string;
+  username: string;
+}

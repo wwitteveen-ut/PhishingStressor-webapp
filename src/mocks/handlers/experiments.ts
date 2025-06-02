@@ -4,7 +4,7 @@ import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 
 export const experimentsHandlers = [
     http.get(await getExternalApiUrl('/api/experiments'), () => {
-    return HttpResponse.json(mockExperiments);
+      return HttpResponse.json(mockExperiments);
     }),
     http.get(await getExternalApiUrl('/api/experiments/:experimentId'), ({ params }) => {
     const { experimentId } = params;

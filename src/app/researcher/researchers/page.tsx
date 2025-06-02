@@ -1,18 +1,18 @@
 "use server";
 
-import { getExperiments } from "@/researcher/actions/actions";
-import ExperimentList from "@/researcher/components/ExperimentList";
+import { getResearchers } from "@/researcher/actions/actions";
+import ResearcherList from "@/researcher/components/ResearcherTable";
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
 import { ScrollArea } from "@mantine/core";
 
 export default async function ExperimentsPage() {
-    const experiments = await getExperiments();
+    const researchers = await getResearchers();
 
     return (
         <>
              <ResearcherSidebar />
-             <ScrollArea>
-                <ExperimentList experiments={experiments}/> 
+             <ScrollArea flex={1}>
+                <ResearcherList researchers={researchers}/>
              </ScrollArea>
         </>
     );
