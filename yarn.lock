@@ -2585,6 +2585,11 @@ headers-polyfill@^4.0.2:
   resolved "https://registry.yarnpkg.com/headers-polyfill/-/headers-polyfill-4.0.3.tgz#922a0155de30ecc1f785bcf04be77844ca95ad07"
   integrity sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==
 
+heatmap-ts@^0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/heatmap-ts/-/heatmap-ts-0.0.5.tgz#e27f781bd724ef979e67273d906b7a18a0018e00"
+  integrity sha512-u75dNVbKFTC8sdcWxr0HdQ0ceb4hkgqDlzI8vv76gX9clZBdzOJyAKDfh+vDuha9TkD+pe5iQPkuD4iY3hadng==
+
 highlight.js@^11.10.0:
   version "11.11.1"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.11.1.tgz#fca06fa0e5aeecf6c4d437239135fabc15213585"

@@ -1,33 +1,56 @@
 "use client";
+import { useContext, useEffect } from "react";
 import EmailList from "../EmailList";
 import EmailView from "../EmailView";
 import { ZustandEmail } from "@/mail/store/types";
-import RefreshButton from "../RefreshButton";
 import { EmailClientStoreContext } from "@/mail/providers/EmailClientStoreProvider";
-import { useContext, useEffect } from "react";
+import { DataPoint } from "heatmap-ts";
 
-export function EmailClient({emails = []}: {emails: ZustandEmail[]}) {
+export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
     const store = useContext(EmailClientStoreContext);
-    
-    useEffect(() => {
+    let dataPoints: DataPoint[] = [];
 
+    useEffect(() => {
         if (!store) return;
-        console.log("hello");
+
+        let mouseX = 0;
+        let mouseY = 0;
 
         const unsub = store.subscribe(
             (state) => state.selectedEmailId,
-            console.log
+            () => {
+                console.log("Noticed email switch, stopped tracking. Received info:", dataPoints);
+                dataPoints = [];
+            }
         );
-        return () => unsub();
+
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+
+        const trackHeatmap = () => {
+            dataPoints.push({ x: mouseX, y: mouseY, value: 100 });
+        };
+
+        const interval = setInterval(trackHeatmap, 500);
+
+        return () => {
+            unsub();
+            clearInterval(interval);
+            window.removeEventListener("mousemove", handleMouseMove);
+        };
     }, [store]);
 
     return (
-            <>
+        <>
             <div className="flex flex-1 overflow-hidden">
-                <EmailList initialEmails={emails}/>
-                <EmailView/>
+                <EmailList initialEmails={emails} />
+                <EmailView />
             </div>
-            <RefreshButton/>
-            </>
+            {/* <RefreshButton /> */}
+        </>
     );
 }
