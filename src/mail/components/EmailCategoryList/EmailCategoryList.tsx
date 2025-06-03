@@ -1,5 +1,6 @@
 "use client"
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
+import { Badge, Group, NavLink, ThemeIcon, Text, Flex, Stack } from '@mantine/core';
 import {
   InboxIcon,
   TrashIcon,
@@ -7,7 +8,7 @@ import {
 
 export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
-  const activeCategory: string = useEmailClientStore((state) => state.selectedCategory);
+  const selectedCategory = useEmailClientStore((state) => state.selectedCategory);
   const unreadCount = useEmailClientStore((state) => state.getUnreadCount());
 
   const menuItems = [
@@ -24,28 +25,47 @@ export default function EmailCategoryList() {
     },
   ]
 
-    return (
-      <nav className="mt-6 flex-1 overflow-y-auto">
-        <ul>
-          {menuItems.map((item) => (
-             <li key={item.id}>
-                <button
-                onClick={() => selectCategory(item.id)}
-                className={`flex items-center w-full px-4 py-2 text-sm ${activeCategory === item.id ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-100'}`}
-                >
-                <item.icon size={18} className="mr-3" />
-                <span>{item.label}</span>
-                {item.count && item.count > 0 ? (
-                  <span
-                  className={`ml-auto px-2 py-0.5 rounded-full text-xs ${activeCategory === item.id ? 'bg-blue-100 text-blue-600' : 'bg-gray-200 text-gray-600'}`}
-                  >
-                  {item.count}
-                  </span>
-                ) : null}
-                </button>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    );
+  return (
+    <Stack flex={1} gap={0}>
+      {menuItems.map((item) => (
+        <NavLink
+          key={item.id}
+          label={
+            <Group>
+              <ThemeIcon variant='transparent' color={selectedCategory === item.id ? 'blue.7' : 'gray.6'}>
+                <item.icon size={18} />
+              </ThemeIcon>
+              <Text fw={500} fz={'sm'} c={selectedCategory === item.id ? 'blue.7' : 'gray.8'}>
+                {item.label}
+              </Text>
+            </Group>
+          }
+          rightSection={
+            item.count ? (
+              <Badge 
+                size="xs" 
+                variant='light' 
+                color={selectedCategory === item.id ? 'blue.5' : 'gray.4'} 
+                circle
+              >
+                {item.count}
+              </Badge>
+            ) : null
+          }
+          active={selectedCategory === item.id}
+          onClick={() => selectCategory(item.id)}
+          color="blue.6"
+          variant="light"
+          styles={{
+            root: { 
+              borderRadius: '0.25rem',
+              '&:hover': {
+                backgroundColor: '#e6f0fa',
+              },
+            },
+          }}
+        />
+      ))}
+    </Stack>
+  );
 }
