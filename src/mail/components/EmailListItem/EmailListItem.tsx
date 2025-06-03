@@ -52,13 +52,11 @@ export default function EmailListItem({email, isSelected}: {email:ZustandEmail, 
         <Text size="xs" c="gray.6" truncate style={{ flex: 1 }}>
         {email.content}
         </Text>
-        <Group gap="xs">
         {email.attachments.length > 0 && (
           <ThemeIcon color='gray.6' variant='transparent'>
-            <Paperclip size={14} />
+            <Paperclip size={13} />
           </ThemeIcon>
         ) }
-        </Group>
       </Group>
       </Box>
       </Box>
