@@ -1,7 +1,6 @@
 "use client";
 import { ApiUser } from "@/researcher/store/types";
 import { ActionIcon, Group, Paper, Stack, Table, Title } from "@mantine/core";
-import { ExperimentForm } from "../ExperimentForm";
 import { TrashIcon } from "lucide-react";
 
 export default function ResearcherList({researchers}:{researchers:ApiUser[]}){
@@ -29,7 +28,6 @@ export default function ResearcherList({researchers}:{researchers:ApiUser[]}){
       <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
         <Group justify="space-between" mb="lg">
           <Title order={2}>All researchers</Title>
-          <ExperimentForm/>
         </Group>
           <Paper flex={1} p={"md"}>
           <Table>

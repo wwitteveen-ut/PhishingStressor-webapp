@@ -26,9 +26,6 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
             username: '',
             password: '',
         },
-        validate: {
-            username: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-        },
     });
 
     const credentialsAction = ({ username, password }: {

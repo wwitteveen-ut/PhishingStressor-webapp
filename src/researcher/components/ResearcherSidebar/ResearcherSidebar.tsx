@@ -14,16 +14,14 @@ import {
 } from '@mantine/core';
 import { 
   ArrowRightLeft, 
-  CalendarCheck, 
-  CircuitBoard, 
-  FileBarChart, 
-  LineChart, 
-  Lock, 
-  Settings, 
   LayoutDashboardIcon, 
   LucideIcon, 
   LogOut, 
-  Users
+  Users,
+  SquareGanttChart,
+  Mail,
+  ChartArea,
+  FlaskConical
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
 import { signOut } from "next-auth/react";
@@ -33,6 +31,7 @@ import { usePathname } from 'next/navigation';
 interface MenuItem {
   label: string;
   icon: LucideIcon;
+  initiallyOpened?: boolean;
   mainLink?: string;
   links?: { label: string; link: string }[];
 }
@@ -45,7 +44,7 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
   const pathname = usePathname();
   const experimentMenu: MenuItem = {
     label: 'Experiments',
-    icon: CircuitBoard,
+    icon: FlaskConical,
     mainLink: "/researcher/experiments"
   };
 
@@ -62,24 +61,28 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
 
   const mockdata: MenuItem[] = [
     {
-      label: 'Releases',
-      icon: CalendarCheck,
-      links: [
-        { label: 'Upcoming releases', link: '/' },
-        { label: 'Previous releases', link: '/' },
-        { label: 'Releases schedule', link: '/' },
-      ],
+      label: 'Overview',
+      icon: SquareGanttChart,
+      mainLink: `/researcher/experiments/${experimentId}`
     },
-    { label: 'Analytics', icon: LineChart },
-    { label: 'Contracts', icon: FileBarChart },
-    { label: 'Settings', icon: Settings },
+    { 
+      label: 'Emails', 
+      icon: Mail,
+      mainLink: `/researcher/experiments/${experimentId}/emails`
+    },
+    { 
+      label: 'Researchers', 
+      icon: Users,
+      mainLink: `/researcher/experiments/${experimentId}/researchers`
+    },
     {
-      label: 'Security',
-      icon: Lock,
+      label: 'Statistics',
+      icon: ChartArea,
+      initiallyOpened: true,
       links: [
-        { label: 'Enable 2FA', link: '/' },
-        { label: 'Change password', link: '/' },
-        { label: 'Recovery codes', link: '/' },
+        { label: 'First statistic', link: '/' },
+        { label: 'Second statistic', link: '/' },
+        { label: 'Third statistic', link: '/' },
       ],
     },
   ];
@@ -152,7 +155,7 @@ export default function ResearcherSidebar({ experimentId }: SidebarProps) {
             key={item.label}
             icon={item.icon}
             label={item.label}
-            initiallyOpened={false}
+            initiallyOpened={item.initiallyOpened}
             active={pathname === item.mainLink}
             mainLink={item.mainLink}
             links={item.links}

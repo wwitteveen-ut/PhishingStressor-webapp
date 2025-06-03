@@ -1,6 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { authenticateParticipant } from "./auth/actions/actions"
+import { authenticateParticipant, authenticateResearcher } from "./auth/actions/actions"
 
 declare module "next-auth" {
   interface Session {
@@ -22,6 +22,7 @@ declare module "@auth/core/jwt" {
   interface JWT {
     username: string;
     experimentId: string;
+    id?:string;
     loggedIn: string;
   }
 }
@@ -60,7 +61,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       authorize: async (credentials) => {
         console.log("credentials", credentials)
-        const token = await authenticateParticipant(
+        const token = await authenticateResearcher(
           credentials?.username as string,
           credentials?.password as string
         );
@@ -73,6 +74,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, user }) {
       if (user) {
         token.loggedIn = user.loggedIn;
+        token.id = user.id;
         token.experimentId = user.experimentId;
         token.username = user.username;
       }
@@ -82,6 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.experimentId = token.experimentId;
       session.user.loggedIn = token.loggedIn;
       session.user.username = token.username;
+      session.user.id = token.id ?? '';
       return session
     },
   },

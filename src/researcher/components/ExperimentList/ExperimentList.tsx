@@ -1,4 +1,3 @@
-"use client";
 import { Experiment } from "@/researcher/store/types";
 import ExperimentListItem from "../ExperimentListItem";
 import { Group, SimpleGrid, Stack, Title } from "@mantine/core";

@@ -1,3 +1,4 @@
+"use client";
 import { Experiment } from "@/researcher/store/types";
 import { ActionIcon, Badge, Button, Card, Stack, Group, Text } from "@mantine/core";
 import { TrashIcon } from "lucide-react";

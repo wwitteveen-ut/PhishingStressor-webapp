@@ -1,11 +1,19 @@
 "use client";
 
-import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect } from "@mantine/core";
+import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal } from "@mantine/core";
 import { hasLength, isInRange, useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { PlusIcon } from "lucide-react";
 
-export default function ExperimentForm() {
+export interface choice{
+    label: string;
+    value: string;
+}
+
+export default function ExperimentForm({researcherChoices}: {researcherChoices: choice[]}) {
+    const [opened, { open, close }] = useDisclosure(false);
+
     const form = useForm({
         initialValues: {
             name: '',
@@ -53,6 +61,13 @@ export default function ExperimentForm() {
     ));
 
     return (
+        <>
+        <Modal
+            opened={opened}
+            onClose={close}
+            size={"xl"}
+            title={"Create new experiment"}
+        >
         <form onSubmit={form.onSubmit((form) => {console.log(form)})}>
             <Stack>
                 <TextInput
@@ -63,12 +78,11 @@ export default function ExperimentForm() {
                     value={form.values.name}
                     onChange={(event) => form.setFieldValue('name', event.currentTarget.value)}
                     error={form.errors.name && 'Invalid name'}
-                    radius="md"
                 />
                 <MultiSelect
                     label="Researchers"
                     placeholder="Pick value"
-                    data={['React', 'Angular', 'Vue', 'Svelte']}
+                    data={researcherChoices}
                     checkIconPosition="right"
                     searchable
                     nothingFoundMessage="Nothing found..."
@@ -103,5 +117,13 @@ export default function ExperimentForm() {
                 </Button>
             </Stack>
         </form>
+        </Modal>
+        <Button
+            leftSection={<PlusIcon size={16} />}
+            onClick={open}
+            >
+            New Experiment
+        </Button>
+        </>
     );
 }
