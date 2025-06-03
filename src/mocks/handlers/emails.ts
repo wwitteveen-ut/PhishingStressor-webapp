@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { mockEmails } from '../data/emails';
+import { mockAttachments, mockEmails } from '../data/emails';
 import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 import { getApiUrl } from '@/shared/utils/apiHelper';
 
@@ -17,15 +17,19 @@ export const emailsHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Email not found' });
     }
   }),
-  http.get(await getExternalApiUrl(`/api/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`), async () => {
-    
-    const res = await fetch(getApiUrl('/mock/sample.pdf'));
+  http.get(await getExternalApiUrl(`/api/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`), async ({params}) => {
+    const { attachmentId } = params;
+    const attachment = mockAttachments.find(a => a.id === attachmentId);    
+    if (!attachment) {
+      return new HttpResponse(null, { status: 404, statusText: 'Attachment not found' });
+    }
+    const res = await fetch(getApiUrl(`/mock/${attachment.filename}`));
     const buffer = await res.arrayBuffer();
     return new HttpResponse(buffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/octet-stream',
-        'Content-Disposition': 'attachment; filename="test.pdf"',
+        'Content-Disposition': `attachment; filename="${attachment.filename}"`,
       },
     });
   }),
