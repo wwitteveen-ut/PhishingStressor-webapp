@@ -71,9 +71,6 @@ export default function EmailView() {
         </div>
         <Container fluid p={0} mt={'xl'}>          
           <p>{email.content}</p>
-          <br />
-          <p>Best regards,</p>
-          <p>{email.senderName}</p>
         </Container>
         <EmailAttachmentList emailId={email.id} attachments={email.attachments}/>
 

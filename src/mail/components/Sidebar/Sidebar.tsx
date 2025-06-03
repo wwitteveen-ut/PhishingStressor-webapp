@@ -8,7 +8,6 @@ export default async function Sidebar() {
   if (!session) {
     redirect('/login')
   }
-  console.log(session);
   
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
