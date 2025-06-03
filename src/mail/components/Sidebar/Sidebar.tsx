@@ -8,6 +8,7 @@ export default async function Sidebar() {
   if (!session) {
     redirect('/login')
   }
+  console.log(session);
   
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
@@ -20,7 +21,7 @@ export default async function Sidebar() {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center">
           <div className="ml-3">
-            <p className="text-xs text-gray-500">{session.user?.email}</p>
+            <p className="text-xs text-gray-500">{session.user.username}</p>
           </div>
         </div>
       </div>

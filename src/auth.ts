@@ -51,7 +51,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // Replace this with your actual user validation logic
  
         // Return user object with their profile data
-        token.loggedInAt = new Date().toUTCString();
+        token.username = credentials.username;
+
         console.log("token", token);
 
         return token;

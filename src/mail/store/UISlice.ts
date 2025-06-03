@@ -31,7 +31,7 @@ export const initialUISliceState: UISlice = {
 
 export const createUISlice: StateCreator<
   EmailClientState,
-  [['zustand/devtools', never]],
+  [['zustand/devtools', never], ['zustand/subscribeWithSelector', never]],
   [],
   UISlice
 > = (set, get) => ({
