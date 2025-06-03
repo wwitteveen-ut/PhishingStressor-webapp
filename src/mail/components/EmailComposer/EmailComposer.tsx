@@ -6,7 +6,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
-import { CrossIcon, PaperclipIcon } from "lucide-react";
+import { CrossIcon, PaperclipIcon, X } from "lucide-react";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import { UseFormReturnType } from "@mantine/form";
 import { CloseButton } from "@mantine/core";
@@ -125,7 +125,7 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
             <RichTextEditor.Content className="min-h-[200px] prose prose-sm max-w-none" />
           </Dropzone>
         </RichTextEditor>
-
+        
         {attachments.length > 0 && (
           <div className="p-4">
             <h4 className="text-sm font-medium text-gray-700 mb-2">Attachments</h4>
@@ -146,7 +146,7 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
                     onClick={() => handleRemoveAttachment(attachment.id)}
                     className="ml-2 text-gray-400 hover:text-gray-600"
                   >
-                    <CrossIcon size={14} />
+                    <X size={14} />
                   </button>
                 </div>
               ))}

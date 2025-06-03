@@ -66,7 +66,7 @@ export default function EmailAttachmentListItem({ emailId, attachmentData }: Ema
         </div>
         <div className="ml-3">
           {isDownloading ? (
-            <Loader size={16} color="gray.5" variant="dots" />          
+            <Loader size={16} color="gray.5" />          
           ) : (
             <DownloadIcon size={18} />
           )}
