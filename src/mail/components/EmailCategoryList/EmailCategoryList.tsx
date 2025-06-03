@@ -1,6 +1,6 @@
 "use client"
 import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
-import { Badge, Group, NavLink, ThemeIcon, Text, Flex, Stack } from '@mantine/core';
+import { Badge, Group, NavLink, ThemeIcon, Text, Stack } from '@mantine/core';
 import {
   InboxIcon,
   TrashIcon,
