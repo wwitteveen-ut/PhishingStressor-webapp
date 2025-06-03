@@ -1,4 +1,6 @@
-import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
+import { getExperiment } from "@/researcher/actions/actions";
+import { ExperimentProvider } from "@/researcher/components/ExperimentContext/ExperimentContext";
+import ExperimentSidebar from "@/researcher/components/ExperimentSidebar";
 import { ReactNode } from "react";
 
 export default async function Layout({
@@ -9,11 +11,12 @@ export default async function Layout({
   params: Promise<{ experimentId: string }>;
 }) {
   const { experimentId } = await params;
+  const experiment = await getExperiment(experimentId);
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <ResearcherSidebar experimentId={experimentId} />
-      {children}
-    </div>
+      <ExperimentProvider experiment={experiment}>
+        <ExperimentSidebar/>
+        {children}
+      </ExperimentProvider>
   );
 }

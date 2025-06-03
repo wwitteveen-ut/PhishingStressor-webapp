@@ -4,22 +4,30 @@ import React from 'react';
 import { 
   Paper, 
   Group, 
+  Text, 
   Title, 
   Button, 
   ScrollArea, 
   Divider, 
   ThemeIcon,
+  Flex,
+  Stack
 } from '@mantine/core';
 import { 
+  ArrowRightLeft, 
   LayoutDashboardIcon, 
   LucideIcon, 
   LogOut, 
   Users,
-  FlaskConical
+  SquareGanttChart,
+  Mail,
+  ChartArea,
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
 import { signOut } from "next-auth/react";
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useExperimentContext } from '../ExperimentContext/ExperimentContext';
 
 interface MenuItem {
   label: string;
@@ -29,22 +37,37 @@ interface MenuItem {
   links?: { label: string; link: string }[];
 }
 
-export default function ResearcherSidebar() {
+export default function ExperimentSidebar() {
   const pathname = usePathname();
+  const experiment = useExperimentContext();
 
-  const mainMenu: MenuItem[] = [
+  const mockdata: MenuItem[] = [
     {
-    label: 'Researchers',
-    icon: Users,
-    mainLink: "/researcher/researchers"
-  },
+      label: 'Overview',
+      icon: SquareGanttChart,
+      mainLink: `/researcher/experiments/${experiment.id}`
+    },
+    { 
+      label: 'Emails', 
+      icon: Mail,
+      mainLink: `/researcher/experiments/${experiment.id}/emails`
+    },
+    { 
+      label: 'Researchers', 
+      icon: Users,
+      mainLink: `/researcher/experiments/${experiment.id}/researchers`
+    },
     {
-    label: 'Experiments',
-    icon: FlaskConical,
-    mainLink: "/researcher/experiments"
-  }
+      label: 'Statistics',
+      icon: ChartArea,
+      initiallyOpened: true,
+      links: [
+        { label: 'First statistic', link: '/' },
+        { label: 'Second statistic', link: '/' },
+        { label: 'Third statistic', link: '/' },
+      ],
+    },
   ];
-
 
   const headerComponent = (
     <>
@@ -84,8 +107,26 @@ export default function ResearcherSidebar() {
       style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       {headerComponent}
+          <Button 
+            component={Link} 
+            href={'/researcher/experiments'}
+            fullWidth
+            variant='subtle'
+            radius={0}
+            rightSection={<ArrowRightLeft size={14} />}
+            justify='space-between'
+            ta={'left'}
+            h={60}
+            py={10}
+          >
+            <Stack gap={0} flex={1}>
+                <Text c="dimmed" size="xs">Current Experiment</Text>
+                <Text size="sm" fw={600} c={"black.3"}>{experiment.name}</Text>
+            </Stack>
+          </Button>
+          <Divider />
       <ScrollArea style={{ flex: 1, padding: '8px' }}>
-        {mainMenu.map((item) => (
+        {mockdata.map((item) => (
           <LinksGroup
             key={item.label}
             icon={item.icon}
