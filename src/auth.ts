@@ -37,20 +37,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-        // Add your authentication logic here
         console.log("credentials", credentials)
         const token = await authenticateParticipant(
           credentials?.username as string,
           credentials?.password as string
         );
         
-        // Example: validate credentials against your database
-        // const user = await validateUserCredentials(credentials.email, credentials.password)
-        
-        // For now, returning null will always fail authentication
-        // Replace this with your actual user validation logic
- 
-        // Return user object with their profile data
         token.username = credentials.username;
 
         console.log("token", token);
@@ -67,20 +59,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-        // Add your authentication logic here
         console.log("credentials", credentials)
         const token = await authenticateParticipant(
           credentials?.username as string,
           credentials?.password as string
         );
-        
-        // Example: validate credentials against your database
-        // const user = await validateUserCredentials(credentials.email, credentials.password)
-        
-        // For now, returning null will always fail authentication
-        // Replace this with your actual user validation logic
- 
-        // Return user object with their profile data
 
         return token;
       },
@@ -103,7 +86,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
   pages: {
-    signIn: '/login', // Optional: customize sign-in page
+    signIn: '/login',
   },
   session: {
     strategy: "jwt",
