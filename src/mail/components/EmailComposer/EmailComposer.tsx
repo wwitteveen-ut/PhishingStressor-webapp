@@ -6,7 +6,7 @@ import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
-import { CrossIcon, PaperclipIcon, X } from "lucide-react";
+import { PaperclipIcon, X } from "lucide-react";
 import { Dropzone, FileWithPath } from "@mantine/dropzone";
 import { UseFormReturnType } from "@mantine/form";
 import { CloseButton } from "@mantine/core";
