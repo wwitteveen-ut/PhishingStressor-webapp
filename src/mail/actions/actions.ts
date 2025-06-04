@@ -1,6 +1,6 @@
 "use server";
 import { auth } from "@/auth";
-import { Email, EmailAttachmentData } from "../store/types";
+import { Email, EmailAttachmentData, ZustandEmail } from "../store/types";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
 export const getEmail = async (id: number): Promise<Email> => {
@@ -15,15 +15,31 @@ export const getEmail = async (id: number): Promise<Email> => {
     return data;
 }
 
-export const getEmails = async (): Promise<Email[]> => {
-    const token = await auth();
-    if (!token){
-        throw new Error("not good!");
+export const getEmails = async (): Promise<ZustandEmail[]> => {
+    const session = await auth();
+    if (!session) {
+        throw new Error("Unauthorized");
     }
-    const path = await getExternalApiUrl(`/api/experiments/${token.user.experimentId}/emails`);
+
+    const loggedIn = session.user.loggedIn;
+    const loggedInDate = new Date(loggedIn);
+    const path = await getExternalApiUrl(`/api/experiments/${session.user.experimentId}/emails`);
     const response = await fetch(path);
-    const data = await response.json();
-    return data;
+    const emails = await response.json() as Email[];
+
+    const filteredEmails: ZustandEmail[] = emails
+        .map((email) => {
+            const scheduledTime = new Date(Math.floor((loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000) * 60000);
+            return {
+                ...email,
+                sendAt: scheduledTime,
+                isRead: false,
+                isTrashed: false
+            };
+        })
+        .filter(email => email.sendAt < new Date());
+
+    return filteredEmails;
 }
 
 export const downloadAttachment = async (emailId: string, attachmentData: EmailAttachmentData) => {

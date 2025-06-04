@@ -1,21 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import type { ZustandEmail } from "@/mail/store/types";
 
 import EmailListFilters from "../EmailListFilters";
 import EmailListItem from "../EmailListItem";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 
-export default function EmailList({initialEmails = []} : {initialEmails?: ZustandEmail[]}) {
-  const setEmails = useEmailClientStore((state) => state.setEmails);
+export default function EmailList() {
   const selectedEmailId = useEmailClientStore((state) => state.selectedEmailId);
-
-  useEffect(() => {
-    if (initialEmails.length > 0) {
-      setEmails(initialEmails);
-    }
-  }, [initialEmails, setEmails]);
 
   let emails = useEmailClientStore((state) => state.emails);
   const query = useEmailClientStore((state) => state.searchQuery);

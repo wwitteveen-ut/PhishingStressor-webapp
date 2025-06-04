@@ -1,14 +1,36 @@
 "use client";
-import { useContext, useEffect } from "react";
+import { startTransition, useContext, useEffect } from "react";
 import EmailList from "../EmailList";
 import EmailView from "../EmailView";
 import { ZustandEmail } from "@/mail/store/types";
-import { EmailClientStoreContext } from "@/mail/providers/EmailClientStoreProvider";
+import { EmailClientStoreContext, useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 import { DataPoint } from "heatmap-ts";
+import { getEmails } from "@/mail/actions/actions";
 
 export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
     const store = useContext(EmailClientStoreContext);
+    const setEmails = useEmailClientStore((state) => state.setEmails);
+
     let dataPoints: DataPoint[] = [];
+
+        useEffect(() => {
+        if (!store) return;
+
+        setEmails(emails);
+
+        const interval = setInterval(() => {
+            startTransition(async () => {
+                try {
+                    const newEmails = await getEmails();
+                    setEmails(newEmails);
+                } catch (err) {
+                    console.error("Error refetching emails:", err);
+                }
+            });
+        }, 1000 * 30);
+
+        return () => clearInterval(interval);
+    }, [store]);
 
     useEffect(() => {
         if (!store) return;
@@ -47,7 +69,7 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
     return (
         <>
             <div className="flex flex-1 overflow-hidden">
-                <EmailList initialEmails={emails} />
+                <EmailList />
                 <EmailView />
             </div>
             {/* <RefreshButton /> */}
