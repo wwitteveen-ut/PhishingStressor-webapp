@@ -2,6 +2,8 @@
 import { auth } from "@/auth";
 import { Email, EmailAttachmentData, ZustandEmail } from "../store/types";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
+import { getApiUrl } from "@/shared/utils/apiHelper";
+import { cookies } from "next/headers";
 
 export const getEmail = async (id: number): Promise<Email> => {
     const token = await auth();
@@ -15,31 +17,28 @@ export const getEmail = async (id: number): Promise<Email> => {
     return data;
 }
 
-export const getEmails = async (): Promise<ZustandEmail[]> => {
-    const session = await auth();
-    if (!session) {
-        throw new Error("Unauthorized");
-    }
+export const getParticipantEmails = async ():Promise<ZustandEmail[]> => {
 
-    const loggedIn = session.user.loggedIn;
-    const loggedInDate = new Date(loggedIn);
-    const path = await getExternalApiUrl(`/api/experiments/${session.user.experimentId}/emails`);
-    const response = await fetch(path);
-    const emails = await response.json() as Email[];
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("authjs.session-token")?.value;
+  const session = await auth();
+  if (!session || !sessionCookie) {
+      throw new Error("Unauthorized");
+  }
 
-    const filteredEmails: ZustandEmail[] = emails
-        .map((email) => {
-            const scheduledTime = new Date(Math.floor((loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000) * 60000);
-            return {
-                ...email,
-                sendAt: scheduledTime,
-                isRead: false,
-                isTrashed: false
-            };
-        })
-        .filter(email => email.sendAt < new Date());
 
-    return filteredEmails;
+  const path = getApiUrl(`/api/emails`);
+  const response = await fetch(path, {
+    headers: {
+      Cookie: `authjs.session-token=${sessionCookie}`,
+    },
+  });
+
+  if(response.ok){
+    const emails = await response.json() as ZustandEmail[];
+    return emails;
+  }
+  throw new Error(`Failed to fetch emails: ${response.statusText}`);
 }
 
 export const downloadAttachment = async (emailId: string, attachmentData: EmailAttachmentData) => {
