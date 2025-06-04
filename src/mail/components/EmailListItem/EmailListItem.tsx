@@ -4,8 +4,6 @@ import { Group, Box, Text, ThemeIcon, Tooltip } from '@mantine/core';
 import { Paperclip } from 'lucide-react';
 import classes from './EmailListItem.module.css';
 
-
-
 export default function EmailListItem({email, isSelected}: {email:ZustandEmail, isSelected: boolean}) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
 

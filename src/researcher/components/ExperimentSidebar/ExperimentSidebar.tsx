@@ -10,7 +10,6 @@ import {
   ScrollArea, 
   Divider, 
   ThemeIcon,
-  Flex,
   Stack
 } from '@mantine/core';
 import { 

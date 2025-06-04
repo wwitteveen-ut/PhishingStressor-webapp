@@ -18,10 +18,10 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
 
     setEmails(emails);
 
-    // const interval = setInterval(() => fetchAndSetEmails(setEmails), 1000 * 30);
+    const interval = setInterval(() => fetchAndSetEmails(setEmails), 1000 * 30);
 
-    // return () => clearInterval(interval);
-  }, [setEmails]);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     if (!store) return;

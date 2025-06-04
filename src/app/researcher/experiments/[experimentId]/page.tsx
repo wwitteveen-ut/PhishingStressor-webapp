@@ -8,7 +8,7 @@ export default function ExperimentOverviewPage() {
     return (
         <>
             <Center h={"100vh"}>
-                
+                {experiment.name}
             </Center>
         </>
     );
