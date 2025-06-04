@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { IconChevronRight } from '@tabler/icons-react';
+import { IconChevronRight, TablerIcon } from '@tabler/icons-react';
 import { Box, Collapse, Group, Text, ThemeIcon, UnstyledButton } from '@mantine/core';
 import classes from './LinksGroup.module.css';
 import { LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 interface LinksGroupProps {
-  icon: LucideIcon;
+  icon: LucideIcon | TablerIcon;
   label: string;
   initiallyOpened?: boolean;
   active?: boolean;

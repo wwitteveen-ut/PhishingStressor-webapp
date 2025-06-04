@@ -21,16 +21,19 @@ import {
   SquareGanttChart,
   Mail,
   ChartArea,
+  GroupIcon,
+  BookUser,
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
 import { signOut } from "next-auth/react";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useExperimentContext } from '../ExperimentContext/ExperimentContext';
+import { IconUsersGroup, TablerIcon } from '@tabler/icons-react';
 
 interface MenuItem {
   label: string;
-  icon: LucideIcon;
+  icon: LucideIcon | TablerIcon;
   initiallyOpened?: boolean;
   mainLink?: string;
   links?: { label: string; link: string }[];
@@ -52,8 +55,13 @@ export default function ExperimentSidebar() {
       mainLink: `/researcher/experiments/${experiment.id}/emails`
     },
     { 
+      label: 'Groups', 
+      icon: IconUsersGroup,
+      mainLink: `/researcher/experiments/${experiment.id}/groups`
+    },
+    { 
       label: 'Researchers', 
-      icon: Users,
+      icon: BookUser,
       mainLink: `/researcher/experiments/${experiment.id}/researchers`
     },
     {
