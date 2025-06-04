@@ -17,11 +17,9 @@ import {
   LayoutDashboardIcon, 
   LucideIcon, 
   LogOut, 
-  Users,
   SquareGanttChart,
   Mail,
   ChartArea,
-  GroupIcon,
   BookUser,
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
