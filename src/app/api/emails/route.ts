@@ -13,16 +13,17 @@ export const GET = auth(async function GET(req) {
     const emails = await response.json() as Email[];
 
     const filteredEmails: ZustandEmail[] = emails
-        .map((email) => {
-            const scheduledTime = new Date(Math.floor((loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000) * 60000);
-            return {
-                ...email,
-                sendAt: scheduledTime,
-                isRead: false,
-                isTrashed: false
-            };
-        })
-        .filter(email => email.sendAt < new Date());
+      .map((email) => {
+        const scheduledTime = new Date(Math.floor((loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000) * 60000);
+        return {
+          ...email,
+          sendAt: scheduledTime,
+          isRead: false,
+          isTrashed: false
+        };
+      })
+      .filter(email => email.sendAt < new Date())
+      .sort((a, b) => b.sendAt.getTime() - a.sendAt.getTime());
 
     return NextResponse.json(filteredEmails);
 }
