@@ -13,7 +13,7 @@ export default function EmailListFilters() {
 
     return (
         <div className="p-3 border-b border-gray-200">
-            <Input variant='filled' placeholder="Search Mails" leftSection={<SearchIcon size={18} className="text-gray-500 mr-2" />} onInput={(e) => handleSearchChange(e.currentTarget.value)} />
+            <Input variant='filled' placeholder="Search Mails" leftSection={<SearchIcon size={18} />} onInput={(e) => handleSearchChange(e.currentTarget.value)} />
         </div>
     );
 }

@@ -43,9 +43,9 @@ export default function EmailCategoryList() {
           rightSection={
             item.count ? (
               <Badge 
-                size="xs" 
+                size="sm" 
                 variant='light' 
-                color={selectedCategory === item.id ? 'blue.5' : 'gray.4'} 
+                color={selectedCategory === item.id ? 'blue.5' : 'gray.6'} 
                 circle
               >
                 {item.count}
