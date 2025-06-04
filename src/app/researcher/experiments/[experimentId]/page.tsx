@@ -1,15 +1,21 @@
 "use client";
 
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
-import { Center } from "@mantine/core";
+import { Group, Paper, Stack, Title } from "@mantine/core";
 
 export default function ExperimentOverviewPage() {
     const experiment = useExperimentContext();
     return (
         <>
-            <Center h={"100vh"}>
-                {experiment.name}
-            </Center>
+            <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
+                <Group justify="space-between">
+                    <Title order={2}>Experiment overview</Title>
+                </Group>
+                <Paper p={"md"}>
+                    {experiment.id}
+                </Paper>
+
+            </Stack>
         </>
     );
 }

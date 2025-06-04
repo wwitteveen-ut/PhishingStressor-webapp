@@ -26,7 +26,7 @@ export default function ResearcherList({researchers}:{researchers:ApiUser[]}){
   
   return (
       <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
-        <Group justify="space-between" mb="lg">
+        <Group justify="space-between">
           <Title order={2}>All researchers</Title>
         </Group>
           <Paper flex={1} p={"md"}>
