@@ -23,7 +23,7 @@ export interface EmailProperties {
   isTrashed: boolean;
 }
 
-export interface ZustandEmail extends Email, EmailProperties {
+export interface ZustandEmail extends Omit<Email, 'isPhishing'>, EmailProperties {
   sendAt: Date;
 }
 
