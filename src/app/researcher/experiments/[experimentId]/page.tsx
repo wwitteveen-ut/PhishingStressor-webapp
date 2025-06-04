@@ -9,7 +9,7 @@ export default function ExperimentOverviewPage() {
     return (
     <Container p="xl" flex={1}>
       <Title order={2} c="gray.9" mb="lg">
-        Experiment Settings
+        Experiment Overview
       </Title>
       <Paper shadow="sm" p="lg" radius="md">
         <Stack gap="md">
