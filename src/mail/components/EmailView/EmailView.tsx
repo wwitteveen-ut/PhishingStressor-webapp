@@ -60,7 +60,7 @@ export default function EmailView() {
             </div>
           </div>
           <div className="text-sm text-gray-500">
-            {new Date(email.scheduledFor).toLocaleString([], {
+            {new Date(email.sendAt).toLocaleString([], {
               weekday: 'short',
               month: 'short',
               day: 'numeric',
