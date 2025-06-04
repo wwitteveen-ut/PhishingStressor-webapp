@@ -33,3 +33,13 @@ export async function authenticateResearcher(username: string, password: string)
 
   return res.json();
 }
+
+export async function canRegisterResearcher(): Promise<boolean> {
+  const res = await fetch(await getExternalApiUrl("/api/auth/register"));
+
+  if (!res.ok) {
+    throw new Error(`canRegisterResearcher fetch failed:${res.statusText}`);
+  }
+
+  return res.json();
+}

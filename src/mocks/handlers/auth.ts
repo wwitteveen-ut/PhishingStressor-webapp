@@ -17,11 +17,20 @@ export const authHandlers = [
     const data = await request.json() as { username: string, password: string };
     const researcher = researchers.find(r => r.username === data.username);
     if (!researcher) {
-      return new HttpResponse(null, { status: 401 });
+      return new HttpResponse(null, { status: 404});
     }
     return HttpResponse.json({
       token: RESEARCHER_TOKEN,
       id: researcher.id
     });
   }),
+  http.get(await getExternalApiUrl(`/api/auth/register`), () => {
+    return HttpResponse.json(process.env.RESEARCHER_REGISTRATION === 'enabled');
+  }),
+   http.post(await getExternalApiUrl(`/api/auth/register`), async ({request}) => {
+    if (process.env.RESEARCHER_REGISTRATION !== 'enabled') return new HttpResponse(null, { status: 401 });
+
+    const info = await request.formData();
+    return HttpResponse.json(info);
+   }),
 ];

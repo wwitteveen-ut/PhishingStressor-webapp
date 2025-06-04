@@ -17,9 +17,10 @@ import { useForm } from '@mantine/form';
 
 interface ILoginFormProps {
     variant?: "participant" | "researcher";
+    canRegister?: boolean;
 }
 
-export default function LoginForm({ variant = "participant" }: ILoginFormProps) {
+export default function LoginForm({ variant = "participant", canRegister=false }: ILoginFormProps) {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -95,13 +96,15 @@ export default function LoginForm({ variant = "participant" }: ILoginFormProps) 
                         Go to Researcher login
                     </Button>
                 ) : (
-                    <Group justify='space-between'>
+                    <Group justify={canRegister ? 'space-between' : 'center'}>
                         <Button leftSection={<ArrowLeft size={18}/>} variant='subtle' component={Link} href="/login">
                             To participant login
                         </Button>
-                        <Button rightSection={<ArrowRight size={18}/>} color={"gray"} variant='subtle' component={Link} href="/login/researcher/register">
-                            Or register here
-                        </Button>
+                        {canRegister && 
+                            <Button rightSection={<ArrowRight size={18}/>} color={"gray"} variant='subtle' component={Link} href="/login/researcher/register">
+                                Or register here
+                            </Button>
+                        }
                     </Group>
                 )
             }   
