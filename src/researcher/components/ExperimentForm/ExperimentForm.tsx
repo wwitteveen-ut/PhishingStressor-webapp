@@ -90,8 +90,8 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
                     error={form.errors.researchers && 'Invalid name'}
                 />
                 <Box>
-                    <Text fw={500} size="sm" mb="xs">
-                        Groups
+                    <Text size="sm">
+                        Experiment groups
                     </Text>
 
                     {groups.length > 0 ? groups : (
