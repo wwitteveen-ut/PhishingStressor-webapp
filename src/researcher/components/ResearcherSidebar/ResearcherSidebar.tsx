@@ -34,15 +34,15 @@ export default function ResearcherSidebar() {
 
   const mainMenu: MenuItem[] = [
     {
-    label: 'Researchers',
-    icon: Users,
-    mainLink: "/researcher/researchers"
-  },
-    {
     label: 'Experiments',
     icon: FlaskConical,
     mainLink: "/researcher/experiments"
-  }
+    },
+    {
+      label: 'Researchers',
+      icon: Users,
+      mainLink: "/researcher/researchers"
+    },
   ];
 
 

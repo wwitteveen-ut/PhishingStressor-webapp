@@ -1,21 +1,92 @@
 "use client";
 
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
-import { Group, Paper, Stack, Title } from "@mantine/core";
+import { Card, Checkbox, Text, Stack, TextInput, Title, Group, Container, Button, Paper } from "@mantine/core";
+import Link from "next/link";
 
 export default function ExperimentOverviewPage() {
     const experiment = useExperimentContext();
     return (
-        <>
-            <Stack justify="flex-start" mx={"xl"} flex={1} mt={"xl"}>
-                <Group justify="space-between">
-                    <Title order={2}>Experiment overview</Title>
-                </Group>
-                <Paper p={"md"}>
-                    {experiment.id}
-                </Paper>
+    <Container p="xl" flex={1}>
+      <Title order={2} c="gray.9" mb="lg">
+        Experiment Settings
+      </Title>
+      <Paper shadow="sm" p="lg" radius="md">
+        <Stack gap="md">
+            <TextInput
+            label="Experiment ID"
+            name="name"
+            value={experiment.id}
+            disabled
+            size="xs"
+          />
+          <TextInput
+            label="Experiment Name"
+            name="name"
+            value={experiment.name}
+            disabled
+            size="sm"
+          />
+          <TextInput
+            label="Duration"
+            name="name"
+            value={experiment.duration}
+            disabled
+            size="sm"
+          />
+          <Stack gap="sm">
+            <Group justify="space-between">
+                <Text size="sm" c="gray.7" fw={500}>
+                Groups
+                </Text>
+                <Button variant="light" component={Link} href={ `${experiment.id}/groups`}>
+                    Manage groups
+                </Button>
+            </Group>
 
-            </Stack>
-        </>
-    );
+            {experiment.groups.map((group) => (
+              <Group
+                key={group.id}
+                p="sm"
+                bg="gray.0"
+                style={{ borderRadius: 'var(--mantine-radius-md)' }}
+                justify="space-between"
+              >
+                <Group gap="xs">
+                  <Text size="sm" c="gray.9">
+                    {group.name}
+                  </Text>
+                  <Text size="xs" c="gray.5">
+                    (Capacity: {group.capacity})
+                  </Text>
+                </Group>
+              </Group>
+            ))}
+          </Stack>
+          <Stack gap="sm">
+                        <Group justify="space-between">
+                <Text size="sm" c="gray.7" fw={500}>
+                Researchers
+                </Text>
+                <Button variant="light" component={Link} href={ `${experiment.id}/researchers`}>
+                    Manage researchers
+                </Button>
+            </Group>
+            {experiment.researchers.map((researcher) => (
+              <Group
+                key={researcher.id}
+                p="sm"
+                bg="gray.0"
+                style={{ borderRadius: 'var(--mantine-radius-md)' }}
+              >
+                <Text size="sm" c="gray.9">
+                  {researcher.username}
+                </Text>
+              </Group>
+            ))}
+          </Stack>
+        </Stack>
+      </Paper>
+    </Container>
+  );
 }
