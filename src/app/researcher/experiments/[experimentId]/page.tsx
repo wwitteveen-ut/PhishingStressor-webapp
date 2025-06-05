@@ -1,7 +1,7 @@
 "use client";
 
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
-import { Card, Checkbox, Text, Stack, TextInput, Title, Group, Container, Button, Paper } from "@mantine/core";
+import { Text, Stack, TextInput, Title, Group, Container, Button, Paper } from "@mantine/core";
 import Link from "next/link";
 
 export default function ExperimentOverviewPage() {
