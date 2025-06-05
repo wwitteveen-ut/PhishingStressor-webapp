@@ -17,21 +17,21 @@ export default function ExperimentOverviewPage() {
             label="Experiment ID"
             name="name"
             value={experiment.id}
-            disabled
-            size="xs"
+            readOnly
+            size="sm"
           />
           <TextInput
             label="Experiment Name"
             name="name"
             value={experiment.name}
-            disabled
+            readOnly
             size="sm"
           />
           <TextInput
-            label="Duration"
+            label="Duration (minutes)"
             name="name"
             value={experiment.duration}
-            disabled
+            readOnly
             size="sm"
           />
           <Stack gap="sm">

@@ -1,12 +1,36 @@
 "use client";
+import { deleteExperiment } from "@/researcher/actions/actions";
 import { Experiment } from "@/researcher/store/types";
 import { ActionIcon, Badge, Button, Card, Stack, Group, Text } from "@mantine/core";
 import { TrashIcon } from "lucide-react";
+import { modals } from "@mantine/modals";
+
 import Link from "next/link";
 
 export default function ExperimentListItem({experiment}:{experiment: Experiment}){
-    return (
-        <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:shadow-md transition-shadow duration-200">
+  const openDeleteModal = () => modals.openConfirmModal({
+    title: 'Please confirm your action',
+    withCloseButton: false,
+    radius: 'xs',
+    size:'md',
+    centered: true,
+    children: (
+      <Text size="sm">
+        Are you sure you want to delete experiment <strong>"{experiment.name}"</strong><br/>
+        (ID: {experiment.id})?
+      </Text>
+    ),
+    labels: { confirm: 'Delete experiment', cancel: 'Cancel' },
+    confirmProps: { color: 'red' },
+    onConfirm: () => handleDelete(),
+  });
+  
+  const handleDelete = async () => {
+      await deleteExperiment(experiment.id);
+  }
+  
+  return (
+    <Card shadow="sm" padding="lg" radius="md" withBorder className="hover:shadow-md transition-shadow duration-200">
       <Group justify="space-between" mb="md">
         <Text fw={500} size="lg" truncate>{experiment.name}</Text>
         <Badge color="blue">{experiment.duration} days</Badge>
@@ -37,6 +61,7 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
         <ActionIcon
           color="red"
           variant="subtle"
+          onClick={openDeleteModal}
         >
           <TrashIcon size={20} />
         </ActionIcon>

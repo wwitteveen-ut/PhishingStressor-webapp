@@ -5,6 +5,7 @@ import '@mantine/core/styles.css';
 import '@mantine/tiptap/styles.css';
 
 import {ColorSchemeScript, MantineProvider, mantineHtmlProps} from '@mantine/core';
+import { ModalsProvider } from "@mantine/modals";
 
 export const metadata: Metadata = {
     title: "PhishingStressor",
@@ -23,7 +24,11 @@ export default function RootLayout({children,}: {
             <ColorSchemeScript/>
         </head>
         <body>
-            <MantineProvider>{children}</MantineProvider>
+            <MantineProvider>
+                <ModalsProvider>
+                    {children}
+                </ModalsProvider>
+            </MantineProvider>
         </body>
         </html>
     );

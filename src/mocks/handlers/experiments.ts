@@ -7,13 +7,23 @@ export const experimentsHandlers = [
       return HttpResponse.json(mockExperiments);
     }),
     http.get(await getExternalApiUrl('/api/experiments/:experimentId'), ({ params }) => {
-    const { experimentId } = params;
-    const experiment = mockExperiments.find(e => e.id === experimentId);
+      const { experimentId } = params;
+      const experiment = mockExperiments.find(e => e.id === experimentId);
 
-    if (experiment) {
-      return HttpResponse.json(experiment);
-    } else {
-      return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
-    }
-  }),
+      if (experiment) {
+        return HttpResponse.json(experiment);
+      } else {
+        return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+      }
+    }),
+    http.delete(await getExternalApiUrl('/api/experiments/:experimentId'), ({ params }) => {
+      const { experimentId } = params;
+      const experiment = mockExperiments.find(e => e.id === experimentId);
+
+      if (!experiment) {
+        return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+      }
+      console.log(`Received request to delete experiment with id: ${experimentId}`);
+      return new HttpResponse(null, { status: 200 })
+    }),
 ];
