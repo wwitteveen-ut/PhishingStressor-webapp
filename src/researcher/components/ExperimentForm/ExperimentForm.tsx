@@ -1,5 +1,8 @@
 "use client";
 
+import { sendReply } from "@/mail/actions/actions";
+import { createExperiment } from "@/researcher/actions/actions";
+import { ExperimentCreatePayload } from "@/researcher/store/types";
 import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal } from "@mantine/core";
 import { hasLength, isInRange, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,12 +14,22 @@ export interface choice{
     value: string;
 }
 
+interface ExperimentFormValues {
+    name: string;
+    researchers: string[];
+    groups: Array<{
+        name: string;
+        capacity: number;
+    }>;
+}
+
 export default function ExperimentForm({researcherChoices}: {researcherChoices: choice[]}) {
     const [opened, { open, close }] = useDisclosure(false);
 
     const form = useForm({
         initialValues: {
             name: '',
+            duration: 60,
             researchers: [''],
             groups: [{ name: '', capacity: 0 }],
         },
@@ -28,6 +41,10 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
             }
         },
     });
+
+    const handleSubmit = (values: ExperimentCreatePayload) =>{
+        createExperiment(values)
+    };
 
     const groups = form.getValues().groups.map((group, index) => (
         <Group key={index} mt="xs" align="flex-end">
@@ -68,7 +85,7 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
             size={"xl"}
             title={"Create new experiment"}
         >
-        <form onSubmit={form.onSubmit((form) => {console.log(form)})}>
+        <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack>
                 <TextInput
                     data-autofocus

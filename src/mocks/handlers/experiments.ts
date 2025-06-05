@@ -16,6 +16,12 @@ export const experimentsHandlers = [
         return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
       }
     }),
+    http.post(await getExternalApiUrl(`/api/experiments`), async ({request}) => {
+      const experimentData = await request.json();
+      console.log(`Received request to create experiment with following payload:`, experimentData);
+
+      return HttpResponse.json(experimentData);
+      }),
     http.delete(await getExternalApiUrl('/api/experiments/:experimentId'), ({ params }) => {
       const { experimentId } = params;
       const experiment = mockExperiments.find(e => e.id === experimentId);
