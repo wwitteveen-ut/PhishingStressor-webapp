@@ -121,7 +121,7 @@ export default function LoginForm({ variant = "participant", canRegister=false }
                         Go to Researcher login
                     </Button>
                 ) : (
-                    <Group justify={canRegister ? 'space-between' : 'center'}>
+                    <Group justify={canRegister ? 'space-between' : 'center'} gap={0}>
                         <Button leftSection={<ArrowLeft size={18}/>} variant='subtle' component={Link} href="/login">
                             To participant login
                         </Button>
