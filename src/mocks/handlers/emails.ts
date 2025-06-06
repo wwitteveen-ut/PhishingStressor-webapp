@@ -2,6 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { mockAttachments, mockEmails } from '../data/emails';
 import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 import { getApiUrl } from '@/shared/utils/apiHelper';
+import { mockExperiments } from '../data/experiments';
 
 export const emailsHandlers = [
   http.get(await getExternalApiUrl(`/experiments/:experimentId/emails`), () => {
@@ -33,9 +34,39 @@ export const emailsHandlers = [
       },
     });
   }),
-  http.post(await getExternalApiUrl(`/experiments/:experimentId/emails/:emailId/replies`), async ({request}) => {
-    const info = await request.formData();
-    console.log(info);
-    return HttpResponse.json(info);
-   }),
+  http.post(await getExternalApiUrl('/experiments/:experimentId/emails/:emailId/tracking'), async ({ params, request }) => {
+    const { experimentId, emailId } = params;
+    const experiment = mockExperiments.find(e => e.id === experimentId);
+
+    if (!experiment) {
+      return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+    }
+
+    const trackingData = await request.json();
+    console.log(`Received request with tracking info for email: ${emailId} in experiment: ${experimentId}`, trackingData);
+    return HttpResponse.json(trackingData);
+  }),
+  http.post(await getExternalApiUrl('/experiments/:experimentId/emails/:emailId/replies'), async ({ params, request }) => {
+    const { experimentId, emailId } = params;
+    const experiment = mockExperiments.find(e => e.id === experimentId);
+
+    if (!experiment) {
+      return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+    }
+
+    const replyData = await request.json();
+    console.log(`Received request to create reply for email: ${emailId} in experiment: ${experimentId}`, replyData);
+    return HttpResponse.json(replyData);
+  }),
+    http.delete(await getExternalApiUrl('/experiments/:experimentId/emails/:emailId'), ({ params }) => {
+      const { experimentId, emailId } = params;
+      const experiment = mockExperiments.find(e => e.id === experimentId);
+  
+      if (!experiment) {
+        return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+      }
+  
+      console.log(`Received request to delete email with id: ${emailId} for experiment: ${experimentId}`);
+      return new HttpResponse(null, { status: 200 });
+    }),
 ];
