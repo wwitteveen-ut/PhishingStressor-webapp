@@ -1,3 +1,5 @@
+"use client";
+
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
 import { Text, Stack, TextInput, Group, Button, Paper } from "@mantine/core";
 import Link from "next/link";
