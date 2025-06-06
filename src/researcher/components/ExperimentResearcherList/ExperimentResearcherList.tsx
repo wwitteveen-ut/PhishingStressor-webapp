@@ -1,6 +1,6 @@
 "use client";
 import { ApiUser } from "@/researcher/store/types";
-import { Group, Text, Box, Button, Stack, ScrollArea, TextInput } from "@mantine/core";
+import { Group, Text, Box, Button, Stack } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { Trash } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";

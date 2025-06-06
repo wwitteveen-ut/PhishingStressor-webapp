@@ -1,6 +1,6 @@
 "use client";
 
-import { addResearcherToExperiment, createExperiment } from "@/researcher/actions/actions";
+import { createExperiment } from "@/researcher/actions/actions";
 import { ExperimentCreatePayload } from "@/researcher/store/types";
 import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal, LoadingOverlay } from "@mantine/core";
 import { hasLength, isInRange, useForm } from "@mantine/form";

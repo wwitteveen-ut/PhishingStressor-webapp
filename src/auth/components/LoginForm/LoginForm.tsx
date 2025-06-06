@@ -9,11 +9,15 @@ import {
     TextInput,
     ThemeIcon,
     Title,
+    Text,
+    Paper
 } from '@mantine/core';
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, Beaker, Mail, RectangleEllipsis, User } from 'lucide-react';
+import { AlertCircle, ArrowLeft, ArrowRight, Beaker, Mail, RectangleEllipsis, User } from 'lucide-react';
 import { signIn } from "next-auth/react";
 import { useForm } from '@mantine/form';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 interface ILoginFormProps {
     variant?: "participant" | "researcher";
@@ -21,6 +25,8 @@ interface ILoginFormProps {
 }
 
 export default function LoginForm({ variant = "participant", canRegister=false }: ILoginFormProps) {
+    const [error, setError] = useState<string | null>(null);
+    const router = useRouter();
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: {
@@ -29,15 +35,23 @@ export default function LoginForm({ variant = "participant", canRegister=false }
         },
     });
 
-    const credentialsAction = ({ username, password }: {
+    const credentialsAction = async ({ username, password }: {
         username: string;
         password: string;
     }) => {
-        signIn(variant, {
+        const response = signIn(variant, {
             username,
             password,
-            redirectTo: variant === "participant" ? "/mail" : "/researcher/experiments",
+            redirect: false
         });
+        const authResponse = await response;
+        console.log(authResponse);
+        if (authResponse.error && authResponse.code){
+            setError(authResponse.code)
+        } else if(authResponse.ok){
+            router.push(variant === "participant" ? "/mail" : "/researcher/experiments")
+        }
+
     };
 
     return (
@@ -79,7 +93,18 @@ export default function LoginForm({ variant = "participant", canRegister=false }
                         key={form.key('password')}
                         {...form.getInputProps('password')}
                     />
-
+                    {error && (
+                        <Paper bg={'red.0'} radius={'xs'}>
+                            <Group gap={0} flex={1} justify='center' >
+                                <ThemeIcon c={'red'} variant='transparent'>
+                                    <AlertCircle size={16} />
+                                </ThemeIcon>
+                                <Text c="red.6" size="sm">
+                                    {error}
+                                </Text>
+                            </Group>
+                        </Paper>
+                    )}
                     <Button
                         type="submit"
                         fullWidth

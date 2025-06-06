@@ -11,7 +11,7 @@ export const authHandlers = [
       token: PARTICIPANT_TOKEN,
       experimentId: "1077d109-17fb-4a9d-a0d7-193ad821ae00",
       loggedIn: new Date().toISOString(),
-    });
+    },{status: 401});
   }),
   http.post(await getExternalApiUrl(`/auth/login/researcher`), async ({request}) => {
     const data = await request.json() as { username: string, password: string };

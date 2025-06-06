@@ -1,4 +1,4 @@
-import NextAuth, { type DefaultSession } from "next-auth"
+import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import { authenticateParticipant, authenticateResearcher } from "./auth/actions/actions"
 
@@ -27,6 +27,10 @@ declare module "@auth/core/jwt" {
   }
 }
 
+class InvalidLoginError extends CredentialsSignin {
+  code = "Invalid username or password";
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Credentials({
@@ -38,15 +42,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-        console.log("credentials", credentials)
-        const token = await authenticateParticipant(
-          credentials?.username as string,
-          credentials?.password as string
-        );
-        
-        token.username = credentials.username;
 
-        console.log("token", token);
+        if (!credentials.username || !credentials.password) {
+          console.log("Missing credentials");
+          return null;
+        }
+        const result = await authenticateParticipant(
+          credentials.username as string,
+          credentials.password as string
+        );
+
+        console.log("auth result", result);
+
+        if (!result.success) {
+          console.log("Authentication failed:", result.error);
+          throw new InvalidLoginError();
+        }
+        
+        const token = result.data;
+        token.username = credentials.username;
 
         return token;
       },
@@ -60,11 +74,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-        console.log("credentials", credentials)
-        const token = await authenticateResearcher(
-          credentials?.username as string,
-          credentials?.password as string
+
+        if (!credentials.username || !credentials.password) {
+          console.log("Missing credentials");
+          return null;
+        }
+        const result = await authenticateResearcher(
+          credentials.username as string,
+          credentials.password as string
         );
+
+        console.log("auth result", result);
+
+        if (!result.success) {
+          console.log("Authentication failed:", result.error);
+          throw new InvalidLoginError();
+        }
+        
+        const token = result.data;
 
         return token;
       },
