@@ -1,19 +1,24 @@
+"use client";
 import { ApiUser } from "@/researcher/store/types";
-import { Group, Text, Box, Button, Stack, ScrollArea } from "@mantine/core";
+import { Group, Text, Box, Button, Stack, ScrollArea, TextInput } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { Trash } from "lucide-react";
-import Link from "next/link";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import { removeResearcherFromExperiment } from "@/researcher/actions/actions";
+import AddResearcherModal from "../AddResearcherModal";
+import Link from "next/link";
+import { choice } from "../ExperimentForm/ExperimentForm";
 
 interface ResearcherListProps {
   variant?: 'view' | 'edit';
+  researcherChoices?: choice[];
 }
 
-export default function ExperimentResearcherList({ variant = "view" }: ResearcherListProps) {
+export default function ExperimentResearcherList({ variant = "view", researcherChoices = [] }: ResearcherListProps) {
   const experiment = useExperimentContext();
 
-  const handleDelete = async () => {
-    console.log('deleting the researcher');
+  const handleDelete = async (researcherId: string) => {
+    await removeResearcherFromExperiment(experiment.id, researcherId);
   };
 
   const openDeleteModal = (researcher: ApiUser) => 
@@ -32,7 +37,7 @@ export default function ExperimentResearcherList({ variant = "view" }: Researche
       ),
       labels: { confirm: 'Remove researcher', cancel: 'Cancel' },
       confirmProps: { color: 'red' },
-      onConfirm: handleDelete,
+      onConfirm: () => handleDelete(researcher.id),
     });
 
   const header = (
@@ -40,7 +45,7 @@ export default function ExperimentResearcherList({ variant = "view" }: Researche
       <Text size="lg" c="gray.7" fw={600}>
         Researchers
       </Text>
-      {variant === 'view' && (
+      { variant === 'view' && (
         <Button variant="light" component={Link} href={`${experiment.id}/researchers`}>
           Manage researchers
         </Button>
@@ -62,7 +67,6 @@ export default function ExperimentResearcherList({ variant = "view" }: Researche
   return (
     <Stack gap="sm">
       {header}
-      <ScrollArea>
         <Stack gap="xs">
           {experiment.researchers.map((researcher) => (
             <Group key={researcher.id} p="xs" bg="gray.0" justify="space-between">
@@ -76,6 +80,7 @@ export default function ExperimentResearcherList({ variant = "view" }: Researche
               </Stack>
 
               {variant === 'edit' && (
+                <>
                 <Group gap="xs">
                   <Button
                     variant="subtle"
@@ -87,11 +92,15 @@ export default function ExperimentResearcherList({ variant = "view" }: Researche
                     Delete
                   </Button>
                 </Group>
+                </>
               )}
             </Group>
           ))}
+          {researcherChoices && variant === 'edit' && (
+            <AddResearcherModal researcherChoices={researcherChoices}/>
+          )}
+
         </Stack>
-      </ScrollArea>
     </Stack>
   );
 }

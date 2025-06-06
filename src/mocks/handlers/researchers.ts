@@ -15,8 +15,8 @@ export const researcherHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
     }
 
-    const researcherId = await request.json();
-    console.log(`Received request to delete researcher with id: ${researcherId} from the experiment`);
+    const { id } = await request.json() as { id: string };
+    console.log(`Received request to delete researcher with id: ${id} from the experiment`);
     return new HttpResponse(null, { status: 200 });
   }),
 
@@ -28,9 +28,9 @@ export const researcherHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
     }
 
-    const researcherId = await request.json();
+    const { id } = await request.json() as { id: string };
 
-    console.log(`Received request to delete researcher with id: ${researcherId} from the experiment`);
+    console.log(`Received request to delete researcher with id: ${id} from the experiment`);
     return new HttpResponse(null, { status: 200 });
   }),
 ];

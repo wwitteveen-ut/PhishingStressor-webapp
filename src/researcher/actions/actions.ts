@@ -44,3 +44,27 @@ export async function deleteExperiment(experimentId: string):Promise<boolean> {
 
     return response.ok;
 }
+
+export async function addResearcherToExperiment(experimentId: string, researcherId: string):Promise<boolean> {
+    const path = await getExternalApiUrl(`/experiments/${experimentId}/researchers`);
+    const response = await fetch(path, {
+        method: 'POST',
+        body: JSON.stringify({
+            id: researcherId
+        }),
+    });
+
+    return response.ok;
+}
+
+export async function removeResearcherFromExperiment(experimentId: string, researcherId: string):Promise<boolean> {
+    const path = await getExternalApiUrl(`/experiments/${experimentId}/researchers`);
+    const response = await fetch(path, {
+        method: 'DELETE',
+        body: JSON.stringify({
+            id: researcherId
+        }),
+    });
+
+    return response.ok;
+}

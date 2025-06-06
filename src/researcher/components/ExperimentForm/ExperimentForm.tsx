@@ -1,10 +1,11 @@
 "use client";
 
-import { createExperiment } from "@/researcher/actions/actions";
+import { addResearcherToExperiment, createExperiment } from "@/researcher/actions/actions";
 import { ExperimentCreatePayload } from "@/researcher/store/types";
-import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal } from "@mantine/core";
+import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal, LoadingOverlay } from "@mantine/core";
 import { hasLength, isInRange, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import { IconTrash } from "@tabler/icons-react";
 import { PlusIcon } from "lucide-react";
 
@@ -15,6 +16,8 @@ export interface choice{
 
 export default function ExperimentForm({researcherChoices}: {researcherChoices: choice[]}) {
     const [opened, { open, close }] = useDisclosure(false);
+    const [isLoading, { open: startLoading, close: stopLoading }] = useDisclosure(false);
+    
 
     const form = useForm({
         initialValues: {
@@ -32,8 +35,19 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
         },
     });
 
-    const handleSubmit = (values: ExperimentCreatePayload) =>{
-        createExperiment(values)
+    const handleSubmit = async (values: ExperimentCreatePayload) => {
+        startLoading();
+
+        try {
+            await createExperiment(values);
+            modals.closeAll();
+            return true;
+        } catch (error) {
+            console.error('Failed to create experiment:', error);
+            return false;
+        } finally {
+            stopLoading();
+        }
     };
 
     const groups = form.getValues().groups.map((group, index) => (
@@ -75,6 +89,12 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
             size={"xl"}
             title={"Create new experiment"}
         >
+        <Box pos="relative">
+        <LoadingOverlay 
+            visible={isLoading} 
+            zIndex={1000} 
+            overlayProps={{ radius: 'sm', blur: 2 }} 
+        />
         <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack>
                 <TextInput
@@ -124,6 +144,7 @@ export default function ExperimentForm({researcherChoices}: {researcherChoices: 
                 </Button>
             </Stack>
         </form>
+        </Box>
         </Modal>
         <Button
             leftSection={<PlusIcon size={16} />}
