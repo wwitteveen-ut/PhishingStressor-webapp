@@ -1,9 +1,9 @@
 "use client";
 import { ApiUser } from "@/researcher/store/types";
-import { ActionIcon, Container, Group, Paper, Stack, Table, Title } from "@mantine/core";
+import { ActionIcon, Container, Paper, Table, Title } from "@mantine/core";
 import { TrashIcon } from "lucide-react";
 
-export default function ResearcherList({researchers}:{researchers:ApiUser[]}){
+export default function ResearcherTable({researchers}:{researchers:ApiUser[]}){
   const rows = researchers.map((researcher) => (
     <Table.Tr key={researcher.id}>
       <Table.Td>{researcher.id}</Table.Td>

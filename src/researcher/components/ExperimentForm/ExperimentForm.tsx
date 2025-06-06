@@ -1,6 +1,5 @@
 "use client";
 
-import { sendReply } from "@/mail/actions/actions";
 import { createExperiment } from "@/researcher/actions/actions";
 import { ExperimentCreatePayload } from "@/researcher/store/types";
 import { Text, ActionIcon, Box, Button, Group, NumberInput, Stack, TextInput, MultiSelect, Modal } from "@mantine/core";
@@ -12,15 +11,6 @@ import { PlusIcon } from "lucide-react";
 export interface choice{
     label: string;
     value: string;
-}
-
-interface ExperimentFormValues {
-    name: string;
-    researchers: string[];
-    groups: Array<{
-        name: string;
-        capacity: number;
-    }>;
 }
 
 export default function ExperimentForm({researcherChoices}: {researcherChoices: choice[]}) {

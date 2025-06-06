@@ -16,8 +16,8 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
     centered: true,
     children: (
       <Text size="sm">
-        Are you sure you want to delete experiment <strong>"{experiment.name}"</strong><br/>
-        (ID: {experiment.id})?
+        Are you sure you want to delete experiment <strong>{experiment.name}</strong>?<br/>
+        (ID: {experiment.id})
       </Text>
     ),
     labels: { confirm: 'Delete experiment', cancel: 'Cancel' },

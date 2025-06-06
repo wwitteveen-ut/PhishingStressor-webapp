@@ -1,17 +1,15 @@
 "use client";
 
-import ResearcherList from "@/researcher/components/ResearcherTable";
-import { ScrollArea } from "@mantine/core";
-import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
+import { Container, Paper } from "@mantine/core";
+import ExperimentResearcherList from "@/researcher/components/ExperimentResearcherList";
 
 export default function ExperimentsPage() {
-    const experiment = useExperimentContext();
 
     return (
-        <>
-             <ScrollArea flex={1}>
-                <ResearcherList researchers={experiment.researchers}/>
-             </ScrollArea>
-        </>
+        <Container p="xl" flex={1}>
+            <Paper shadow="sm" p="lg" radius="md">
+                    <ExperimentResearcherList variant="edit"/>
+            </Paper>
+        </Container>
     );
 }

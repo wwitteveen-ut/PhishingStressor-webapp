@@ -3,6 +3,7 @@
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
 import { Text, Stack, TextInput, Group, Button, Paper } from "@mantine/core";
 import Link from "next/link";
+import ExperimentResearcherList from "../ExperimentResearcherList";
 
 export default function ExperimentOverview() {
     const experiment = useExperimentContext();
@@ -34,7 +35,7 @@ export default function ExperimentOverview() {
           <Stack gap="sm">
             <Group justify="space-between">
                 <Text size="sm" c="gray.7" fw={500}>
-                Groups
+                    Groups
                 </Text>
                 <Button variant="light" component={Link} href={ `${experiment.id}/groups`}>
                     Manage groups
@@ -46,7 +47,6 @@ export default function ExperimentOverview() {
                 key={group.id}
                 p="sm"
                 bg="gray.0"
-                style={{ borderRadius: 'var(--mantine-radius-md)' }}
                 justify="space-between"
               >
                 <Group gap="xs">
@@ -61,26 +61,7 @@ export default function ExperimentOverview() {
             ))}
           </Stack>
           <Stack gap="sm">
-                        <Group justify="space-between">
-                <Text size="sm" c="gray.7" fw={500}>
-                Researchers
-                </Text>
-                <Button variant="light" component={Link} href={ `${experiment.id}/researchers`}>
-                    Manage researchers
-                </Button>
-            </Group>
-            {experiment.researchers.map((researcher) => (
-              <Group
-                key={researcher.id}
-                p="sm"
-                bg="gray.0"
-                style={{ borderRadius: 'var(--mantine-radius-md)' }}
-              >
-                <Text size="sm" c="gray.9">
-                  {researcher.username}
-                </Text>
-              </Group>
-            ))}
+            <ExperimentResearcherList variant="view"/>
           </Stack>
         </Stack>
       </Paper>
