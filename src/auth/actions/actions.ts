@@ -3,7 +3,7 @@
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
 export async function authenticateParticipant(username: string, password: string) {
-  const res = await fetch(await getExternalApiUrl("/api/auth/login/participant"), {
+  const res = await fetch(await getExternalApiUrl("/auth/login/participant"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -19,7 +19,7 @@ export async function authenticateParticipant(username: string, password: string
 }
 
 export async function authenticateResearcher(username: string, password: string) {
-  const res = await fetch(await getExternalApiUrl("/api/auth/login/researcher"), {
+  const res = await fetch(await getExternalApiUrl("/auth/login/researcher"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export async function authenticateResearcher(username: string, password: string)
 }
 
 export async function canRegisterResearcher(): Promise<boolean> {
-  const res = await fetch(await getExternalApiUrl("/api/auth/register"));
+  const res = await fetch(await getExternalApiUrl("/auth/register"));
 
   if (!res.ok) {
     throw new Error(`canRegisterResearcher fetch failed:${res.statusText}`);

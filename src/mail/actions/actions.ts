@@ -10,7 +10,7 @@ export const getEmail = async (id: number): Promise<Email> => {
     if (!token){
         throw new Error("not good!");
     }
-    const path = await getExternalApiUrl(`/api/experiments/${token.user.experimentId}/emails/${id}`);
+    const path = await getExternalApiUrl(`/experiments/${token.user.experimentId}/emails/${id}`);
     const response = await fetch(path);
 
     const data = await response.json();
@@ -27,7 +27,7 @@ export const getParticipantEmails = async ():Promise<ZustandEmail[]> => {
   }
 
 
-  const path = getApiUrl(`/api/emails`);
+  const path = getApiUrl(`/emails`);
   const response = await fetch(path, {
     headers: {
       Cookie: `authjs.session-token=${sessionCookie}`,
@@ -47,7 +47,7 @@ export const downloadAttachment = async (emailId: string, attachmentData: EmailA
         throw new Error("not good!");
     }
     
-    const path = await getExternalApiUrl(`/api/experiments/${token.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`);
+    const path = await getExternalApiUrl(`/experiments/${token.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`);
     const response = await fetch(path);
     
     if (!response.ok) {
@@ -72,7 +72,7 @@ export const sendReply = async (emailId: string, formData: FormData) => {
     }
 
     const path = await getExternalApiUrl(
-      `/api/experiments/${token.user.experimentId}/emails/${emailId}/replies`
+      `/experiments/${token.user.experimentId}/emails/${emailId}/replies`
     );
 
     const response = await fetch(path, {

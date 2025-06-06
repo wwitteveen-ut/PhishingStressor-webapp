@@ -4,10 +4,10 @@ import { getExternalApiUrl } from '@/shared/utils/externalApiHelper';
 import { getApiUrl } from '@/shared/utils/apiHelper';
 
 export const emailsHandlers = [
-  http.get(await getExternalApiUrl(`/api/experiments/:experimentId/emails`), () => {
+  http.get(await getExternalApiUrl(`/experiments/:experimentId/emails`), () => {
     return HttpResponse.json(mockEmails);
   }),
-  http.get(`${process.env.API_BASE_URL}/api/experiments/:experimentId/emails/:emailId`, ({ params }) => {
+  http.get(`${process.env.API_BASE_URL}/experiments/:experimentId/emails/:emailId`, ({ params }) => {
     const { emailId } = params;
     const email = mockEmails.find(e => e.id === emailId);
 
@@ -17,7 +17,7 @@ export const emailsHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Email not found' });
     }
   }),
-  http.get(await getExternalApiUrl(`/api/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`), async ({params}) => {
+  http.get(await getExternalApiUrl(`/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`), async ({params}) => {
     const { attachmentId } = params;
     const attachment = mockAttachments.find(a => a.id === attachmentId);    
     if (!attachment) {
@@ -33,7 +33,7 @@ export const emailsHandlers = [
       },
     });
   }),
-  http.post(await getExternalApiUrl(`/api/experiments/:experimentId/emails/:emailId/replies`), async ({request}) => {
+  http.post(await getExternalApiUrl(`/experiments/:experimentId/emails/:emailId/replies`), async ({request}) => {
     const info = await request.formData();
     console.log(info);
     return HttpResponse.json(info);

@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { researchers } from '../data/accounts';
 
 export const researcherHandlers = [
-  http.get(await getExternalApiUrl('/api/researchers'), () => {
+  http.get(await getExternalApiUrl('/researchers'), () => {
     return HttpResponse.json(researchers);
   }),
 ];

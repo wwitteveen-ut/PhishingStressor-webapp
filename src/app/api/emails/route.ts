@@ -8,7 +8,7 @@ export const GET = auth(async function GET(req) {
     const user = req.auth.user;
     const loggedIn = user.loggedIn;
     const loggedInDate = new Date(loggedIn);
-    const path = await getExternalApiUrl(`/api/experiments/${user.experimentId}/emails`);
+    const path = await getExternalApiUrl(`/experiments/${user.experimentId}/emails`);
     const response = await fetch(path);
     const emails = await response.json() as Email[];
 

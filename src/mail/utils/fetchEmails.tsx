@@ -7,7 +7,7 @@ import { EmailClientState } from "../store/EmailClientStore";
 export const fetchAndSetEmails = async (setEmails: EmailClientState['setEmails']) => {
 
     try {
-        const response = await fetch(getApiUrl("/api/emails"));
+        const response = await fetch(getApiUrl("/emails"));
         const emails = await response.json();
 
         startTransition(() => {
