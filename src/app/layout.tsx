@@ -21,7 +21,7 @@ export default function RootLayout({children,}: {
     return (
         <html lang="en" {...mantineHtmlProps}>
         <head>
-            <ColorSchemeScript/>
+            <ColorSchemeScript defaultColorScheme="light"/>
         </head>
         <body>
             <MantineProvider>
