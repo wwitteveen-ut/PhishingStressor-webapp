@@ -19,12 +19,18 @@ export default function AddResearcherForm({researcherChoices = []}: {researcherC
     const [loading, { open: startLoading, close: stopLoading }] = useDisclosure();
 
     const form = useForm({
-        initialValues: {
-            researcherId: '',
+      initialValues: {
+        researcherId: '',
+      },
+      validate: {
+        researcherId: (value) => {
+          if (!value.trim()) return 'Please select a researcher';
+          if (!researcherChoices.some(choice => choice.value === value)) {
+            return 'Please select a valid researcher';
+          }
+          return null;
         },
-        validate: {
-            researcherId: (value) => (value.trim() ? null : 'Researcher ID is required'),
-        },
+      },
     });
 
     const handleSubmit = async (values: { researcherId: string }) => {

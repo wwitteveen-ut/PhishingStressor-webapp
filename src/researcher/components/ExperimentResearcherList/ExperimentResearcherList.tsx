@@ -5,7 +5,7 @@ import { modals } from "@mantine/modals";
 import { Trash } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { removeResearcherFromExperiment } from "@/researcher/actions/actions";
-import AddResearcherModal from "../AddResearcherModal";
+import AddResearcherModal from "../AddResearcherForm";
 import Link from "next/link";
 import { choice } from "../ExperimentForm/ExperimentForm";
 
