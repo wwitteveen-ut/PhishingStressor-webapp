@@ -93,7 +93,7 @@ export async function createEmail(experimentId: string, emailPayload: EmailCreat
     const formData = new FormData();
     formData.append('metadata', JSON.stringify(emailPayload.metadata));
     emailPayload.files.forEach((file, index) => {
-      formData.append(`files[${index}]`, file, file.name);
+      formData.append(`files`, file, file.name);
     });
 
     const response = await fetch(path, {
