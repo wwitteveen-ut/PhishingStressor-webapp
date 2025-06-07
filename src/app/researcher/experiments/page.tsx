@@ -3,7 +3,7 @@
 import { getExperiments } from "@/researcher/actions/actions";
 import ExperimentList from "@/researcher/components/ExperimentList";
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
-import { ScrollArea } from "@mantine/core";
+import { Container, ScrollArea } from "@mantine/core";
 
 export default async function ExperimentsPage() {
     const experiments = await getExperiments();
@@ -11,9 +11,9 @@ export default async function ExperimentsPage() {
     return (
         <>
              <ResearcherSidebar />
-             <ScrollArea flex={1}>
+             <Container fluid w={"100%"} mx={"lg"} mt={"xl"}>
                 <ExperimentList experiments={experiments}/> 
-             </ScrollArea>
+             </Container>
         </>
     );
 }

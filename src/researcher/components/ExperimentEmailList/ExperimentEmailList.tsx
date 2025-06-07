@@ -14,10 +14,9 @@ export default function ExperimentEmailList({  eemails }: ExperimentEmailListPro
     const emails: Email[] = mockEmails;
 
     return (
-      <Table verticalSpacing="md" highlightOnHover>
+      <Table verticalSpacing="md" highlightOnHover >
           <Table.Thead>
             <Table.Tr>
-              <Table.Th>Campaign Name</Table.Th>
               <Table.Th>Subject</Table.Th>
               <Table.Th>Sender</Table.Th>
               <Table.Th>Schedule</Table.Th>

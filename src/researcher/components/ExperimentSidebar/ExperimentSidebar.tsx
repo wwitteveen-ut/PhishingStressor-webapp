@@ -102,9 +102,9 @@ export default function ExperimentSidebar() {
 
   return (
     <Paper 
-      shadow="xs" 
+      shadow="xs"
       withBorder 
-      style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
+      style={{ minWidth: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       {headerComponent}
           <Button 
@@ -120,8 +120,8 @@ export default function ExperimentSidebar() {
             py={10}
           >
             <Stack gap={0} flex={1}>
-                <Text c="dimmed" size="xs">Current Experiment</Text>
-                <Text size="sm" fw={600} c={"black.3"}>{experiment.name}</Text>
+                <Text c="dimmed" size="sm">Current Experiment</Text>
+                <Text size="md" fw={600} c={"black.3"}>{experiment.name}</Text>
             </Stack>
           </Button>
           <Divider />

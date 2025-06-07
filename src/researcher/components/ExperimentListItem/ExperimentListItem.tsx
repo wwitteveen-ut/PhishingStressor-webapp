@@ -37,7 +37,7 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
       </Group>
       <Stack gap="md">
         <div>
-          <Text size="xs" c="dimmed" fw={500} mb="xs">Groups</Text>
+          <Text size="sm" c="dimmed" fw={500} mb="xs">Groups</Text>
           <Group gap="xs">
             {experiment.groups.map((group) => (
               <Badge key={group.id} fw={600} color="gray" variant="light">
@@ -47,7 +47,7 @@ export default function ExperimentListItem({experiment}:{experiment: Experiment}
           </Group>
         </div>
         <div>
-          <Text size="xs" c="dimmed" fw={500} mb="xs">Team</Text>
+          <Text size="sm" c="dimmed" fw={500} mb="xs">Team</Text>
           <Group gap="xs">
             {experiment.researchers.map((researcher) => (
               <Badge key={researcher.id} fw={600} color="blue" variant="light">

@@ -81,7 +81,7 @@ export default function ResearcherSidebar() {
     <Paper 
       shadow="xs" 
       withBorder 
-      style={{ width: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
+      style={{ minWidth: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
     >
       {headerComponent}
       <ScrollArea style={{ flex: 1, padding: '8px' }}>

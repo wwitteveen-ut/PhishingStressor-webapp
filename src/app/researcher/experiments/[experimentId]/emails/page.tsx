@@ -1,4 +1,4 @@
-import { Paper } from "@mantine/core";
+import { Group, Paper, Container, Title } from "@mantine/core";
 import { auth } from "@/auth";
 import { getResearchers } from "@/researcher/actions/actions";
 import { redirect } from "next/navigation";
@@ -18,8 +18,15 @@ export default async function ExperimentsPage() {
             value: researcher.id
         }));
     return (
-        <Paper shadow="sm" p="lg" radius="md" flex={1} m={"md"}>
+        <>
+        <Group>
+            <Title order={2} c="gray.9" mb="lg">
+            Experiment Emails
+            </Title> 
+        </Group>
+        <Paper shadow="sm" p="lg" radius="md">
             <ExperimentEmailList />
         </Paper>
+        </>
     );
 }

@@ -67,12 +67,13 @@ export default function ExperimentResearcherList({ researcherChoices = [] }: Res
       {header}
         <Stack gap="xs">
           {experiment.researchers.map((researcher) => (
-            <Group key={researcher.id} p="xs" bg="gray.0" justify="space-between">
+            <Paper bg={"gray.0"}  p="xs" radius={"sm"} shadow="0" pl={"md"}>
+            <Group key={researcher.id} justify="space-between">
               <Stack gap={0}>
-                <Text size="xs" c="gray.6">
+                <Text size="sm" c="gray.6">
                   {researcher.id}
                 </Text>
-                <Text size="sm" c="gray.9" fw={600}>
+                <Text size="md" c="gray.9" fw={600}>
                   {researcher.username}
                 </Text>
               </Stack>
@@ -80,7 +81,7 @@ export default function ExperimentResearcherList({ researcherChoices = [] }: Res
                 <Group gap="xs">
                   <Button
                     variant="subtle"
-                    size="xs"
+                    size="sm"
                     color="red"
                     onClick={() => openDeleteModal(researcher)}
                     leftSection={<Trash size={14} />}
@@ -89,6 +90,8 @@ export default function ExperimentResearcherList({ researcherChoices = [] }: Res
                   </Button>
                 </Group>
             </Group>
+            </Paper>
+
           ))}
           <AddResearcherModal researcherChoices={researcherChoices}/>
         </Stack>

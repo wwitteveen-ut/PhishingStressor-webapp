@@ -34,10 +34,7 @@ export default function ExperimentEmailListItem({ email }: ExperimentEmailListIt
     return (
         <Table.Tr>
             <Table.Td>
-                <Text fw={500}>{email.senderName}</Text>
-            </Table.Td>
-            <Table.Td>
-                <Text c="dimmed">{email.title}</Text>
+                <Text fw={500}>{email.title}</Text>
             </Table.Td>
             <Table.Td>
                 <Text c="dimmed">{`${email.senderName} (${email.senderAddress})`}</Text>
@@ -48,7 +45,7 @@ export default function ExperimentEmailListItem({ email }: ExperimentEmailListIt
                     <Text c="dimmed">
                         {email.scheduledFor === 0
                             ? 'Immediate'
-                            : `${email.scheduledFor} minutes after login`}
+                            : `${email.scheduledFor} min after login`}
                     </Text>
                 </Group>
             </Table.Td>
