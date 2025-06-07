@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
 import { Button, Container, Group } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import EmailComposer from "../EmailComposer/EmailComposer";
 import { ReplyIcon, Send } from "lucide-react";
 import { sendReply } from "@/mail/actions/actions";
+import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 
 export default function EmailReplySection({ emailId }: { emailId: string }) {
-  const [isReplying, setIsReplying] = useState(false);
+  const isReplying = useEmailClientStore((state) => state.isReplying);
+  const setIsReplying = useEmailClientStore(
+    (state) => state.setIsReplying,
+  );
 
   const form = useForm({
     initialValues: {
