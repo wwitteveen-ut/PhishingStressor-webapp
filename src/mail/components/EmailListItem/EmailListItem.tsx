@@ -1,7 +1,14 @@
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 import { ZustandEmail } from "@/mail/store/types";
-import { Group, Box, Text, ThemeIcon, Tooltip } from "@mantine/core";
-import { Paperclip } from "lucide-react";
+import {
+  Group,
+  Box,
+  Text,
+  ThemeIcon,
+  Tooltip,
+  ActionIcon,
+} from "@mantine/core";
+import { Paperclip, Trash, Undo } from "lucide-react";
 import classes from "./EmailListItem.module.css";
 
 export default function EmailListItem({
@@ -12,12 +19,16 @@ export default function EmailListItem({
   isSelected: boolean;
 }) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
-
+  const toggleEmailTrashed = useEmailClientStore(
+    (state) => state.toggleEmailTrashed
+  );
   return (
     <Box
       onClick={() => selectEmailId(email.id)}
       p="md"
-      className={`${classes.mailItem} ${!email.isRead ? classes.unread : ""} ${isSelected ? classes.active : ""}`}
+      className={`${classes.mailItem} ${!email.isRead ? classes.unread : ""} ${
+        isSelected ? classes.active : ""
+      }`}
     >
       <Group justify="space-between">
         <Box style={{ flex: 1, minWidth: 0 }}>
@@ -46,6 +57,27 @@ export default function EmailListItem({
             minute: "2-digit",
           })}
         </Text>
+        <Tooltip label={email.isTrashed ? "Restore email" : "Trash email"}>
+        <ActionIcon
+          variant="transparent"
+          color="gray"
+          styles={{
+            root: {
+              "--ai-hover-color": !email.isTrashed ? "red" : "green",
+            },
+          }}
+          onClick={(e) => {
+            toggleEmailTrashed(email.id);
+            e.stopPropagation();
+          }}
+        >
+          {email.isTrashed ? (
+            <Undo size={15} />
+          ) : (
+            <Trash size={15} />
+          )}
+        </ActionIcon>
+        </Tooltip>
       </Group>
       <Box>
         <Text size="sm" fw={600} c={"blue.5"} truncate>

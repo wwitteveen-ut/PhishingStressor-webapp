@@ -77,7 +77,7 @@ export const createUISlice: StateCreator<
         emailProperties: {
           ...state.emailProperties,
           [emailId]: {
-            ...(state.emailProperties[emailId] ?? { isTrashed: false }),
+            ...(state.emailProperties[emailId] ?? { isRead: false }),
             isRead: !(state.emailProperties[emailId]?.isRead ?? false),
           },
         },
@@ -87,21 +87,25 @@ export const createUISlice: StateCreator<
     ),
   toggleEmailTrashed: (emailId: string) =>
     set(
-      (state) => ({
-        emails: state.emails.map((email) =>
-          email.id === emailId
-            ? { ...email, isTrashed: !email.isTrashed }
-            : email
-        ),
-        emailProperties: {
-          ...state.emailProperties,
-          [emailId]: {
-            ...(state.emailProperties[emailId] ?? { isRead: false }),
-            isTrashed: !(state.emailProperties[emailId]?.isTrashed ?? false),
+      (state) => {
+        const currentIsTrashed =
+          state.emailProperties[emailId]?.isTrashed ?? false;
+        const newIsTrashed = !currentIsTrashed;
+
+        return {
+          emails: state.emails.map((email) =>
+            email.id === emailId ? { ...email, isTrashed: newIsTrashed } : email
+          ),
+          emailProperties: {
+            ...state.emailProperties,
+            [emailId]: {
+              ...(state.emailProperties[emailId] ?? {}),
+              isTrashed: newIsTrashed,
+            },
           },
-        },
-        selectedEmailId: null,
-      }),
+          selectedEmailId: null,
+        };
+      },
       undefined,
       "ui/toggleEmailTrashed"
     ),

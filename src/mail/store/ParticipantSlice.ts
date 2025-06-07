@@ -29,6 +29,8 @@ export const createParticipantSlice: StateCreator<
             ...email,
             isRead:
               state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
+            isTrashed:
+              state.emailProperties[email.id]?.isTrashed ?? email.isTrashed ?? false,
           }))
           .sort((a, b) => b.scheduledFor - a.scheduledFor),
         emailProperties: state.emailProperties,
