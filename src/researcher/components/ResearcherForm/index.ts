@@ -1,1 +1,1 @@
-export { default } from './ResearcherForm';
+export { default } from "./ResearcherForm";

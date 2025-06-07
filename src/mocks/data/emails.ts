@@ -4,20 +4,20 @@ import { ResearcherEmail } from "@/researcher/store/types";
 export const mockAttachments = [
   {
     filename: "sample.txt",
-    id: "a9b8c7d6-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
+    id: "a9b8c7d6-5e4f-3a2b-1c0d-9e8f7a6b5c4d",
   },
   {
     filename: "sample.png",
-    id: "b0c9d8e7-6f5a-4b3c-2d1e-0f9a8b7c6d5e"
+    id: "b0c9d8e7-6f5a-4b3c-2d1e-0f9a8b7c6d5e",
   },
   {
     filename: "sample.jpg",
-    id: "c1d0e9f8-7a6b-5c4d-3e2f-1a0b9c8d7e6f"
+    id: "c1d0e9f8-7a6b-5c4d-3e2f-1a0b9c8d7e6f",
   },
   {
     filename: "sample.pdf",
-    id: "d2e1f0a9-8b7c-6d5e-4f3a-2b1c0d9e8f7a"
-  }
+    id: "d2e1f0a9-8b7c-6d5e-4f3a-2b1c0d9e8f7a",
+  },
 ];
 
 export const mockEmails: ResearcherEmail[] = [
@@ -28,10 +28,11 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Jane Doe",
     senderAddress: "jane.doe@example.com",
     title: "Meeting Next Week",
-    content: "Hi there, just checking in about our meeting next week. Let me know what time works best!",
+    content:
+      "Hi there, just checking in about our meeting next week. Let me know what time works best!",
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[0], mockAttachments[1]]
+    attachments: [mockAttachments[0], mockAttachments[1]],
   },
   {
     id: "2b8e9f3a-5c2d-4f1e-b7a4-3c9d8e2f1b6a",
@@ -40,10 +41,11 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Tech Updates",
     senderAddress: "newsletter@techupdates.com",
     title: "Your June Tech Newsletter",
-    content: "Welcome to the June edition of our tech newsletter. This month we're covering AI trends, cloud tools, and more.",
+    content:
+      "Welcome to the June edition of our tech newsletter. This month we're covering AI trends, cloud tools, and more.",
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3]]
+    attachments: [mockAttachments[3]],
   },
   {
     id: "3c9f0e4b-6d3e-5f2f-a8b5-4d0e9f3a2c7b",
@@ -52,10 +54,11 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "WebApp Support",
     senderAddress: "support@webapp.io",
     title: "Support Ticket Resolved",
-    content: "Your ticket has been resolved. Please review the resolution and let us know if you need further assistance.",
+    content:
+      "Your ticket has been resolved. Please review the resolution and let us know if you need further assistance.",
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
-    attachments: []
+    attachments: [],
   },
   {
     id: "4d0g1f5c-7e4f-6g3g-b9c6-5e1f0g4b3d8c",
@@ -67,7 +70,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Please update your account credentials immediately.",
     scheduledFor: 1,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[0]]
+    attachments: [mockAttachments[0]],
   },
   {
     id: "5e1h2g6d-8f5g-7h4h-c0d7-6f2g1h5c4e9d",
@@ -79,7 +82,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Reminder: Team meeting at 10 AM tomorrow.",
     scheduledFor: 2,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3], mockAttachments[2]]
+    attachments: [mockAttachments[3], mockAttachments[2]],
   },
   {
     id: "6f2i3h7e-9g6h-8i5i-d1e8-7g3i2j6d5f0e",
@@ -91,7 +94,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Your invoice #12345 is due for payment.",
     scheduledFor: 3,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3]]
+    attachments: [mockAttachments[3]],
   },
   {
     id: "7g3j4i8f-0h7i-9j6j-e2f9-8h4j3k7e6g1f",
@@ -103,7 +106,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Please review the new benefits package for the upcoming year.",
     scheduledFor: 5,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3], mockAttachments[0]]
+    attachments: [mockAttachments[3], mockAttachments[0]],
   },
   {
     id: "8h4k5j9g-1i8j-0k7k-f3g0-9i5k4l8f7h2g",
@@ -115,7 +118,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Check out our latest course on advanced programming techniques.",
     scheduledFor: 8,
     experimentId: mockExperiments[0].id,
-    attachments: []
+    attachments: [],
   },
   {
     id: "9i5l6k0h-2j9k-1l8l-g4h1-0j6l5m9g8i3h",
@@ -127,7 +130,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Your monthly payslip is now available for download.",
     scheduledFor: 8,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3]]
+    attachments: [mockAttachments[3]],
   },
   {
     id: "0j6m7l1i-3k0l-2m9m-h5i2-1k7m6n0h9j4i",
@@ -136,10 +139,11 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "IT Department",
     senderAddress: "it@company.com",
     title: "System Maintenance",
-    content: "Scheduled maintenance will occur this weekend. Please save your work.",
+    content:
+      "Scheduled maintenance will occur this weekend. Please save your work.",
     scheduledFor: 4,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[0]]
+    attachments: [mockAttachments[0]],
   },
   {
     id: "1k7n8m2j-4l1m-3n0n-i6j3-2l8n7o1i0k5j",
@@ -151,7 +155,7 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Please review the latest marketing campaign materials.",
     scheduledFor: 13,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3], mockAttachments[2]]
+    attachments: [mockAttachments[3], mockAttachments[2]],
   },
   {
     id: "2l8o9n3k-5m2n-4o1o-j7k4-3m9o8p2j1l6k",
@@ -163,6 +167,6 @@ export const mockEmails: ResearcherEmail[] = [
     content: "Important updates to the Q4 project timeline. Please review.",
     scheduledFor: 6,
     experimentId: mockExperiments[0].id,
-    attachments: [mockAttachments[3]]
-  }
+    attachments: [mockAttachments[3]],
+  },
 ];

@@ -1,6 +1,6 @@
-import { StateCreator } from 'zustand/vanilla';
-import { EmailClientState } from './EmailClientStore';
-import { ZustandEmail } from './types';
+import { StateCreator } from "zustand/vanilla";
+import { EmailClientState } from "./EmailClientStore";
+import { ZustandEmail } from "./types";
 
 export interface ParticipantSlice {
   emails: ZustandEmail[];
@@ -18,7 +18,7 @@ export const initialParticipantState: ParticipantSlice = {
 
 export const createParticipantSlice: StateCreator<
   EmailClientState,
-  [['zustand/devtools', never]],
+  [["zustand/devtools", never]],
   [],
   ParticipantSlice
 > = (set) => ({
@@ -29,12 +29,13 @@ export const createParticipantSlice: StateCreator<
         emails: emails
           .map((email) => ({
             ...email,
-            isRead: state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
+            isRead:
+              state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
           }))
           .sort((a, b) => b.scheduledFor - a.scheduledFor),
         emailProperties: state.emailProperties,
       }),
       undefined,
-      'participant/setEmails'
+      "participant/setEmails",
     ),
 });

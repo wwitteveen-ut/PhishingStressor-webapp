@@ -1,1 +1,1 @@
-export { default } from './TrashActionButton';
+export { default } from "./TrashActionButton";

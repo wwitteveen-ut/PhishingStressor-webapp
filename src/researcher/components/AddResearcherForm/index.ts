@@ -1,1 +1,1 @@
-export {default} from './AddResearcherModal';
+export { default } from "./AddResearcherModal";

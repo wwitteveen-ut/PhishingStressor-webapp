@@ -22,10 +22,10 @@ export const researcherHandlers = [
 
       const { id } = (await request.json()) as { id: string };
       console.log(
-        `Received request to add researcher with id: ${id} to the experiment`
+        `Received request to add researcher with id: ${id} to the experiment`,
       );
       return new HttpResponse(null, { status: 200 });
-    }
+    },
   ),
 
   http.delete(
@@ -44,9 +44,9 @@ export const researcherHandlers = [
       const { id } = (await request.json()) as { id: string };
 
       console.log(
-        `Received request to delete researcher with id: ${id} from the experiment`
+        `Received request to delete researcher with id: ${id} from the experiment`,
       );
       return new HttpResponse(null, { status: 200 });
-    }
+    },
   ),
 ];

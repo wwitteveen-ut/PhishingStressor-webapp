@@ -1,1 +1,1 @@
-export { default } from './EmailCategoryList';
+export { default } from "./EmailCategoryList";

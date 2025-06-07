@@ -1,6 +1,9 @@
-import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { authenticateParticipant, authenticateResearcher } from "./auth/actions/actions"
+import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+import {
+  authenticateParticipant,
+  authenticateResearcher,
+} from "./auth/actions/actions";
 
 declare module "next-auth" {
   interface Session {
@@ -8,7 +11,7 @@ declare module "next-auth" {
       username: string;
       experimentId: string;
       loggedIn: string;
-    } & DefaultSession["user"]
+    } & DefaultSession["user"];
   }
 
   interface User {
@@ -18,11 +21,11 @@ declare module "next-auth" {
   }
 }
 
-declare module "@auth/core/jwt" {  
+declare module "@auth/core/jwt" {
   interface JWT {
     username: string;
     experimentId: string;
-    id?:string;
+    id?: string;
     loggedIn: string;
   }
 }
@@ -42,14 +45,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-
         if (!credentials.username || !credentials.password) {
           console.log("Missing credentials");
           return null;
         }
         const result = await authenticateParticipant(
           credentials.username as string,
-          credentials.password as string
+          credentials.password as string,
         );
 
         console.log("auth result", result);
@@ -58,14 +60,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("Authentication failed:", result.error);
           throw new InvalidLoginError();
         }
-        
+
         const token = result.data;
         token.username = credentials.username;
 
         return token;
       },
     }),
-  Credentials({
+    Credentials({
       id: "researcher",
       name: "researcher",
       credentials: {
@@ -74,14 +76,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
 
       authorize: async (credentials) => {
-
         if (!credentials.username || !credentials.password) {
           console.log("Missing credentials");
           return null;
         }
         const result = await authenticateResearcher(
           credentials.username as string,
-          credentials.password as string
+          credentials.password as string,
         );
 
         console.log("auth result", result);
@@ -90,7 +91,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           console.log("Authentication failed:", result.error);
           throw new InvalidLoginError();
         }
-        
+
         const token = result.data;
 
         return token;
@@ -105,20 +106,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.experimentId = user.experimentId;
         token.username = user.username;
       }
-      return token
+      return token;
     },
     session({ session, token }) {
       session.user.experimentId = token.experimentId;
       session.user.loggedIn = token.loggedIn;
       session.user.username = token.username;
-      session.user.id = token.id ?? '';
-      return session
+      session.user.id = token.id ?? "";
+      return session;
     },
   },
   pages: {
-    signIn: '/login',
+    signIn: "/login",
   },
   session: {
     strategy: "jwt",
   },
-})
+});

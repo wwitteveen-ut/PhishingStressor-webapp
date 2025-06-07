@@ -1,1 +1,1 @@
-export { default } from './EmailView';
+export { default } from "./EmailView";

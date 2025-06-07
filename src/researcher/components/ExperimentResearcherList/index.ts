@@ -1,1 +1,1 @@
-export { default } from './ExperimentResearcherList';
+export { default } from "./ExperimentResearcherList";

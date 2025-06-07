@@ -1,1 +1,1 @@
-export { default as EmailClient } from './EmailClientContainer';
+export { default as EmailClient } from "./EmailClientContainer";

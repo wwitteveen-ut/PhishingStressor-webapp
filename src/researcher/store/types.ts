@@ -30,13 +30,16 @@ export interface ExperimentCreatePayload {
   }[];
 }
 
-
-export interface EmailCreate extends Omit<ResearcherEmail, 'id' | 'createdAt' | 'experimentId' | 'attachments'>{
+export interface EmailCreate
+  extends Omit<
+    ResearcherEmail,
+    "id" | "createdAt" | "experimentId" | "attachments"
+  > {
   groups: string[];
 }
 
 export interface EmailCreatePayload {
-  metadata: EmailCreate
+  metadata: EmailCreate;
   files: File[];
 }
 

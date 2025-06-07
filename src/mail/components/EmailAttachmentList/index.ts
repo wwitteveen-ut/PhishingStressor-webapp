@@ -1,1 +1,1 @@
-export { default } from './EmailAttachmentList';
+export { default } from "./EmailAttachmentList";

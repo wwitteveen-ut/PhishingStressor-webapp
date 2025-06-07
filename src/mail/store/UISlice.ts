@@ -1,7 +1,6 @@
-import { StateCreator } from 'zustand/vanilla';
-import { EmailClientState } from './EmailClientStore';
-import { EmailProperties } from './types';
-
+import { StateCreator } from "zustand/vanilla";
+import { EmailClientState } from "./EmailClientStore";
+import { EmailProperties } from "./types";
 
 export interface UISlice {
   selectedCategory: string;
@@ -17,9 +16,9 @@ export interface UISlice {
 }
 
 export const initialUISliceState: UISlice = {
-  selectedCategory: 'inbox',
+  selectedCategory: "inbox",
   emailProperties: {},
-  searchQuery: '',
+  searchQuery: "",
   selectedEmailId: null,
   setSearchQuery: () => {},
   selectEmailId: () => {},
@@ -31,16 +30,16 @@ export const initialUISliceState: UISlice = {
 
 export const createUISlice: StateCreator<
   EmailClientState,
-  [['zustand/devtools', never], ['zustand/subscribeWithSelector', never]],
+  [["zustand/devtools", never], ["zustand/subscribeWithSelector", never]],
   [],
   UISlice
 > = (set, get) => ({
-  selectedCategory: 'inbox',
+  selectedCategory: "inbox",
   selectedEmailId: null,
   emailProperties: {},
-  searchQuery: '',
+  searchQuery: "",
   setSearchQuery: (query: string) =>
-    set({ searchQuery: query }, undefined, 'ui/setSearchQuery'),
+    set({ searchQuery: query }, undefined, "ui/setSearchQuery"),
   selectEmailId: (emailId: string) =>
     set(
       (state) => {
@@ -54,10 +53,10 @@ export const createUISlice: StateCreator<
         return { selectedEmailId: emailId };
       },
       undefined,
-      'ui/selectEmailId'
+      "ui/selectEmailId",
     ),
   selectCategory: (category: string) =>
-    set({ selectedCategory: category }, undefined, 'ui/selectCategory'),
+    set({ selectedCategory: category }, undefined, "ui/selectCategory"),
   getUnreadCount: () => {
     const { emails, emailProperties } = get();
     return emails.reduce((count, email) => {
@@ -69,39 +68,37 @@ export const createUISlice: StateCreator<
     set(
       (state) => ({
         emails: state.emails.map((email) =>
-          email.id === emailId
-            ? { ...email, isRead: !email.isRead }
-            : email
+          email.id === emailId ? { ...email, isRead: !email.isRead } : email,
         ),
         emailProperties: {
           ...state.emailProperties,
           [emailId]: {
-            ...state.emailProperties[emailId] ?? { isTrashed: false },
+            ...(state.emailProperties[emailId] ?? { isTrashed: false }),
             isRead: !(state.emailProperties[emailId]?.isRead ?? false),
           },
         },
       }),
       undefined,
-      'ui/toggleEmailRead'
+      "ui/toggleEmailRead",
     ),
-    toggleEmailTrashed: (emailId: string) =>
+  toggleEmailTrashed: (emailId: string) =>
     set(
       (state) => ({
         emails: state.emails.map((email) =>
           email.id === emailId
             ? { ...email, isTrashed: !email.isTrashed }
-            : email
+            : email,
         ),
         emailProperties: {
           ...state.emailProperties,
           [emailId]: {
-            ...state.emailProperties[emailId] ?? { isRead: false },
+            ...(state.emailProperties[emailId] ?? { isRead: false }),
             isTrashed: !(state.emailProperties[emailId]?.isTrashed ?? false),
           },
         },
         selectedEmailId: null,
       }),
       undefined,
-      'ui/toggleEmailTrashed'
+      "ui/toggleEmailTrashed",
     ),
 });

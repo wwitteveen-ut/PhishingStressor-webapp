@@ -1,4 +1,4 @@
-import { DataPoint } from 'heatmap-ts';
+import { DataPoint } from "heatmap-ts";
 
 export interface EmailAttachmentData {
   filename: string;
@@ -22,7 +22,9 @@ export interface EmailProperties {
   isTrashed: boolean;
 }
 
-export interface ZustandEmail extends Omit<Email, 'isPhishing'>, EmailProperties {
+export interface ZustandEmail
+  extends Omit<Email, "isPhishing">,
+    EmailProperties {
   sendAt: Date;
 }
 
@@ -32,7 +34,7 @@ export enum UserEventType {
   ATTACHMENT_OPENED = "ATTACHMENT_OPENED",
   ATTACHMENT_CLOSED = "ATTACHMENT_CLOSED",
   HEATMAP = "HEATMAP",
-  OTHER = "OTHER"
+  OTHER = "OTHER",
 }
 
 export interface UserEvent {
