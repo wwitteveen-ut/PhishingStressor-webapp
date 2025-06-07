@@ -1,25 +1,25 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { 
-  Paper, 
-  Group, 
-  Title, 
-  Button, 
-  ScrollArea, 
-  Divider, 
+import React from "react";
+import {
+  Paper,
+  Group,
+  Title,
+  Button,
+  ScrollArea,
+  Divider,
   ThemeIcon,
-} from '@mantine/core';
-import { 
-  LayoutDashboardIcon, 
-  LucideIcon, 
-  LogOut, 
+} from "@mantine/core";
+import {
+  LayoutDashboardIcon,
+  LucideIcon,
+  LogOut,
   Users,
-  FlaskConical
-} from 'lucide-react';
-import LinksGroup from '@/shared/components/LinksGroup';
+  FlaskConical,
+} from "lucide-react";
+import LinksGroup from "@/shared/components/LinksGroup";
 import { signOut } from "next-auth/react";
-import { usePathname } from 'next/navigation';
+import { usePathname } from "next/navigation";
 
 interface MenuItem {
   label: string;
@@ -34,42 +34,43 @@ export default function ResearcherSidebar() {
 
   const mainMenu: MenuItem[] = [
     {
-    label: 'Experiments',
-    icon: FlaskConical,
-    mainLink: "/researcher/experiments"
+      label: "Experiments",
+      icon: FlaskConical,
+      mainLink: "/researcher/experiments",
     },
     {
-      label: 'Researchers',
+      label: "Researchers",
       icon: Users,
-      mainLink: "/researcher/researchers"
+      mainLink: "/researcher/researchers",
     },
   ];
 
-
   const headerComponent = (
     <>
-    <Group p="md" gap="xs">
-      <ThemeIcon variant="white">
-        <LayoutDashboardIcon size={24} />
-      </ThemeIcon>
-      <Title order={6}>PhishingStressor Dashboard</Title>
-    </Group>
-    <Divider/>
+      <Group p="md" gap="xs">
+        <ThemeIcon variant="white">
+          <LayoutDashboardIcon size={24} />
+        </ThemeIcon>
+        <Title order={6}>PhishingStressor Dashboard</Title>
+      </Group>
+      <Divider />
     </>
   );
 
   const footerComponent = (
     <>
       <Divider />
-      <div style={{ padding: '16px' }}>
+      <div style={{ padding: "16px" }}>
         <Button
           variant="subtle"
           color="red"
           fullWidth
           leftSection={<LogOut size={16} />}
-          onClick={() => signOut({
-            redirectTo: "/login/researcher",
-          })}
+          onClick={() =>
+            signOut({
+              redirectTo: "/login/researcher",
+            })
+          }
         >
           Sign out
         </Button>
@@ -78,13 +79,18 @@ export default function ResearcherSidebar() {
   );
 
   return (
-    <Paper 
-      shadow="xs" 
-      withBorder 
-      style={{ minWidth: 256, height: '100vh', display: 'flex', flexDirection: 'column' }}
+    <Paper
+      shadow="xs"
+      withBorder
+      style={{
+        minWidth: 256,
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
       {headerComponent}
-      <ScrollArea style={{ flex: 1, padding: '8px' }}>
+      <ScrollArea style={{ flex: 1, padding: "8px" }}>
         {mainMenu.map((item) => (
           <LinksGroup
             key={item.label}

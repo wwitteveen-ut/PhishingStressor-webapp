@@ -5,21 +5,18 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export default async function ExperimentFormContainer() {
-    const session = await auth();
-    if (!session) {
-        redirect('/login')
-    }
-    
-    const researchers = await getResearchers();
-    const researcherChoices = researchers
-        .filter((researcher) => researcher.id !== session.user.id)
-        .map((researcher) => ({
-            label: researcher.username,
-            value: researcher.id
-        }));
+  const session = await auth();
+  if (!session) {
+    redirect("/login");
+  }
 
+  const researchers = await getResearchers();
+  const researcherChoices = researchers
+    .filter((researcher) => researcher.id !== session.user.id)
+    .map((researcher) => ({
+      label: researcher.username,
+      value: researcher.id,
+    }));
 
-    return (
-            <ExperimentForm researcherChoices={researcherChoices} />
-    )
+  return <ExperimentForm researcherChoices={researcherChoices} />;
 }

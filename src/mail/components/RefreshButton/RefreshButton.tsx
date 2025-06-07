@@ -7,20 +7,19 @@ import { useDisclosure } from "@mantine/hooks";
 import { RotateCw } from "lucide-react";
 
 export default function RefreshButton() {
-    const [loading, { toggle, close }] = useDisclosure();
-    const setEmails = useEmailClientStore((state) => state.setEmails);
+  const [loading, { toggle, close }] = useDisclosure();
+  const setEmails = useEmailClientStore((state) => state.setEmails);
 
-
-    const handleRefresh = async () => {
-        toggle();
-        try {
-            await fetchAndSetEmails(setEmails);
-        } catch (err) {
-            console.error("Error refreshing emails:", err);
-        } finally {
-            close();
-        }
-    };
+  const handleRefresh = async () => {
+    toggle();
+    try {
+      await fetchAndSetEmails(setEmails);
+    } catch (err) {
+      console.error("Error refreshing emails:", err);
+    } finally {
+      close();
+    }
+  };
 
   return (
     <Affix position={{ bottom: 20, right: 20 }}>

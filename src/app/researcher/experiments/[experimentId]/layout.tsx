@@ -15,11 +15,11 @@ export default async function Layout({
   const experiment = await getExperiment(experimentId);
 
   return (
-      <ExperimentProvider experiment={experiment}>
-        <ExperimentSidebar/>
-        <Container fluid w={"100%"} mx={"lg"} mt={"xl"}>
+    <ExperimentProvider experiment={experiment}>
+      <ExperimentSidebar />
+      <Container fluid w={"100%"} mx={"lg"} mt={"xl"}>
         {children}
-        </Container>
-      </ExperimentProvider>
+      </Container>
+    </ExperimentProvider>
   );
 }

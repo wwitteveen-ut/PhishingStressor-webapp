@@ -6,14 +6,12 @@ export interface ParticipantSlice {
   emails: ZustandEmail[];
   startedAt: Date;
   setEmails: (emails: ZustandEmail[]) => void;
-  setDate: (date: Date) => void;
 }
 
 export const initialParticipantState: ParticipantSlice = {
   emails: [],
   startedAt: new Date(),
   setEmails: () => {},
-  setDate: () => {},
 };
 
 export const createParticipantSlice: StateCreator<

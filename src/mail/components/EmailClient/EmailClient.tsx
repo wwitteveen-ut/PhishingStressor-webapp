@@ -3,7 +3,10 @@ import { useContext, useEffect } from "react";
 import EmailList from "../EmailList";
 import EmailView from "../EmailView";
 import { ZustandEmail } from "@/mail/store/types";
-import { EmailClientStoreContext, useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import {
+  EmailClientStoreContext,
+  useEmailClientStore,
+} from "@/mail/providers/EmailClientStoreProvider";
 import { DataPoint } from "heatmap-ts";
 import { fetchAndSetEmails } from "@/mail/utils/fetchEmails";
 import RefreshButton from "../RefreshButton";
@@ -15,7 +18,6 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
   let dataPoints: DataPoint[] = [];
 
   useEffect(() => {
-
     setEmails(emails);
 
     const interval = setInterval(() => fetchAndSetEmails(setEmails), 1000 * 30);
@@ -32,9 +34,12 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
     const unsub = store.subscribe(
       (state) => state.selectedEmailId,
       () => {
-        console.log("Noticed email switch, stopped tracking. Received info:", dataPoints);
+        console.log(
+          "Noticed email switch, stopped tracking. Received info:",
+          dataPoints,
+        );
         dataPoints = [];
-      }
+      },
     );
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -62,7 +67,7 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
       <div className="flex flex-1 overflow-hidden">
         <EmailList />
         <EmailView />
-        <RefreshButton/>
+        <RefreshButton />
       </div>
     </>
   );

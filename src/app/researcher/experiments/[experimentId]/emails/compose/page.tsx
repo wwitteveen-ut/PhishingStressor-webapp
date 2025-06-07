@@ -12,7 +12,7 @@ export default async function ExperimentsPage({}) {
   return (
     <Container ml={0}>
       <Paper shadow="sm" p="lg" radius="md">
-        <ExperimentEmailFormPage/>
+        <ExperimentEmailFormPage />
       </Paper>
     </Container>
   );

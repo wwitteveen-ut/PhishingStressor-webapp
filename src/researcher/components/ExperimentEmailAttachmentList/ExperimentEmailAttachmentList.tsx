@@ -48,7 +48,7 @@ function ExperimentEmailAttachmentListItem({
       withBorder
       shadow="0"
       radius="md"
-      bg={'gray.0'}
+      bg={"gray.0"}
       style={{ alignItems: "center" }}
     >
       <Group gap="sm" align="center">
@@ -73,10 +73,7 @@ function ExperimentEmailAttachmentListItem({
           </Text>
         </div>
         {isPreview && (
-          <ActionIcon
-            variant="transparent"
-            color="gray"
-          >
+          <ActionIcon variant="transparent" color="gray">
             <Download size={18} />
           </ActionIcon>
         )}

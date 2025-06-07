@@ -24,7 +24,11 @@ interface EmailComposerProps {
   onCancel?: () => void;
 }
 
-export default function EmailComposer({ replyTo, form, onCancel }: EmailComposerProps) {
+export default function EmailComposer({
+  replyTo,
+  form,
+  onCancel,
+}: EmailComposerProps) {
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const openRef = useRef<() => void>(null);
 
@@ -48,12 +52,14 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
   }, [form.values.content, editor]);
 
   useEffect(() => {
-    const newAttachments: Attachment[] = form.values.attachments.map((file, index) => ({
-      id: Date.now() + index,
-      name: file.name,
-      size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
-      type: file.name.split(".").pop()?.toLowerCase() || "unknown",
-    }));
+    const newAttachments: Attachment[] = form.values.attachments.map(
+      (file, index) => ({
+        id: Date.now() + index,
+        name: file.name,
+        size: `${(file.size / 1024 / 1024).toFixed(1)} MB`,
+        type: file.name.split(".").pop()?.toLowerCase() || "unknown",
+      }),
+    );
     setAttachments(newAttachments);
   }, [form.values.attachments]);
 
@@ -64,7 +70,9 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
   const handleRemoveAttachment = (id: number) => {
     const attachmentIndex = attachments.findIndex((att) => att.id === id);
     if (attachmentIndex !== -1) {
-      const newFiles = form.values.attachments.filter((_, index) => index !== attachmentIndex);
+      const newFiles = form.values.attachments.filter(
+        (_, index) => index !== attachmentIndex,
+      );
       form.setFieldValue("attachments", newFiles);
     }
   };
@@ -76,9 +84,7 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
           <h3 className="font-medium text-gray-700">
             {replyTo ? `Re: ${replyTo.subject}` : "New Message"}
           </h3>
-          {onCancel && (
-            <CloseButton onClick={onCancel} size={"md"} />
-          )}
+          {onCancel && <CloseButton onClick={onCancel} size={"md"} />}
         </div>
         {!replyTo && (
           <div className="mt-3">
@@ -125,10 +131,12 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
             <RichTextEditor.Content className="min-h-[200px] prose prose-sm max-w-none" />
           </Dropzone>
         </RichTextEditor>
-        
+
         {attachments.length > 0 && (
           <div className="p-4">
-            <h4 className="text-sm font-medium text-gray-700 mb-2">Attachments</h4>
+            <h4 className="text-sm font-medium text-gray-700 mb-2">
+              Attachments
+            </h4>
             <div className="flex flex-wrap gap-2">
               {attachments.map((attachment) => (
                 <div
@@ -139,7 +147,9 @@ export default function EmailComposer({ replyTo, form, onCancel }: EmailComposer
                     {attachment.type}
                   </div>
                   <div className="ml-2">
-                    <p className="text-xs font-medium text-gray-700">{attachment.name}</p>
+                    <p className="text-xs font-medium text-gray-700">
+                      {attachment.name}
+                    </p>
                     <p className="text-xs text-gray-500">{attachment.size}</p>
                   </div>
                   <button

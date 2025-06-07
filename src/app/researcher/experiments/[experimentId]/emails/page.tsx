@@ -1,8 +1,6 @@
 import { Button, Group, Paper, Title } from "@mantine/core";
 import { auth } from "@/auth";
-import {
-  getExperimentEmails,
-} from "@/researcher/actions/actions";
+import { getExperimentEmails } from "@/researcher/actions/actions";
 import { redirect } from "next/navigation";
 import ExperimentEmailList from "@/researcher/components/ExperimentEmailList";
 import Link from "next/link";
@@ -25,8 +23,11 @@ export default async function ExperimentsPage({
         <Title order={2} c="gray.9">
           Experiment Emails
         </Title>
-        <Button component={Link} href={`/researcher/experiments/${experimentId}/emails/compose`}>
-            Create new email
+        <Button
+          component={Link}
+          href={`/researcher/experiments/${experimentId}/emails/compose`}
+        >
+          Create new email
         </Button>
       </Group>
       <Paper shadow="sm" p="lg" radius="md">

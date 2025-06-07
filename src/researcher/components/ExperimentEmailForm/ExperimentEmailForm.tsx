@@ -139,9 +139,7 @@ export default function ExperimentEmailForm({
                 </FileButton>
               )}
             </Group>
-            <ExperimentEmailAttachmentList
-              files={form.values.files}
-            />
+            <ExperimentEmailAttachmentList files={form.values.files} />
 
             <Group justify="end">
               <Button

@@ -50,7 +50,7 @@ export default function ExperimentEmailPreview({
           </Stack>
           <Text size="sm" c="dimmed">
             {new Date(
-              metadata.scheduledFor * 60 * 1000 + Date.now()
+              metadata.scheduledFor * 60 * 1000 + Date.now(),
             ).toLocaleString([], {
               weekday: "short",
               month: "short",

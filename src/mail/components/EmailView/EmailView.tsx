@@ -1,35 +1,33 @@
 "use client";
-import {
-  ArrowLeftIcon,
-} from 'lucide-react'
-import { useEmailClientStore } from '@/mail/providers/EmailClientStoreProvider';
-import EmailAttachmentList from '../EmailAttachmentList';
-import EmailReplySection from '../EmailReplySection';
-import TrashActionButton from '../TrashActionButton';
-import { Container } from '@mantine/core';
+import { ArrowLeftIcon } from "lucide-react";
+import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import EmailAttachmentList from "../EmailAttachmentList";
+import EmailReplySection from "../EmailReplySection";
+import TrashActionButton from "../TrashActionButton";
+import { Container } from "@mantine/core";
 
 export default function EmailView() {
   const emailId = useEmailClientStore((state) => state.selectedEmailId);
   const emails = useEmailClientStore((state) => state.emails);
   const email = emails.find((email) => email.id === emailId);
 
-  const toggleEmailTrashed = useEmailClientStore((state) => state.toggleEmailTrashed);
-  
+  const toggleEmailTrashed = useEmailClientStore(
+    (state) => state.toggleEmailTrashed,
+  );
+
   if (!email) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gray-50 text-gray-500">
         <p>Select an email to view</p>
       </div>
-    )
+    );
   }
 
   return (
     <div className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
       <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <div className="flex items-center">
-          <button
-            className="mr-4 text-gray-500 hover:text-gray-700 md:hidden"
-          >
+          <button className="mr-4 text-gray-500 hover:text-gray-700 md:hidden">
             <ArrowLeftIcon size={20} />
           </button>
           <h2 className="text-xl font-medium text-gray-800 truncate">
@@ -37,9 +35,10 @@ export default function EmailView() {
           </h2>
         </div>
         <div className="flex items-center space-x-2">
-
-        <TrashActionButton isTrashed={email.isTrashed} onClick={() => toggleEmailTrashed(email.id)} />
-
+          <TrashActionButton
+            isTrashed={email.isTrashed}
+            onClick={() => toggleEmailTrashed(email.id)}
+          />
         </div>
       </div>
       <div className="p-6">
@@ -61,23 +60,24 @@ export default function EmailView() {
           </div>
           <div className="text-sm text-gray-500">
             {new Date(email.sendAt).toLocaleString([], {
-              weekday: 'short',
-              month: 'short',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
             })}
           </div>
         </div>
-        <Container fluid p={0} mt={'xl'}>          
+        <Container fluid p={0} mt={"xl"}>
           <p>{email.content}</p>
         </Container>
-        <EmailAttachmentList emailId={email.id} attachments={email.attachments}/>
+        <EmailAttachmentList
+          emailId={email.id}
+          attachments={email.attachments}
+        />
 
-        { !email.isTrashed && (
-          <EmailReplySection emailId={email.id}/>
-        )}
+        {!email.isTrashed && <EmailReplySection emailId={email.id} />}
       </div>
     </div>
-  )
+  );
 }

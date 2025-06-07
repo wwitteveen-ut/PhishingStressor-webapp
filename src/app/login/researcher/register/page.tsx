@@ -4,15 +4,15 @@ import { Center } from "@mantine/core";
 import { permanentRedirect } from "next/navigation";
 
 export default async function ResearcherRegisterPage() {
-    const canRegister = await canRegisterResearcher();
+  const canRegister = await canRegisterResearcher();
 
-    if (!canRegister){
-        permanentRedirect('/login/researcher');
-    }
+  if (!canRegister) {
+    permanentRedirect("/login/researcher");
+  }
 
-    return (
-        <Center h={"100vh"}>
-            <ResearcherForm/>
-        </Center>
-    );
+  return (
+    <Center h={"100vh"}>
+      <ResearcherForm />
+    </Center>
+  );
 }

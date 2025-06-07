@@ -7,8 +7,10 @@ export interface UISlice {
   emailProperties: Record<string, EmailProperties>;
   searchQuery: string;
   selectedEmailId: string | null;
+  isReplying: boolean;
   setSearchQuery: (query: string) => void;
   selectEmailId: (emailId: string) => void;
+  setIsReplying: (isReplying: boolean) => void;
   toggleEmailRead: (emailId: string) => void;
   toggleEmailTrashed: (emailId: string) => void;
   selectCategory: (category: string) => void;
@@ -20,8 +22,10 @@ export const initialUISliceState: UISlice = {
   emailProperties: {},
   searchQuery: "",
   selectedEmailId: null,
+  isReplying: false,
   setSearchQuery: () => {},
   selectEmailId: () => {},
+  setIsReplying: () => {},
   toggleEmailRead: () => {},
   toggleEmailTrashed: () => {},
   selectCategory: () => {},
@@ -34,10 +38,7 @@ export const createUISlice: StateCreator<
   [],
   UISlice
 > = (set, get) => ({
-  selectedCategory: "inbox",
-  selectedEmailId: null,
-  emailProperties: {},
-  searchQuery: "",
+  ...initialUISliceState,
   setSearchQuery: (query: string) =>
     set({ searchQuery: query }, undefined, "ui/setSearchQuery"),
   selectEmailId: (emailId: string) =>
@@ -50,13 +51,16 @@ export const createUISlice: StateCreator<
         if (!isCurrentlyRead) {
           state.toggleEmailRead(emailId);
         }
+        state.setIsReplying(false);
         return { selectedEmailId: emailId };
       },
       undefined,
-      "ui/selectEmailId",
+      "ui/selectEmailId"
     ),
   selectCategory: (category: string) =>
     set({ selectedCategory: category }, undefined, "ui/selectCategory"),
+  setIsReplying: (isReplying: boolean) =>
+    set({ isReplying: isReplying }, undefined, "ui/setIsReplying"),
   getUnreadCount: () => {
     const { emails, emailProperties } = get();
     return emails.reduce((count, email) => {
@@ -68,7 +72,7 @@ export const createUISlice: StateCreator<
     set(
       (state) => ({
         emails: state.emails.map((email) =>
-          email.id === emailId ? { ...email, isRead: !email.isRead } : email,
+          email.id === emailId ? { ...email, isRead: !email.isRead } : email
         ),
         emailProperties: {
           ...state.emailProperties,
@@ -79,7 +83,7 @@ export const createUISlice: StateCreator<
         },
       }),
       undefined,
-      "ui/toggleEmailRead",
+      "ui/toggleEmailRead"
     ),
   toggleEmailTrashed: (emailId: string) =>
     set(
@@ -87,7 +91,7 @@ export const createUISlice: StateCreator<
         emails: state.emails.map((email) =>
           email.id === emailId
             ? { ...email, isTrashed: !email.isTrashed }
-            : email,
+            : email
         ),
         emailProperties: {
           ...state.emailProperties,
@@ -99,6 +103,6 @@ export const createUISlice: StateCreator<
         selectedEmailId: null,
       }),
       undefined,
-      "ui/toggleEmailTrashed",
+      "ui/toggleEmailTrashed"
     ),
 });

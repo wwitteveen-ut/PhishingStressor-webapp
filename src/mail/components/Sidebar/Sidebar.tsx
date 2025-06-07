@@ -1,19 +1,21 @@
-import MailCategoryList from '@/mail/components/EmailCategoryList/EmailCategoryList'
-import React from 'react'
-import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
+import MailCategoryList from "@/mail/components/EmailCategoryList/EmailCategoryList";
+import React from "react";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function Sidebar() {
   const session = await auth();
   if (!session) {
-    redirect('/login')
+    redirect("/login");
   }
-  
+
   return (
     <div className="w-64 border-r border-gray-200 bg-white flex flex-col h-full">
       <div className="p-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-gray-800">PhishingStressor</h1>
+          <h1 className="text-xl font-semibold text-gray-800">
+            PhishingStressor
+          </h1>
         </div>
       </div>
       <MailCategoryList />
@@ -25,5 +27,5 @@ export default async function Sidebar() {
         </div>
       </div>
     </div>
-  )
+  );
 }

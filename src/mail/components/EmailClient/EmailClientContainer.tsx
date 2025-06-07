@@ -5,15 +5,13 @@ import { redirect } from "next/navigation";
 import { EmailClient } from "./EmailClient";
 
 async function EmailClientContainer() {
-    const session = await auth();
-    if (!session){
-        redirect("/login")
-    }
-    const emails = await getParticipantEmails();
+  const session = await auth();
+  if (!session) {
+    redirect("/login");
+  }
+  const emails = await getParticipantEmails();
 
-    return (
-        <EmailClient emails={emails} />
-    );
+  return <EmailClient emails={emails} />;
 }
 
 export default EmailClientContainer;

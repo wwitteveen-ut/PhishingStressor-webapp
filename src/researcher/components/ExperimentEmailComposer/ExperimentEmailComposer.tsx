@@ -11,10 +11,15 @@ import { EmailFormValues } from "../ExperimentEmailFormPage/ExperimentEmailFormP
 import { EmailCreatePayload } from "@/researcher/store/types";
 
 interface ExperimentEmailComposerProps {
-  form: UseFormReturnType<EmailFormValues, (values: EmailFormValues) => EmailCreatePayload>;
+  form: UseFormReturnType<
+    EmailFormValues,
+    (values: EmailFormValues) => EmailCreatePayload
+  >;
 }
 
-export default function ExperimentEmailComposer({ form }: ExperimentEmailComposerProps) {
+export default function ExperimentEmailComposer({
+  form,
+}: ExperimentEmailComposerProps) {
   const editor = useEditor({
     extensions: [
       StarterKit,

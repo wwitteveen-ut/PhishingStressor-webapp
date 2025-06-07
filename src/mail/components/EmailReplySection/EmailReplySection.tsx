@@ -41,7 +41,9 @@ export default function EmailReplySection({ emailId }: { emailId: string }) {
             }}
           />
           <Group justify="flex-start" mt="md">
-            <Button type="submit" leftSection={<Send size={18}/>}>Send</Button>
+            <Button type="submit" leftSection={<Send size={18} />}>
+              Send
+            </Button>
           </Group>
         </form>
       ) : (
