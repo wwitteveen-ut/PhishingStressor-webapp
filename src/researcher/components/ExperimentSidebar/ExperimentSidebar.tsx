@@ -121,7 +121,7 @@ export default function ExperimentSidebar() {
           >
             <Stack gap={0} flex={1}>
                 <Text c="dimmed" size="sm">Current Experiment</Text>
-                <Text size="md" fw={600} c={"black.3"}>{experiment.name}</Text>
+                <Text size="md" fw={600} >{experiment.name}</Text>
             </Stack>
           </Button>
           <Divider />
