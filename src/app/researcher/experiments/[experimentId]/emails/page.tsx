@@ -10,9 +10,7 @@ import Link from "next/link";
 export default async function ExperimentsPage({
   params,
 }: {
-  params: {
-    experimentId: string;
-  };
+  params: Promise<{ experimentId: string }>;
 }) {
   const { experimentId } = await params;
   const session = await auth();

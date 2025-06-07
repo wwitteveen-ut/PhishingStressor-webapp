@@ -20,7 +20,6 @@ import {
   SquareGanttChart,
   Mail,
   ChartArea,
-  BookUser,
 } from 'lucide-react';
 import LinksGroup from '@/shared/components/LinksGroup';
 import { signOut } from "next-auth/react";

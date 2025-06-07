@@ -1,5 +1,4 @@
 "use client";
-import { Email } from '@/mail/store/types';
 import { deleteEmail } from '@/researcher/actions/actions';
 import { ResearcherEmail } from '@/researcher/store/types';
 import { Badge, Group, Text, ActionIcon, Table, Tooltip } from '@mantine/core';

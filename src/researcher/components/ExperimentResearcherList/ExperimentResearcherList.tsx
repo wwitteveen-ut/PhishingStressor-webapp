@@ -67,8 +67,8 @@ export default function ExperimentResearcherList({ researcherChoices = [] }: Res
       {header}
         <Stack gap="xs">
           {experiment.researchers.map((researcher) => (
-            <Paper bg={"gray.0"}  p="xs" radius={"sm"} shadow="0" pl={"md"}>
-            <Group key={researcher.id} justify="space-between">
+            <Paper key={researcher.id} bg={"gray.0"}  p="xs" radius={"sm"} shadow="0" pl={"md"}>
+            <Group justify="space-between">
               <Stack gap={0}>
                 <Text size="sm" c="gray.6">
                   {researcher.id}

@@ -1,4 +1,3 @@
-import { Email } from "@/mail/store/types";
 import { mockExperiments } from "./experiments";
 import { ResearcherEmail } from "@/researcher/store/types";
 
