@@ -1,6 +1,8 @@
 "use client";
 import { Email } from '@/mail/store/types';
+import { deleteEmail } from '@/researcher/actions/actions';
 import { Badge, Group, Text, ActionIcon, Table } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { Clock, AlertTriangle, Trash } from 'lucide-react';
 
 interface ExperimentEmailListItemProps {
@@ -8,12 +10,26 @@ interface ExperimentEmailListItemProps {
 }
 
 export default function ExperimentEmailListItem({ email }: ExperimentEmailListItemProps) {
-    const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (window.confirm('Are you sure you want to delete this campaign?')) {
-        //   onDelete(campaign.id);
-        }
-    };
+    const openDeleteModal = () => modals.openConfirmModal({
+        title: 'Please confirm your action',
+        withCloseButton: false,
+        radius: 'xs',
+        size:'md',
+        centered: true,
+        children: (
+        <Text size="sm">
+            Are you sure you want to delete this email from experiment?<br/>
+            (ID: {email.id})
+        </Text>
+        ),
+        labels: { confirm: 'Delete email', cancel: 'Cancel' },
+        confirmProps: { color: 'red' },
+        onConfirm: () => handleDelete(),
+    });
+    
+    const handleDelete = async () => {
+        await deleteEmail(email.experimentId, email.id);
+    }
 
     return (
         <Table.Tr>
@@ -49,7 +65,7 @@ export default function ExperimentEmailListItem({ email }: ExperimentEmailListIt
                 <ActionIcon
                     color="red"
                     variant="subtle"
-                    onClick={handleDelete}
+                    onClick={openDeleteModal}
                 >
                     <Trash size={20} />
                 </ActionIcon>

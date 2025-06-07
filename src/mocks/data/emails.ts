@@ -1,4 +1,5 @@
 import { Email } from "@/mail/store/types";
+import { mockExperiments } from "./experiments";
 
 export const mockAttachments = [
   {
@@ -29,7 +30,7 @@ export const mockEmails: Email[] = [
     title: "Meeting Next Week",
     content: "Hi there, just checking in about our meeting next week. Let me know what time works best!",
     scheduledFor: 0,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0], mockAttachments[1]]
   },
   {
@@ -41,7 +42,7 @@ export const mockEmails: Email[] = [
     title: "Your June Tech Newsletter",
     content: "Welcome to the June edition of our tech newsletter. This month we're covering AI trends, cloud tools, and more.",
     scheduledFor: 0,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]]
   },
   {
@@ -53,7 +54,7 @@ export const mockEmails: Email[] = [
     title: "Support Ticket Resolved",
     content: "Your ticket has been resolved. Please review the resolution and let us know if you need further assistance.",
     scheduledFor: 0,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: []
   },
   {
@@ -65,7 +66,7 @@ export const mockEmails: Email[] = [
     title: "Important Security Update",
     content: "Please update your account credentials immediately.",
     scheduledFor: 1,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]]
   },
   {
@@ -77,7 +78,7 @@ export const mockEmails: Email[] = [
     title: "Team Meeting Tomorrow",
     content: "Reminder: Team meeting at 10 AM tomorrow.",
     scheduledFor: 2,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]]
   },
   {
@@ -89,7 +90,7 @@ export const mockEmails: Email[] = [
     title: "Invoice Due",
     content: "Your invoice #12345 is due for payment.",
     scheduledFor: 3,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]]
   },
   {
@@ -101,7 +102,7 @@ export const mockEmails: Email[] = [
     title: "Benefits Update",
     content: "Please review the new benefits package for the upcoming year.",
     scheduledFor: 5,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[0]]
   },
   {
@@ -113,7 +114,7 @@ export const mockEmails: Email[] = [
     title: "New Course Available",
     content: "Check out our latest course on advanced programming techniques.",
     scheduledFor: 8,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: []
   },
   {
@@ -125,7 +126,7 @@ export const mockEmails: Email[] = [
     title: "Payslip Available",
     content: "Your monthly payslip is now available for download.",
     scheduledFor: 8,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]]
   },
   {
@@ -137,7 +138,7 @@ export const mockEmails: Email[] = [
     title: "System Maintenance",
     content: "Scheduled maintenance will occur this weekend. Please save your work.",
     scheduledFor: 4,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]]
   },
   {
@@ -149,7 +150,7 @@ export const mockEmails: Email[] = [
     title: "Campaign Review",
     content: "Please review the latest marketing campaign materials.",
     scheduledFor: 13,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]]
   },
   {
@@ -161,7 +162,7 @@ export const mockEmails: Email[] = [
     title: "Project Timeline Update",
     content: "Important updates to the Q4 project timeline. Please review.",
     scheduledFor: 6,
-    experimentId: "1ffaf706-4eb7-4ec7-b055-85119b361870",
+    experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]]
   }
 ];

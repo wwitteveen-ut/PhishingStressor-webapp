@@ -68,3 +68,12 @@ export async function removeResearcherFromExperiment(experimentId: string, resea
 
     return response.ok;
 }
+
+export async function deleteEmail(experimentId: string, emailId: string):Promise<boolean> {
+    const path = await getExternalApiUrl(`/experiments/${experimentId}/emails/${emailId}`);
+    const response = await fetch(path, {
+        method: 'DELETE',
+    });
+
+    return response.ok;
+}
