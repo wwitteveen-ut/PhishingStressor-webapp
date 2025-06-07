@@ -1,20 +1,20 @@
 "use client";
 import { ApiUser } from "@/researcher/store/types";
-import { Group, Text, Box, Button, Stack } from "@mantine/core";
+import { Group, Text, Box, Button, Stack, Paper, ThemeIcon } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Trash } from "lucide-react";
+import { BookUser, Trash } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { removeResearcherFromExperiment } from "@/researcher/actions/actions";
 import AddResearcherModal from "../AddResearcherForm";
-import Link from "next/link";
+
 import { choice } from "../ExperimentForm/ExperimentForm";
 
+
 interface ResearcherListProps {
-  variant?: 'view' | 'edit';
   researcherChoices?: choice[];
 }
 
-export default function ExperimentResearcherList({ variant = "view", researcherChoices = [] }: ResearcherListProps) {
+export default function ExperimentResearcherList({ researcherChoices = [] }: ResearcherListProps) {
   const experiment = useExperimentContext();
 
   const handleDelete = async (researcherId: string) => {
@@ -41,15 +41,13 @@ export default function ExperimentResearcherList({ variant = "view", researcherC
     });
 
   const header = (
-    <Group justify="space-between">
+    <Group justify="start" gap={"xs"}>
+      <ThemeIcon variant="transparent">
+        <BookUser/>
+      </ThemeIcon>
       <Text size="lg" c="gray.7" fw={600}>
         Researchers
       </Text>
-      { variant === 'view' && (
-        <Button variant="light" component={Link} href={`${experiment.id}/researchers`}>
-          Manage researchers
-        </Button>
-      )}
     </Group>
   );
 
@@ -79,8 +77,6 @@ export default function ExperimentResearcherList({ variant = "view", researcherC
                 </Text>
               </Stack>
 
-              {variant === 'edit' && (
-                <>
                 <Group gap="xs">
                   <Button
                     variant="subtle"
@@ -92,14 +88,9 @@ export default function ExperimentResearcherList({ variant = "view", researcherC
                     Delete
                   </Button>
                 </Group>
-                </>
-              )}
             </Group>
           ))}
-          {researcherChoices && variant === 'edit' && (
-            <AddResearcherModal researcherChoices={researcherChoices}/>
-          )}
-
+          <AddResearcherModal researcherChoices={researcherChoices}/>
         </Stack>
     </Stack>
   );

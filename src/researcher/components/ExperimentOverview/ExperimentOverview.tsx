@@ -4,6 +4,7 @@ import { useExperimentContext } from "@/researcher/components/ExperimentContext/
 import { Text, Stack, TextInput, Group, Button, Paper } from "@mantine/core";
 import Link from "next/link";
 import ExperimentResearcherList from "../ExperimentResearcherList";
+import { useState } from "react";
 
 export default function ExperimentOverview() {
     const experiment = useExperimentContext();
@@ -61,7 +62,7 @@ export default function ExperimentOverview() {
             ))}
           </Stack>
           <Stack gap="sm">
-            <ExperimentResearcherList variant="view"/>
+            <ExperimentResearcherList/>
           </Stack>
         </Stack>
       </Paper>

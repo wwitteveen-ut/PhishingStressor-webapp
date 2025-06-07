@@ -57,11 +57,6 @@ export default function ExperimentSidebar() {
       icon: IconUsersGroup,
       mainLink: `/researcher/experiments/${experiment.id}/groups`
     },
-    { 
-      label: 'Researchers', 
-      icon: BookUser,
-      mainLink: `/researcher/experiments/${experiment.id}/researchers`
-    },
     {
       label: 'Statistics',
       icon: ChartArea,

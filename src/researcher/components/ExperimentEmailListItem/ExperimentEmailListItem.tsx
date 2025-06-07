@@ -1,9 +1,9 @@
 "use client";
 import { Email } from '@/mail/store/types';
 import { deleteEmail } from '@/researcher/actions/actions';
-import { Badge, Group, Text, ActionIcon, Table } from '@mantine/core';
+import { Badge, Group, Text, ActionIcon, Table, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { Clock, AlertTriangle, Trash } from 'lucide-react';
+import { Clock, AlertTriangle, Trash, Eye } from 'lucide-react';
 
 interface ExperimentEmailListItemProps {
     email: Email;
@@ -62,6 +62,16 @@ export default function ExperimentEmailListItem({ email }: ExperimentEmailListIt
                 </Badge>
             </Table.Td>
             <Table.Td style={{ textAlign: 'right' }}>
+                
+                <Tooltip label={"Preview email"}>
+                <ActionIcon
+                    variant="subtle"
+                    onClick={openDeleteModal}
+                >
+                    <Eye size={20} />
+                </ActionIcon>
+                </Tooltip>
+                <Tooltip label={"Delete email"}>
                 <ActionIcon
                     color="red"
                     variant="subtle"
@@ -69,6 +79,7 @@ export default function ExperimentEmailListItem({ email }: ExperimentEmailListIt
                 >
                     <Trash size={20} />
                 </ActionIcon>
+                </Tooltip>
             </Table.Td>
         </Table.Tr>
     );
