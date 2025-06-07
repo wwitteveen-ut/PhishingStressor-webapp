@@ -58,6 +58,18 @@ export const emailsHandlers = [
     console.log(`Received request to create reply for email: ${emailId} in experiment: ${experimentId}`, replyData);
     return HttpResponse.json(replyData);
   }),
+  http.post(await getExternalApiUrl('/experiments/:experimentId/emails'), async ({ params, request }) => {
+    const { experimentId } = params;
+    const experiment = mockExperiments.find(e => e.id === experimentId);
+
+    if (!experiment) {
+      return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
+    }
+
+    const emailData = await request.json();
+    console.log(`Received request to create email in experiment: ${experimentId}`, emailData);
+    return HttpResponse.json(emailData);
+  }),
     http.delete(await getExternalApiUrl('/experiments/:experimentId/emails/:emailId'), ({ params }) => {
       const { experimentId, emailId } = params;
       const experiment = mockExperiments.find(e => e.id === experimentId);

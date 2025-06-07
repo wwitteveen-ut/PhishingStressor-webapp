@@ -1,7 +1,7 @@
 "use server";
 
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
-import { ApiUser, Experiment, ExperimentCreatePayload, ResearcherEmail } from "../store/types";
+import { ApiUser, EmailCreatePayload, Experiment, ExperimentCreatePayload, ResearcherEmail } from "../store/types";
 export async function getExperiment(experimentId: string): Promise<Experiment> {
     const path = await getExternalApiUrl(`/experiments/${experimentId}`);
     const response = await fetch(path);
@@ -84,4 +84,14 @@ export async function getExperimentEmails(experimentId: string):Promise<Research
 
     const data = await response.json();
     return data;
+}
+
+export async function createEmail(experimentId:string, emailPayload: EmailCreatePayload):Promise<boolean> {
+    const path = await getExternalApiUrl(`/experiments/${experimentId}/emails`);
+    const response = await fetch(path, {
+        method: 'POST',
+        body: JSON.stringify(emailPayload),
+    });
+
+    return response.ok;
 }

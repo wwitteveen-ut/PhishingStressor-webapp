@@ -17,6 +17,7 @@ import { useForm, hasLength, isEmail, isInRange } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { SendIcon } from 'lucide-react';
 import { useExperimentContext } from '../ExperimentContext/ExperimentContext';
+import { createEmail } from '@/researcher/actions/actions';
 
 export default function ExperimentEmailForm({form}: {form: any}) {
   const [isSubmitting, { open: startSubmitting, close: stopSubmitting }] = useDisclosure(false);
@@ -26,7 +27,7 @@ export default function ExperimentEmailForm({form}: {form: any}) {
     startSubmitting();
     try {
         console.log(values)
-    //   await onSave(values);
+        await createEmail(experiment.id, values);
     } catch (error) {
       console.error('Failed to save campaign:', error);
     } finally {
@@ -76,7 +77,7 @@ export default function ExperimentEmailForm({form}: {form: any}) {
                 label="Sender Email"
                 placeholder="e.g. john@example.com"
                 required
-                {...form.getInputProps('senderEmail')}
+                {...form.getInputProps('senderAddress')}
               />
             </Group>
 
@@ -100,7 +101,7 @@ export default function ExperimentEmailForm({form}: {form: any}) {
                 leftSection={<SendIcon size={16} />}
                 loading={isSubmitting}
               >
-                Create Campaign
+                Create Mail
               </Button>
             </Group>
           </Stack>

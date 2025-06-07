@@ -4,11 +4,11 @@ import {
 } from 'lucide-react'
 import { Container } from '@mantine/core';
 import TrashActionButton from '@/mail/components/TrashActionButton';
-import { Email } from '@/mail/store/types';
 import EmailAttachmentList from '@/mail/components/EmailAttachmentList';
+import { EmailCreate } from '@/researcher/store/types';
 
 interface ExperimentEmailPreviewProps {
-  email: Omit<Email, 'id' | 'createdAt' | 'experimentId' | 'attachments'>
+  email: EmailCreate
 }
 
 export default function ExperimentEmailPreview({email}: ExperimentEmailPreviewProps) {
