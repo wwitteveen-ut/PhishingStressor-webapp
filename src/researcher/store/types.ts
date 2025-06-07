@@ -1,3 +1,5 @@
+import { Email } from "@/mail/store/types";
+
 export interface Experiment {
   id: string;
   name: string;
@@ -12,6 +14,10 @@ export interface Experiment {
     name: string;
     capacity: number;
   }[];
+}
+
+export interface ResearcherEmail extends Email {
+  isPhishing: boolean;
 }
 
 export interface ExperimentCreatePayload {

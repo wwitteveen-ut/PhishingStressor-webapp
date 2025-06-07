@@ -1,5 +1,6 @@
 import { Email } from "@/mail/store/types";
 import { mockExperiments } from "./experiments";
+import { ResearcherEmail } from "@/researcher/store/types";
 
 export const mockAttachments = [
   {
@@ -20,7 +21,7 @@ export const mockAttachments = [
   }
 ];
 
-export const mockEmails: Email[] = [
+export const mockEmails: ResearcherEmail[] = [
   {
     id: "1077d109-17fb-4a9d-a0d7-193ad821ae00",
     createdAt: "2025-05-15T15:47:33.248Z",

@@ -1,12 +1,13 @@
 "use client";
 import { Email } from '@/mail/store/types';
 import { deleteEmail } from '@/researcher/actions/actions';
+import { ResearcherEmail } from '@/researcher/store/types';
 import { Badge, Group, Text, ActionIcon, Table, Tooltip } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { Clock, AlertTriangle, Trash, Eye } from 'lucide-react';
 
 interface ExperimentEmailListItemProps {
-    email: Email;
+    email: ResearcherEmail;
 }
 
 export default function ExperimentEmailListItem({ email }: ExperimentEmailListItemProps) {

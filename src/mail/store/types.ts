@@ -8,7 +8,6 @@ export interface EmailAttachmentData {
 export interface Email {
   id: string;
   createdAt: string;
-  isPhishing: boolean;
   senderName: string;
   senderAddress: string;
   title: string;

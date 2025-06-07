@@ -1,18 +1,14 @@
 "use client";
 import { Table } from '@mantine/core';
 import ExperimentEmailListItem from '../ExperimentEmailListItem';
-import { Email } from '@/mail/store/types';
-import { mockEmails } from '@/mocks/data/emails';
+import { ResearcherEmail } from '@/researcher/store/types';
 
 
 interface ExperimentEmailListProps {
-  eemails?: Email[];
+  emails: ResearcherEmail[];
 }
 
-export default function ExperimentEmailList({  eemails }: ExperimentEmailListProps) {
-    
-    const emails: Email[] = mockEmails;
-
+export default function ExperimentEmailList({ emails }: ExperimentEmailListProps) {
     return (
       <Table verticalSpacing="md" highlightOnHover >
           <Table.Thead>
