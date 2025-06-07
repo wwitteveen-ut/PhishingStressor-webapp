@@ -86,12 +86,29 @@ export async function getExperimentEmails(experimentId: string):Promise<Research
     return data;
 }
 
-export async function createEmail(experimentId:string, emailPayload: EmailCreatePayload):Promise<boolean> {
+export async function createEmail(experimentId: string, emailPayload: EmailCreatePayload): Promise<boolean> {
+  try {
     const path = await getExternalApiUrl(`/experiments/${experimentId}/emails`);
-    const response = await fetch(path, {
-        method: 'POST',
-        body: JSON.stringify(emailPayload),
+
+    const formData = new FormData();
+    formData.append('metadata', JSON.stringify(emailPayload.metadata));
+    emailPayload.files.forEach((file, index) => {
+      formData.append(`files[${index}]`, file, file.name);
     });
 
-    return response.ok;
+    const response = await fetch(path, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text().catch(() => 'Unknown error');
+      throw new Error(`Failed to create email: ${response.status} ${response.statusText} - ${errorText}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error creating email:', error);
+    return false;
+  }
 }

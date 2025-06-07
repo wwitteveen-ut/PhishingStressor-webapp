@@ -125,8 +125,8 @@ export default function ExperimentEmailForm({
                 </Button>
               ) : (
                 <FileButton
-                  onChange={(payload: File[] | null) =>
-                    form.setFieldValue("files", payload ?? [])
+                  onChange={(payload: File[]) =>
+                    form.setFieldValue("files", payload)
                   }
                   accept="application/pdf,text/plain,image/png,image/jpeg,image/gif"
                   multiple

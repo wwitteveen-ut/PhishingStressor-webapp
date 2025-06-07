@@ -66,7 +66,7 @@ export const emailsHandlers = [
       return new HttpResponse(null, { status: 404, statusText: 'Experiment not found' });
     }
 
-    const emailData = await request.json();
+    const emailData = await request.formData();
     console.log(`Received request to create email in experiment: ${experimentId}`, emailData);
     return HttpResponse.json(emailData);
   }),
