@@ -28,8 +28,6 @@ export default function ExperimentEmailPreview({email}: ExperimentEmailPreviewPr
         </div>
         <div className="flex items-center space-x-2">
 
-        <TrashActionButton isTrashed={false} onClick={() => {}}/>
-
         </div>
       </div>
       <div className="p-6">

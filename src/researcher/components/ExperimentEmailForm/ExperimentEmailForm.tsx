@@ -12,8 +12,8 @@ import {
   Box,
   LoadingOverlay,
   NumberInput,
+  MultiSelect,
 } from '@mantine/core';
-import { useForm, hasLength, isEmail, isInRange } from '@mantine/form';
 import { useDisclosure } from '@mantine/hooks';
 import { SendIcon } from 'lucide-react';
 import { useExperimentContext } from '../ExperimentContext/ExperimentContext';
@@ -34,6 +34,10 @@ export default function ExperimentEmailForm({form}: {form: any}) {
       stopSubmitting();
     }
   };
+
+  const groupChoices = experiment.groups.map(g => {
+    return { value: g.id, label: g.name}
+  })
 
 
   return (
@@ -80,6 +84,16 @@ export default function ExperimentEmailForm({form}: {form: any}) {
                 {...form.getInputProps('senderAddress')}
               />
             </Group>
+            <MultiSelect
+                    label="Groups which receive the mail"
+                    placeholder="Pick value"
+                    data={groupChoices}
+                    checkIconPosition="right"
+                    searchable
+                    nothingFoundMessage="Nothing found..."
+                    onChange={(values) => form.setFieldValue('groups', values)}
+                    error={form.errors.groups && 'Invalid group'}
+                />
 
             <Textarea
               label="Content"
