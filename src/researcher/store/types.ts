@@ -1,5 +1,4 @@
 import { Email } from "@/mail/store/types";
-import { File } from "buffer";
 
 export interface Experiment {
   id: string;
@@ -32,12 +31,13 @@ export interface ExperimentCreatePayload {
 }
 
 
-export interface EmailCreate extends Omit<ResearcherEmail, 'id' | 'createdAt' | 'experimentId' | 'attachments'>{}
+export interface EmailCreate extends Omit<ResearcherEmail, 'id' | 'createdAt' | 'experimentId' | 'attachments'>{
+  groups: string[];
+}
 
 export interface EmailCreatePayload {
-  email: EmailCreate;
+  metadata: EmailCreate
   files: File[];
-  groups: string[];
 }
 
 export interface ApiUser {
