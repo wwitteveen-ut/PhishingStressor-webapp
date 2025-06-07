@@ -81,7 +81,7 @@ export default function ExperimentEmailFormPage() {
         <ExperimentEmailForm form={form}/>
       </Tabs.Panel>
       <Tabs.Panel value="preview" className={classes.panel}>
-        <ExperimentEmailPreview email={form.values}/>
+        <ExperimentEmailPreview emailData={form.getTransformedValues()}/>
       </Tabs.Panel>
     </Tabs>
   );

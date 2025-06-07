@@ -1,67 +1,60 @@
 "use client";
-import {
-  ArrowLeftIcon,
-} from 'lucide-react'
-import { Container } from '@mantine/core';
-import TrashActionButton from '@/mail/components/TrashActionButton';
-import EmailAttachmentList from '@/mail/components/EmailAttachmentList';
-import { EmailCreate } from '@/researcher/store/types';
+import { ArrowLeftIcon } from 'lucide-react'
+import { Container, Text, Group, Stack, Box, TypographyStylesProvider } from '@mantine/core';
+import { EmailCreatePayload } from '@/researcher/store/types';
+import ExperimentEmailAttachmentList from '../ExperimentEmailAttachmentList';
 
-interface ExperimentEmailPreviewProps {
-  email: EmailCreate
-}
-
-export default function ExperimentEmailPreview({email}: ExperimentEmailPreviewProps) {
+export default function ExperimentEmailPreview({emailData: {
+  metadata, files}}: {emailData: EmailCreatePayload}) {
   
   return (
-    <div className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-        <div className="flex items-center">
-          <button
-            className="mr-4 text-gray-500 hover:text-gray-700 md:hidden"
-          >
+    <Box className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
+      <Group justify="space-between" p="md" className="border-b border-gray-200">
+        <Group>
+          <button className="mr-4 text-gray-500 hover:text-gray-700 md:hidden">
             <ArrowLeftIcon size={20} />
           </button>
-          <h2 className="text-xl font-medium text-gray-800 truncate">
-            {email.title}
-          </h2>
-        </div>
-        <div className="flex items-center space-x-2">
+          <Text size="xl" fw={500} truncate>
+            {metadata.title || '<Email Subject>'}
+          </Text>
+        </Group>
+      </Group>
 
-        </div>
-      </div>
-      <div className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div>
-              <div className="flex items-center">
-                <p className="font-medium text-gray-900">{email.senderName}</p>
-                <span className="mx-2 text-gray-500">&#8226;</span>
-                <p className="text-sm text-gray-500">{email.senderAddress}</p>
-              </div>
-              <div className="flex items-center text-sm text-gray-500">
-                <p>To: me</p>
-                {/* <button className="ml-2 text-gray-400 hover:text-gray-600">
-                  <ChevronDownIcon size={16} />
-                </button> */}
-              </div>
-            </div>
-          </div>
-          <div className="text-sm text-gray-500">
-            {new Date(email.scheduledFor * 60 * 1000 + Date.now()).toLocaleString([], {
+      <Box p="xl">
+        <Group justify="space-between">
+          <Stack gap="xs">
+            <Group>
+              <Text fw={500}>
+                {metadata.senderName || '<Sender Name>'}
+              </Text>
+              <Text c="dimmed">•</Text>
+              <Text size="sm" c="dimmed">
+                {metadata.senderAddress || '<sender@email.com>'}
+              </Text>
+            </Group>
+            
+            <Text size="sm" c="dimmed">To: me</Text>
+          </Stack>
+          <Text size="sm" c="dimmed">
+            {new Date(metadata.scheduledFor * 60 * 1000 + Date.now()).toLocaleString([], {
               weekday: 'short',
               month: 'short',
               day: 'numeric',
               hour: '2-digit',
               minute: '2-digit',
             })}
-          </div>
-        </div>
-        <Container fluid p={0} mt={'xl'}>          
-          <p>{email.content}</p>
+          </Text>
+        </Group>
+
+        <Container fluid p={0} mt="xl">
+          <TypographyStylesProvider>
+          <div
+            dangerouslySetInnerHTML={{ __html: metadata.content || '<Email Content>' }}
+          />
+        </TypographyStylesProvider>       
         </Container>
-        {/* <EmailAttachmentList isPreview={true} emailId={email.id} attachments={email.attachments} /> */}
-      </div>
-    </div>
+        <ExperimentEmailAttachmentList isPreview={true} files={files} />
+      </Box>
+    </Box>
   )
 }

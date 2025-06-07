@@ -1,7 +1,7 @@
 "use client";
+
 import {
   TextInput,
-  Textarea,
   Checkbox,
   Button,
   Group,
@@ -18,8 +18,10 @@ import { Files, SendIcon, X } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { createEmail } from "@/researcher/actions/actions";
 import { UseFormReturnType } from "@mantine/form";
-import { EmailCreatePayload } from "@/researcher/store/types";
 import { EmailFormValues } from "../ExperimentEmailFormPage/ExperimentEmailFormPage";
+import ExperimentEmailComposer from "../ExperimentEmailComposer";
+import { EmailCreatePayload } from "@/researcher/store/types";
+import ExperimentEmailAttachmentList from "../ExperimentEmailAttachmentList";
 
 export default function ExperimentEmailForm({
   form,
@@ -44,9 +46,10 @@ export default function ExperimentEmailForm({
     }
   };
 
-  const groupChoices = experiment.groups.map((g) => {
-    return { value: g.id, label: g.name };
-  });
+  const groupChoices = experiment.groups.map((g) => ({
+    value: g.id,
+    label: g.name,
+  }));
 
   return (
     <Box pos="relative">
@@ -100,16 +103,10 @@ export default function ExperimentEmailForm({
               searchable
               nothingFoundMessage="Nothing found..."
               onChange={(values) => form.setFieldValue("groups", values)}
-              error={form.errors.groups && "Invalid group"}
+              error={form.errors.groups && "At least one group is required"}
             />
 
-            <Textarea
-              label="Content"
-              placeholder="Enter email content here..."
-              minRows={6}
-              required
-              {...form.getInputProps("content")}
-            />
+            <ExperimentEmailComposer form={form} />
 
             <Group justify="space-between" align="start">
               <Checkbox
@@ -117,35 +114,34 @@ export default function ExperimentEmailForm({
                 checked={form.values.isPhishing}
                 {...form.getInputProps("isPhishing", { type: "checkbox" })}
               />
-              <Stack>
-                <Stack>
-                  {form.values.files?.length > 0 ? (
-                    <Button
-                      variant="light"
-                      color="red"
-                      onClick={() => form.setFieldValue("files", [])}
-                      leftSection={<X size={16} />}
-                    >
-                      Reset Attachments
+              {form.values.files?.length > 0 ? (
+                <Button
+                  variant="light"
+                  color="red"
+                  onClick={() => form.setFieldValue("files", [])}
+                  leftSection={<X size={16} />}
+                >
+                  Reset Attachments
+                </Button>
+              ) : (
+                <FileButton
+                  onChange={(payload: File[] | null) =>
+                    form.setFieldValue("files", payload ?? [])
+                  }
+                  accept="application/pdf,text/plain,image/png,image/jpeg,image/gif"
+                  multiple
+                >
+                  {(props) => (
+                    <Button {...props} leftSection={<Files size={16} />}>
+                      Select Attachments
                     </Button>
-                  ) : (
-                    <FileButton
-                      onChange={(payload) =>
-                        form.setFieldValue("files", payload)
-                      }
-                      accept="application/pdf,text/plain,image/png,image/jpeg,image/gif"
-                      multiple
-                    >
-                      {(props) => (
-                        <Button {...props} leftSection={<Files size={16} />}>
-                          Select Attachments
-                        </Button>
-                      )}
-                    </FileButton>
                   )}
-                </Stack>
-              </Stack>
+                </FileButton>
+              )}
             </Group>
+            <ExperimentEmailAttachmentList
+              files={form.values.files}
+            />
 
             <Group justify="end">
               <Button
