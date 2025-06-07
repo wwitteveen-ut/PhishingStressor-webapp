@@ -18,28 +18,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { SendIcon } from 'lucide-react';
 import { useExperimentContext } from '../ExperimentContext/ExperimentContext';
 
-export default function ExperimentEmailForm() {
-  const [previewOpened, { open: openPreview, close: closePreview }] = useDisclosure(false);
+export default function ExperimentEmailForm({form}: {form: any}) {
   const [isSubmitting, { open: startSubmitting, close: stopSubmitting }] = useDisclosure(false);
   const experiment = useExperimentContext();
-
-  const form = useForm({
-    initialValues: {
-      subject: '',
-      senderEmail: '',
-      senderName: '',
-      content: '',
-      isPhishing: false,
-      scheduledFor: 0,
-    },
-    validate: {
-      subject: hasLength({ min: 1 }, 'Subject is required'),
-      senderEmail: isEmail('Invalid email address'),
-      senderName: hasLength({ min: 1 }, 'Sender name is required'),
-      content: hasLength({ min: 1 }, 'Content is required'),
-      scheduledFor: isInRange({ min: 0 }, 'Schedule time must be non-negative'),
-    },
-  });
 
   const handleSubmit = async (values: typeof form.values) => {
     startSubmitting();
@@ -64,9 +45,6 @@ export default function ExperimentEmailForm() {
         <Stack>
         <Group justify="space-between" align="center">
           <Title order={3}>Create New Email</Title>
-          <Button variant="light" color="blue" onClick={openPreview}>
-            Preview
-          </Button>
         </Group>
 
         <form onSubmit={form.onSubmit(handleSubmit)}>
@@ -76,10 +54,10 @@ export default function ExperimentEmailForm() {
                 label="Email Subject"
                 placeholder="e.g. Welcome to Our Service!"
                 required
-                {...form.getInputProps('name')}
+                {...form.getInputProps('title')}
               />
               <NumberInput
-                label="Schedule (minutes after)"
+                label="Scheduled For (minutes after participant has logged in)"
                 placeholder="0"
                 min={0}
                 required
@@ -128,10 +106,6 @@ export default function ExperimentEmailForm() {
           </Stack>
         </form>
       </Stack>
-
-      <Modal opened={previewOpened} onClose={closePreview} title="Email Preview" size="lg">
-        {/* <EmailView email={form.values} /> */}
-      </Modal>
     </Box>
   );
 }

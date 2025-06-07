@@ -4,7 +4,7 @@ import { Loader, MantineColorsTuple, UnstyledButton, useMantineTheme } from '@ma
 import { downloadAttachment } from '@/mail/actions/actions';
 import { useState } from 'react';
 
-export default function EmailAttachmentListItem({ emailId, attachmentData }: EmailAttachmentListItemProps) {
+export default function EmailAttachmentListItem({ emailId, attachmentData, isPreview=false }: EmailAttachmentListItemProps) {
   const theme = useMantineTheme();
   const [isDownloading, setIsDownloading] = useState(false);
   const { filename } = attachmentData;
@@ -25,7 +25,7 @@ export default function EmailAttachmentListItem({ emailId, attachmentData }: Ema
   };
 
   const handleDownload = async () => {
-    if (isDownloading) return;
+    if (isDownloading || isPreview) return;
     
     setIsDownloading(true);
     try {
@@ -53,7 +53,7 @@ export default function EmailAttachmentListItem({ emailId, attachmentData }: Ema
   const colorTuple = getColorForExtension(extension);
 
   return (
-    <UnstyledButton onClick={handleDownload} disabled={isDownloading}>
+    <UnstyledButton onClick={handleDownload} disabled={isDownloading || isPreview}>
       <div className="border border-gray-200 rounded-md p-3 flex items-center bg-gray-50 hover:bg-gray-100 text-gray-500 hover:text-gray-700">
         <div
           className="w-10 h-10 rounded flex items-center justify-center"
