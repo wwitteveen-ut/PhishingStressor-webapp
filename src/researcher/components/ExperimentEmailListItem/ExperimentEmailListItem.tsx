@@ -3,7 +3,7 @@ import { deleteEmail } from "@/researcher/actions/actions";
 import { ResearcherEmail } from "@/researcher/store/types";
 import { ActionIcon, Badge, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { AlertTriangle, Eye, Trash } from "lucide-react";
+import { AlertTriangle, Trash } from "lucide-react";
 
 interface ExperimentEmailListItemProps {
   email: ResearcherEmail;
@@ -62,11 +62,6 @@ export default function ExperimentEmailListItem({
         </Badge>
       </Table.Td>
       <Table.Td style={{ textAlign: "right" }}>
-        <Tooltip label={"Preview email"}>
-          <ActionIcon variant="subtle" onClick={openDeleteModal}>
-            <Eye size={20} />
-          </ActionIcon>
-        </Tooltip>
         <Tooltip label={"Delete email"}>
           <ActionIcon color="red" variant="subtle" onClick={openDeleteModal}>
             <Trash size={20} />
