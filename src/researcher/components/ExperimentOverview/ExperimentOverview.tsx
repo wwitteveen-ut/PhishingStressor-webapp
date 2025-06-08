@@ -1,7 +1,16 @@
 "use client";
 
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
-import { Text, Stack, TextInput, Group, Button, Paper } from "@mantine/core";
+import {
+  Button,
+  Group,
+  Paper,
+  Stack,
+  Text,
+  TextInput,
+  ThemeIcon,
+} from "@mantine/core";
+import { IconUsersGroup } from "@tabler/icons-react";
 import Link from "next/link";
 import ExperimentResearcherList from "../ExperimentResearcherList";
 
@@ -34,9 +43,14 @@ export default function ExperimentOverview() {
         />
         <Stack gap="sm">
           <Group justify="space-between">
-            <Text size="sm" c="gray.7" fw={500}>
-              Groups
-            </Text>
+            <Group justify="start" gap={"xs"}>
+              <ThemeIcon variant="transparent">
+                <IconUsersGroup />
+              </ThemeIcon>
+              <Text size="lg" c="gray.7" fw={600}>
+                Groups
+              </Text>
+            </Group>
             <Button
               variant="light"
               component={Link}

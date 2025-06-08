@@ -1,7 +1,7 @@
 "use client";
+import { ResearcherEmail } from "@/researcher/store/types";
 import { Table } from "@mantine/core";
 import ExperimentEmailListItem from "../ExperimentEmailListItem";
-import { ResearcherEmail } from "@/researcher/store/types";
 
 interface ExperimentEmailListProps {
   emails: ResearcherEmail[];

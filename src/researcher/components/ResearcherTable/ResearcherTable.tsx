@@ -20,7 +20,7 @@ export default function ResearcherTable({
       <Title order={2} mb="lg">
         All researchers
       </Title>
-      <Paper shadow="md" p="lg" radius="md" withBorder>
+      <Paper shadow="sm" p="lg" radius="md" mah={"90vh"}>
         <Table>
           <Table.Thead>
             <Table.Tr>

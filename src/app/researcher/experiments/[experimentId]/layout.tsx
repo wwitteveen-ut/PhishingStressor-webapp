@@ -1,7 +1,7 @@
 import { getExperiment } from "@/researcher/actions/actions";
 import { ExperimentProvider } from "@/researcher/components/ExperimentContext/ExperimentContext";
 import ExperimentSidebar from "@/researcher/components/ExperimentSidebar";
-import { Container } from "@mantine/core";
+import { Container, ScrollArea } from "@mantine/core";
 import { ReactNode } from "react";
 
 export default async function Layout({
@@ -17,8 +17,12 @@ export default async function Layout({
   return (
     <ExperimentProvider experiment={experiment}>
       <ExperimentSidebar />
-      <Container fluid w={"100%"} mx={"lg"} mt={"xl"}>
-        {children}
+      <Container fluid w={"100%"} h={"100vh"}>
+        <ScrollArea h={"100%"}>
+          <Container fluid py={"xl"}>
+            {children}
+          </Container>
+        </ScrollArea>
       </Container>
     </ExperimentProvider>
   );

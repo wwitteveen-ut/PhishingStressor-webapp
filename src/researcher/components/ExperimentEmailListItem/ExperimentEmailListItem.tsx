@@ -1,9 +1,9 @@
 "use client";
 import { deleteEmail } from "@/researcher/actions/actions";
 import { ResearcherEmail } from "@/researcher/store/types";
-import { Badge, Group, Text, ActionIcon, Table, Tooltip } from "@mantine/core";
+import { ActionIcon, Badge, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Clock, AlertTriangle, Trash, Eye } from "lucide-react";
+import { AlertTriangle, Eye, Trash } from "lucide-react";
 
 interface ExperimentEmailListItemProps {
   email: ResearcherEmail;
@@ -45,7 +45,6 @@ export default function ExperimentEmailListItem({
       </Table.Td>
       <Table.Td>
         <Group gap="xs">
-          <Clock size={16} />
           <Text c="dimmed">
             {email.scheduledFor === 0
               ? "Immediate"

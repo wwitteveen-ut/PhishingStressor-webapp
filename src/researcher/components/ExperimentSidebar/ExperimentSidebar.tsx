@@ -1,32 +1,31 @@
 "use client";
 
-import React from "react";
+import LinksGroup from "@/shared/components/LinksGroup";
 import {
-  Paper,
-  Group,
-  Text,
-  Title,
   Button,
-  ScrollArea,
   Divider,
-  ThemeIcon,
+  Group,
+  Paper,
+  ScrollArea,
   Stack,
+  Text,
+  ThemeIcon,
+  Title,
 } from "@mantine/core";
+import { TablerIcon } from "@tabler/icons-react";
 import {
   ArrowRightLeft,
-  LayoutDashboardIcon,
-  LucideIcon,
-  LogOut,
-  SquareGanttChart,
-  Mail,
   ChartArea,
+  LayoutDashboardIcon,
+  LogOut,
+  LucideIcon,
+  Mail,
+  SquareGanttChart,
 } from "lucide-react";
-import LinksGroup from "@/shared/components/LinksGroup";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import { IconUsersGroup, TablerIcon } from "@tabler/icons-react";
 
 interface MenuItem {
   label: string;
@@ -50,11 +49,6 @@ export default function ExperimentSidebar() {
       label: "Emails",
       icon: Mail,
       mainLink: `/researcher/experiments/${experiment.id}/emails`,
-    },
-    {
-      label: "Groups",
-      icon: IconUsersGroup,
-      mainLink: `/researcher/experiments/${experiment.id}/groups`,
     },
     {
       label: "Statistics",
