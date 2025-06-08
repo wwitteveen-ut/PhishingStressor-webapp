@@ -1,15 +1,17 @@
 "use client";
 
-import { ArrowLeftIcon } from "lucide-react";
+import { EmailCreatePayload } from "@/researcher/store/types";
 import {
+  Box,
   Container,
-  Text,
   Group,
   Stack,
-  Box,
+  Text,
   TypographyStylesProvider,
 } from "@mantine/core";
-import { EmailCreatePayload } from "@/researcher/store/types";
+import { useMouse } from "@mantine/hooks";
+import { ArrowLeftIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import ExperimentEmailAttachmentList from "../ExperimentEmailAttachmentList";
 
 export default function ExperimentEmailPreview({
@@ -17,8 +19,32 @@ export default function ExperimentEmailPreview({
 }: {
   emailData: EmailCreatePayload;
 }) {
+  const { ref, x, y } = useMouse({ resetOnExit: true });
+  const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
+  const latestCoords = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    latestCoords.current = { x, y };
+  }, [x, y]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (latestCoords.current.x !== 0 || latestCoords.current.y !== 0) {
+        console.log(latestCoords.current);
+        console.log("width:", ref.current?.clientWidth);
+        console.log("height:", ref.current?.clientHeight);
+        setPositions((prev) => [...prev, latestCoords.current]);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <Box className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
+    <Box
+      className="flex-1 flex flex-col h-full bg-white overflow-y-auto"
+      ref={ref}
+    >
       <Group
         justify="space-between"
         p="md"
@@ -51,7 +77,7 @@ export default function ExperimentEmailPreview({
           </Stack>
           <Text size="sm" c="dimmed">
             {new Date(
-              metadata.scheduledFor * 60 * 1000 + Date.now(),
+              metadata.scheduledFor * 60 * 1000 + Date.now()
             ).toLocaleString([], {
               weekday: "short",
               month: "short",

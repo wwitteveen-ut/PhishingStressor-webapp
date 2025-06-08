@@ -9,7 +9,7 @@ export const GET = auth(async function GET(req) {
     const loggedIn = user.loggedIn;
     const loggedInDate = new Date(loggedIn);
     const path = await getExternalApiUrl(
-      `/experiments/${user.experimentId}/emails`,
+      `/experiments/${user.experimentId}/emails`
     );
     const response = await fetch(path);
     const emails = (await response.json()) as Email[];
@@ -18,11 +18,12 @@ export const GET = auth(async function GET(req) {
       .map((email) => {
         const scheduledTime = new Date(
           Math.floor(
-            (loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000,
-          ) * 60000,
+            (loggedInDate.getTime() + email.scheduledFor * 60 * 1000) / 60000
+          ) * 60000
         );
         return {
           ...email,
+          isPhishing: undefined,
           sendAt: scheduledTime,
           isRead: false,
           isTrashed: false,

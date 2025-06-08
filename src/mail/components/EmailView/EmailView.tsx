@@ -1,23 +1,35 @@
 "use client";
-import { ArrowLeftIcon } from "lucide-react";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import { Container } from "@mantine/core";
+import { useMouse } from "@mantine/hooks";
+import { ArrowLeftIcon } from "lucide-react";
+import { useEffect } from "react";
 import EmailAttachmentList from "../EmailAttachmentList";
 import EmailReplySection from "../EmailReplySection";
 import TrashActionButton from "../TrashActionButton";
-import { Container } from "@mantine/core";
 
 export default function EmailView() {
   const emailId = useEmailClientStore((state) => state.selectedEmailId);
   const emails = useEmailClientStore((state) => state.emails);
   const email = emails.find((email) => email.id === emailId);
 
+  const { ref, x, y } = useMouse();
+
   const toggleEmailTrashed = useEmailClientStore(
-    (state) => state.toggleEmailTrashed,
+    (state) => state.toggleEmailTrashed
   );
+  useEffect(() => {
+    const interval = setInterval(() => console.log(x, y), 100);
+
+    return () => clearInterval(interval);
+  }, []);
 
   if (!email) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-50 text-gray-500">
+      <div
+        className="flex-1 flex items-center justify-center bg-gray-50 text-gray-500"
+        ref={ref}
+      >
         <p>Select an email to view</p>
       </div>
     );
@@ -25,7 +37,10 @@ export default function EmailView() {
 
   return (
     <div className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
-      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+      <div
+        className="p-4 border-b border-gray-200 flex items-center justify-between"
+        ref={ref}
+      >
         <div className="flex items-center">
           <button className="mr-4 text-gray-500 hover:text-gray-700 md:hidden">
             <ArrowLeftIcon size={20} />
