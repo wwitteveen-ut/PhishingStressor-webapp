@@ -30,12 +30,14 @@ export default function ExperimentEmailPreview({
   useEffect(() => {
     const interval = setInterval(() => {
       if (latestCoords.current.x !== 0 || latestCoords.current.y !== 0) {
-        console.log(latestCoords.current);
-        console.log("width:", ref.current?.clientWidth);
-        console.log("height:", ref.current?.clientHeight);
+        const { x, y } = latestCoords.current;
+        console.log(
+          x / ref.current?.clientWidth,
+          y / ref.current?.clientHeight
+        );
         setPositions((prev) => [...prev, latestCoords.current]);
       }
-    }, 100);
+    }, 200);
 
     return () => clearInterval(interval);
   }, []);
