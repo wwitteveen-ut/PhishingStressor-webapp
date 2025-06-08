@@ -9,9 +9,7 @@ import {
   Text,
   TypographyStylesProvider,
 } from "@mantine/core";
-import { useMouse } from "@mantine/hooks";
 import { ArrowLeftIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import ExperimentEmailAttachmentList from "../ExperimentEmailAttachmentList";
 
 export default function ExperimentEmailPreview({
@@ -19,34 +17,8 @@ export default function ExperimentEmailPreview({
 }: {
   emailData: EmailCreatePayload;
 }) {
-  const { ref, x, y } = useMouse({ resetOnExit: true });
-  const [positions, setPositions] = useState<{ x: number; y: number }[]>([]);
-  const latestCoords = useRef({ x: 0, y: 0 });
-
-  useEffect(() => {
-    latestCoords.current = { x, y };
-  }, [x, y]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (latestCoords.current.x !== 0 || latestCoords.current.y !== 0) {
-        const { x, y } = latestCoords.current;
-        console.log(
-          x / ref.current?.clientWidth,
-          y / ref.current?.clientHeight
-        );
-        setPositions((prev) => [...prev, latestCoords.current]);
-      }
-    }, 200);
-
-    return () => clearInterval(interval);
-  }, []);
-
   return (
-    <Box
-      className="flex-1 flex flex-col h-full bg-white overflow-y-auto"
-      ref={ref}
-    >
+    <Box className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
       <Group
         justify="space-between"
         p="md"

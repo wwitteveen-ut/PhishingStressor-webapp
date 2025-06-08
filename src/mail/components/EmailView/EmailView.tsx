@@ -34,9 +34,21 @@ export default function EmailView() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (!email) return;
-      if (latestCoords.current.x !== 0 || latestCoords.current.y !== 0) {
+      if (
+        ref.current &&
+        (latestCoords.current.x !== 0 || latestCoords.current.y !== 0)
+      ) {
         const { x, y } = latestCoords.current;
-        addHeatmapData({ x, y, value: 100 });
+        const width = ref.current.clientWidth;
+        const height = ref.current.clientHeight;
+
+        if (width > 0 && height > 0) {
+          addHeatmapData({
+            x: x / width,
+            y: y / height,
+            value: 100,
+          });
+        }
       }
     }, 200);
 
@@ -87,9 +99,7 @@ export default function EmailView() {
               </Text>
             </Stack>
             <Text size="sm" c="dimmed">
-              {new Date(
-                email.scheduledFor * 60 * 1000 + Date.now()
-              ).toLocaleString([], {
+              {new Date(email.sendAt).toLocaleString([], {
                 weekday: "short",
                 month: "short",
                 day: "numeric",
