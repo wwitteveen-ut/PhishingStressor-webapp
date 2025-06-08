@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  Text,
   Box,
   Button,
-  Stack,
-  TextInput,
-  Popover,
-  PasswordInput,
-  Progress,
   Container,
+  PasswordInput,
+  Popover,
+  Progress,
+  Stack,
+  Text,
+  TextInput,
   ThemeIcon,
   Title,
 } from "@mantine/core";
-import { hasLength, useForm, matchesField } from "@mantine/form";
+import { hasLength, matchesField, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import {
   ArrowRight,
@@ -79,7 +79,7 @@ export default function ResearcherForm() {
     validate: {
       username: hasLength(
         { min: 2, max: 20 },
-        "Name must be 2-10 characters long",
+        "Name must be 2-10 characters long"
       ),
       password: (value) => {
         if (getStrength(value) < 100)

@@ -31,7 +31,7 @@ export const authHandlers = [
         token: RESEARCHER_TOKEN,
         id: researcher.id,
       });
-    },
+    }
   ),
   http.get(await getExternalApiUrl(`/auth/register`), () => {
     return HttpResponse.json(process.env.RESEARCHER_REGISTRATION === "enabled");
@@ -40,7 +40,14 @@ export const authHandlers = [
     if (process.env.RESEARCHER_REGISTRATION !== "enabled")
       return new HttpResponse(null, { status: 401 });
 
-    const info = await request.formData();
-    return HttpResponse.json(info);
+    const trackingData = await request.formData();
+    console.log(
+      `Received request for registering a researcher: `,
+      trackingData
+    );
+    return HttpResponse.json({
+      token: RESEARCHER_TOKEN,
+      id: researchers[0].id,
+    });
   }),
 ];
