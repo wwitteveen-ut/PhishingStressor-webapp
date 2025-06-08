@@ -1,13 +1,17 @@
+import { DataPoint } from "heatmap-ts";
 import { StateCreator } from "zustand/vanilla";
+import { sendTrackingEvents } from "../actions/actions";
 import { EmailClientState } from "./EmailClientStore";
 import { UserEvent, UserEventType, ZustandEmail } from "./types";
-import { sendTrackingEvents } from "../actions/actions";
 
 type SimpleEventType =
   | UserEventType.TIME_OPENED
   | UserEventType.TIME_CLOSED
   | UserEventType.ATTACHMENT_OPENED
+  | UserEventType.ATTACHMENT_DOWNLOADED
   | UserEventType.ATTACHMENT_CLOSED;
+
+type ComplexEventType = UserEventType.HEATMAP;
 
 export interface ParticipantSlice {
   emails: ZustandEmail[];
@@ -57,7 +61,7 @@ export const createParticipantSlice: StateCreator<
         emailProperties: state.emailProperties,
       }),
       undefined,
-      "participant/setEmails",
+      "participant/setEmails"
     ),
 
   addSimpleEvent: (type: SimpleEventType) =>
@@ -72,7 +76,23 @@ export const createParticipantSlice: StateCreator<
         ],
       }),
       undefined,
-      "participant/addSimpleEvent",
+      "participant/addSimpleEvent"
+    ),
+
+  addComplexEvent: (type: ComplexEventType, extra: DataPoint) =>
+    set(
+      (state) => ({
+        userEvents: [
+          ...state.userEvents,
+          {
+            type,
+            timestamp: Date.now().toString(),
+            extra: [extra],
+          },
+        ],
+      }),
+      undefined,
+      "participant/addComplexEvent"
     ),
 
   sendEventsToAPI: async (emailId: string, events: UserEvent[]) => {
@@ -112,7 +132,7 @@ export const createParticipantSlice: StateCreator<
       set(
         { isProcessingEvents: false },
         undefined,
-        "participant/endProcessing",
+        "participant/endProcessing"
       );
     }
   },

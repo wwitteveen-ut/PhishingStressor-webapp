@@ -1,13 +1,15 @@
-import { DownloadIcon } from "lucide-react";
-import { EmailAttachmentListItemProps } from "./types";
+import { downloadAttachment } from "@/mail/actions/actions";
+import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import { UserEventType } from "@/mail/store/types";
 import {
   Loader,
   MantineColorsTuple,
   UnstyledButton,
   useMantineTheme,
 } from "@mantine/core";
-import { downloadAttachment } from "@/mail/actions/actions";
+import { DownloadIcon } from "lucide-react";
 import { useState } from "react";
+import { EmailAttachmentListItemProps } from "./types";
 
 export default function EmailAttachmentListItem({
   emailId,
@@ -19,6 +21,7 @@ export default function EmailAttachmentListItem({
   const { filename } = attachmentData;
   const extension = filename.split(".").pop() || "file";
 
+  const addSimpleEvent = useEmailClientStore((state) => state.addSimpleEvent);
   const getColorForExtension = (ext: string): MantineColorsTuple => {
     switch (ext.toLowerCase()) {
       case "txt":
@@ -37,10 +40,12 @@ export default function EmailAttachmentListItem({
     if (isDownloading || isPreview) return;
 
     setIsDownloading(true);
+    addSimpleEvent(UserEventType.ATTACHMENT_DOWNLOADED);
+
     try {
       const { buffer, contentType, filename } = await downloadAttachment(
         emailId,
-        attachmentData,
+        attachmentData
       );
 
       const blob = new Blob([buffer], { type: contentType });
