@@ -91,7 +91,7 @@ export default function EmailView() {
           attachments={email.attachments}
         />
 
-        {!email.isTrashed && <EmailReplySection emailId={email.id} />}
+        <EmailReplySection email={email} />
       </div>
     </div>
   );

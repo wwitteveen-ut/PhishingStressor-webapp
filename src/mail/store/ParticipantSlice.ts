@@ -56,6 +56,10 @@ export const createParticipantSlice: StateCreator<
               state.emailProperties[email.id]?.isTrashed ??
               email.isTrashed ??
               false,
+            hasReplied:
+              state.emailProperties[email.id]?.hasReplied ??
+              email.hasReplied ??
+              false,
           }))
           .sort((a, b) => b.scheduledFor - a.scheduledFor),
         emailProperties: state.emailProperties,
