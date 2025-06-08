@@ -1,9 +1,12 @@
 "use client";
 
+import { registerResearcher } from "@/auth/actions/actions";
 import {
   Box,
   Button,
   Container,
+  Group,
+  Paper,
   PasswordInput,
   Popover,
   Progress,
@@ -16,6 +19,7 @@ import {
 import { hasLength, matchesField, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import {
+  AlertCircle,
   ArrowRight,
   Beaker,
   Check,
@@ -23,7 +27,9 @@ import {
   User,
   X,
 } from "lucide-react";
+import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 function PasswordRequirement({
@@ -67,6 +73,7 @@ function getStrength(password: string) {
 }
 
 export default function ResearcherForm() {
+  const [error, setError] = useState<string | null>(null);
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [visible, { toggle }] = useDisclosure(false);
 
@@ -99,6 +106,34 @@ export default function ResearcherForm() {
   ));
   const strength = getStrength(form.getValues().password);
   const color = strength === 100 ? "teal" : strength > 50 ? "yellow" : "red";
+  const router = useRouter();
+
+  const handleSubmit = async ({
+    username,
+    password,
+  }: {
+    username: string;
+    password: string;
+  }) => {
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    const response = await registerResearcher(formData);
+    if (response.ok) {
+      const response = signIn("researcher", {
+        username,
+        password,
+        redirect: false,
+      });
+      const authResponse = await response;
+      console.log(authResponse);
+      if (authResponse.error && authResponse.code) {
+        setError(authResponse.code);
+      } else if (authResponse.ok) {
+        router.push("/researcher/experiments");
+      }
+    }
+  };
 
   return (
     <Container size="md" className="w-100">
@@ -121,11 +156,7 @@ export default function ResearcherForm() {
         >
           Register as researcher
         </Title>
-        <form
-          onSubmit={form.onSubmit((form) => {
-            console.log(form);
-          })}
-        >
+        <form onSubmit={form.onSubmit(handleSubmit)}>
           <Stack gap={"md"}>
             <TextInput
               leftSection={<User size={16} />}
@@ -177,6 +208,18 @@ export default function ResearcherForm() {
               key={form.key("confirmPassword")}
               {...form.getInputProps("confirmPassword")}
             />
+            {error && (
+              <Paper bg={"red.0"} radius={"xs"}>
+                <Group gap={0} flex={1} justify="center">
+                  <ThemeIcon c={"red"} variant="transparent">
+                    <AlertCircle size={16} />
+                  </ThemeIcon>
+                  <Text c="red.6" size="sm">
+                    {error}
+                  </Text>
+                </Group>
+              </Paper>
+            )}
             <Button
               type="submit"
               fullWidth

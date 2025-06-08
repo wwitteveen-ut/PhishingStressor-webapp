@@ -4,7 +4,7 @@ import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
 export async function authenticateParticipant(
   username: string,
-  password: string,
+  password: string
 ) {
   try {
     const res = await fetch(
@@ -15,7 +15,7 @@ export async function authenticateParticipant(
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ username, password }),
-      },
+      }
     );
 
     if (!res.ok) {
@@ -31,7 +31,7 @@ export async function authenticateParticipant(
   } catch (error: unknown) {
     console.error(
       "Authentication error:",
-      error instanceof Error ? error.message : error,
+      error instanceof Error ? error.message : error
     );
     return { success: false, error: "Authentication failed" };
   }
@@ -39,7 +39,7 @@ export async function authenticateParticipant(
 
 export async function authenticateResearcher(
   username: string,
-  password: string,
+  password: string
 ) {
   try {
     const res = await fetch(await getExternalApiUrl("/auth/login/researcher"), {
@@ -63,7 +63,7 @@ export async function authenticateResearcher(
   } catch (error: unknown) {
     console.error(
       "Authentication error:",
-      error instanceof Error ? error.message : error,
+      error instanceof Error ? error.message : error
     );
     return { success: false, error: "Authentication failed" };
   }
@@ -78,3 +78,28 @@ export async function canRegisterResearcher(): Promise<boolean> {
 
   return res.json();
 }
+
+export const registerResearcher = async (formData: FormData) => {
+  try {
+    const path = await getExternalApiUrl(`/auth/register`);
+
+    const response = await fetch(path, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`
+      );
+    }
+
+    const result = await response.json();
+    console.log("Reply sent successfully:", result);
+    return result;
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error;
+  }
+};

@@ -1,9 +1,9 @@
-import { Button, Group, Paper, Title } from "@mantine/core";
 import { auth } from "@/auth";
 import { getExperimentEmails } from "@/researcher/actions/actions";
-import { redirect } from "next/navigation";
 import ExperimentEmailList from "@/researcher/components/ExperimentEmailList";
+import { Button, Group, Paper, Title } from "@mantine/core";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function ExperimentsPage({
   params,
@@ -13,7 +13,7 @@ export default async function ExperimentsPage({
   const { experimentId } = await params;
   const session = await auth();
   if (!session) {
-    redirect("/login");
+    redirect("/login/researcher");
   }
 
   const emails = await getExperimentEmails(experimentId);
