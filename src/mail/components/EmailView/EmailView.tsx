@@ -58,7 +58,7 @@ export default function EmailView() {
               </div>
             </div>
           </div>
-          <div className="text-sm text-gray-500">
+          <div className="text-sm text-gray-500 ml-2">
             {new Date(email.sendAt).toLocaleString([], {
               weekday: "short",
               month: "short",

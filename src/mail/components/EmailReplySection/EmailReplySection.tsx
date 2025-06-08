@@ -9,9 +9,7 @@ import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 
 export default function EmailReplySection({ emailId }: { emailId: string }) {
   const isReplying = useEmailClientStore((state) => state.isReplying);
-  const setIsReplying = useEmailClientStore(
-    (state) => state.setIsReplying,
-  );
+  const setIsReplying = useEmailClientStore((state) => state.setIsReplying);
 
   const form = useForm({
     initialValues: {

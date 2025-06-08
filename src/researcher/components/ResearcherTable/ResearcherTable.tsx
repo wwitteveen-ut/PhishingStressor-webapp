@@ -1,7 +1,7 @@
 "use client";
 
 import { ApiUser } from "@/researcher/store/types";
-import { Container, Paper, Stack, Table, Title } from "@mantine/core";
+import { Paper, Stack, Table, Title } from "@mantine/core";
 
 export default function ResearcherTable({
   researchers,

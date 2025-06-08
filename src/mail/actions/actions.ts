@@ -1,6 +1,11 @@
 "use server";
 import { auth } from "@/auth";
-import { Email, EmailAttachmentData, ZustandEmail } from "../store/types";
+import {
+  Email,
+  EmailAttachmentData,
+  UserEvent,
+  ZustandEmail,
+} from "../store/types";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { getApiUrl } from "@/shared/utils/apiHelper";
 import { cookies } from "next/headers";
@@ -96,6 +101,41 @@ export const sendReply = async (emailId: string, formData: FormData) => {
     const result = await response.json();
     console.log("Reply sent successfully:", result);
     return result;
+  } catch (error) {
+    console.error("Error sending reply:", error);
+    throw error;
+  }
+};
+
+export const sendTrackingEvents = async (
+  emailId: string,
+  userEvents: UserEvent[],
+): Promise<boolean> => {
+  try {
+    const token = await auth();
+    if (!token) {
+      throw new Error("Authentication failed: No token received");
+    }
+
+    const path = await getExternalApiUrl(
+      `/experiments/${token.user.experimentId}/emails/${emailId}/tracking`,
+    );
+
+    const response = await fetch(path, {
+      method: "POST",
+      body: JSON.stringify(userEvents),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`,
+      );
+    }
+
+    const result = await response.json();
+    console.log("Tracking info sent successfully:", result);
+    return true;
   } catch (error) {
     console.error("Error sending reply:", error);
     throw error;

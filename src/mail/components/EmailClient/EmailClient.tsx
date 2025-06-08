@@ -23,7 +23,7 @@ export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
     const interval = setInterval(() => fetchAndSetEmails(setEmails), 1000 * 30);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [emails, setEmails]);
 
   useEffect(() => {
     if (!store) return;

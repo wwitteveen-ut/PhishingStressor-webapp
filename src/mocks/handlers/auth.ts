@@ -1,6 +1,7 @@
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { http, HttpResponse } from "msw";
 import { researchers } from "../data/accounts";
+import { mockExperiments } from "../data/experiments";
 
 const PARTICIPANT_TOKEN =
   "voWAmhiC3XfmvoMvmLtyLxse5OeZmiC26rrQwSfMzEBB3iADscFHXO31sdmjOTQr";
@@ -11,7 +12,7 @@ export const authHandlers = [
   http.post(await getExternalApiUrl(`/auth/login/participant`), async () => {
     return HttpResponse.json({
       token: PARTICIPANT_TOKEN,
-      experimentId: "1077d109-17fb-4a9d-a0d7-193ad821ae00",
+      experimentId: mockExperiments[0].id,
       loggedIn: new Date().toISOString(),
     });
   }),

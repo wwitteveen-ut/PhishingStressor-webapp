@@ -20,7 +20,7 @@ export default function EmailListItem({
 }) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
   const toggleEmailTrashed = useEmailClientStore(
-    (state) => state.toggleEmailTrashed
+    (state) => state.toggleEmailTrashed,
   );
   return (
     <Box
@@ -58,25 +58,21 @@ export default function EmailListItem({
           })}
         </Text>
         <Tooltip label={email.isTrashed ? "Restore email" : "Trash email"}>
-        <ActionIcon
-          variant="transparent"
-          color="gray"
-          styles={{
-            root: {
-              "--ai-hover-color": !email.isTrashed ? "red" : "green",
-            },
-          }}
-          onClick={(e) => {
-            toggleEmailTrashed(email.id);
-            e.stopPropagation();
-          }}
-        >
-          {email.isTrashed ? (
-            <Undo size={15} />
-          ) : (
-            <Trash size={15} />
-          )}
-        </ActionIcon>
+          <ActionIcon
+            variant="transparent"
+            color="gray"
+            styles={{
+              root: {
+                "--ai-hover-color": !email.isTrashed ? "red" : "green",
+              },
+            }}
+            onClick={(e) => {
+              toggleEmailTrashed(email.id);
+              e.stopPropagation();
+            }}
+          >
+            {email.isTrashed ? <Undo size={15} /> : <Trash size={15} />}
+          </ActionIcon>
         </Tooltip>
       </Group>
       <Box>
