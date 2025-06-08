@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
-import { Center, SegmentedControl, Tabs } from "@mantine/core";
-import classes from "./ExperimentEmailFormPage.module.css";
-import ExperimentEmailForm from "../ExperimentEmailForm";
-import { Eye, MailPlus } from "lucide-react";
-import { useForm, hasLength, isEmail, isInRange } from "@mantine/form";
-import ExperimentEmailPreview from "../ExperimentEmailPreview";
 import { EmailCreatePayload } from "@/researcher/store/types";
+import { Center, SegmentedControl, Tabs } from "@mantine/core";
+import { hasLength, isEmail, isInRange, useForm } from "@mantine/form";
+import { Eye, MailPlus } from "lucide-react";
+import { useState } from "react";
+import ExperimentEmailForm from "../ExperimentEmailForm";
+import ExperimentEmailPreview from "../ExperimentEmailPreview";
+import classes from "./ExperimentEmailFormPage.module.css";
 
 export type EmailFormValues = {
   title: string;

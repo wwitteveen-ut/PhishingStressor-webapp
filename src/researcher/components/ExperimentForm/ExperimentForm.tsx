@@ -3,21 +3,20 @@
 import { createExperiment } from "@/researcher/actions/actions";
 import { ExperimentCreatePayload } from "@/researcher/store/types";
 import {
-  Text,
   ActionIcon,
   Box,
   Button,
   Group,
+  LoadingOverlay,
+  Modal,
+  MultiSelect,
   NumberInput,
   Stack,
+  Text,
   TextInput,
-  MultiSelect,
-  Modal,
-  LoadingOverlay,
 } from "@mantine/core";
 import { hasLength, isInRange, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { modals } from "@mantine/modals";
 import { IconTrash } from "@tabler/icons-react";
 import { PlusIcon } from "lucide-react";
 
@@ -47,7 +46,7 @@ export default function ExperimentForm({
       groups: {
         name: hasLength(
           { min: 2, max: 20 },
-          "Name must be 2-10 characters long",
+          "Name must be 2-10 characters long"
         ),
         capacity: isInRange({ min: 1 }, "Minimum capacity is 1"),
       },
@@ -59,7 +58,7 @@ export default function ExperimentForm({
 
     try {
       await createExperiment(values);
-      modals.closeAll();
+      close();
       return true;
     } catch (error) {
       console.error("Failed to create experiment:", error);

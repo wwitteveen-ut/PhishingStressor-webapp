@@ -1,20 +1,21 @@
 "use client";
+import { removeResearcherFromExperiment } from "@/researcher/actions/actions";
 import { ApiUser } from "@/researcher/store/types";
 import {
-  Group,
-  Text,
   Box,
   Button,
-  Stack,
+  Group,
   Paper,
+  Stack,
+  Text,
   ThemeIcon,
 } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { BookUser, Trash } from "lucide-react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import { removeResearcherFromExperiment } from "@/researcher/actions/actions";
 import AddResearcherModal from "../AddResearcherForm";
+import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 
+import { useSession } from "next-auth/react";
 import { choice } from "../ExperimentForm/ExperimentForm";
 
 interface ResearcherListProps {
@@ -24,6 +25,7 @@ interface ResearcherListProps {
 export default function ExperimentResearcherList({
   researcherChoices = [],
 }: ResearcherListProps) {
+  const { data: session } = useSession();
   const experiment = useExperimentContext();
 
   const handleDelete = async (researcherId: string) => {
@@ -94,18 +96,21 @@ export default function ExperimentResearcherList({
                   {researcher.username}
                 </Text>
               </Stack>
-
-              <Group gap="xs">
-                <Button
-                  variant="subtle"
-                  size="sm"
-                  color="red"
-                  onClick={() => openDeleteModal(researcher)}
-                  leftSection={<Trash size={14} />}
-                >
-                  Delete
-                </Button>
-              </Group>
+              {researcher.id !== session?.user.id && (
+                <Group gap="xs">
+                  <Button
+                    variant="subtle"
+                    size="sm"
+                    color="red"
+                    onClick={() => {
+                      openDeleteModal(researcher);
+                    }}
+                    leftSection={<Trash size={14} />}
+                  >
+                    Delete
+                  </Button>
+                </Group>
+              )}
             </Group>
           </Paper>
         ))}

@@ -27,6 +27,7 @@ export const GET = auth(async function GET(req) {
           sendAt: scheduledTime,
           isRead: false,
           isTrashed: false,
+          hasReplied: false,
         };
       })
       .filter((email) => email.sendAt < new Date())

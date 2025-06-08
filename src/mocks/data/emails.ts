@@ -1,5 +1,5 @@
-import { mockExperiments } from "./experiments";
 import { ResearcherEmail } from "@/researcher/store/types";
+import { mockExperiments } from "./experiments";
 
 export const mockAttachments = [
   {
@@ -28,8 +28,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Jane Doe",
     senderAddress: "jane.doe@example.com",
     title: "Meeting Next Week",
-    content:
-      "Hi there, just checking in about our meeting next week. Let me know what time works best!",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Hi there,</p>
+        <p>Just checking in about our meeting next week. Let me know what time works best!</p>
+        <p>Best regards,<br>Jane Doe</p>
+      </div>
+    `,
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0], mockAttachments[1]],
@@ -41,8 +46,16 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Tech Updates",
     senderAddress: "newsletter@techupdates.com",
     title: "Your June Tech Newsletter",
-    content:
-      "Welcome to the June edition of our tech newsletter. This month we're covering AI trends, cloud tools, and more.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Welcome to the June edition of our tech newsletter.</p>
+        <ul>
+          <li><strong>AI Trends:</strong> Explore the latest in AI development.</li>
+          <li><strong>Cloud Tools:</strong> New tools for cloud computing.</li>
+        </ul>
+        <p>Stay updated with the latest tech news!</p>
+      </div>
+    `,
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
@@ -54,8 +67,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "WebApp Support",
     senderAddress: "support@webapp.io",
     title: "Support Ticket Resolved",
-    content:
-      "Your ticket has been resolved. Please review the resolution and let us know if you need further assistance.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Your ticket has been resolved.</p>
+        <p>Please review the resolution and let us know if you need further assistance.</p>
+        <p>Thank you,<br>WebApp Support Team</p>
+      </div>
+    `,
     scheduledFor: 0,
     experimentId: mockExperiments[0].id,
     attachments: [],
@@ -63,11 +81,18 @@ export const mockEmails: ResearcherEmail[] = [
   {
     id: "4d0g1f5c-7e4f-6g3g-b9c6-5e1f0g4b3d8c",
     createdAt: "2025-05-15T15:47:33.248Z",
-    isPhishing: false,
+    isPhishing: true,
     senderName: "Security Team",
     senderAddress: "security@company.com",
-    title: "Important Security Update",
-    content: "Please update your account credentials immediately.",
+    title: "Urgent: Account Security Alert",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p style="color: #c0392b;">Urgent: Your account has been flagged for suspicious activity.</p>
+        <p>Please enter your credentials immediately to verify your identity and secure your account.</p>
+        <p>Failure to act within 24 hours may result in account suspension.</p>
+        <p>Security Team</p>
+      </div>
+    `,
     scheduledFor: 1,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]],
@@ -79,7 +104,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Manager",
     senderAddress: "manager@company.com",
     title: "Team Meeting Tomorrow",
-    content: "Reminder: Team meeting at 10 AM tomorrow.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Reminder: Team meeting at 10 AM tomorrow.</p>
+        <p>Please come prepared with your project updates.</p>
+        <p>Best,<br>Your Manager</p>
+      </div>
+    `,
     scheduledFor: 2,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]],
@@ -91,7 +122,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Billing Department",
     senderAddress: "billing@company.com",
     title: "Invoice Due",
-    content: "Your invoice #12345 is due for payment.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Your invoice #12345 is due for payment.</p>
+        <p>Please make the payment by the due date to avoid late fees.</p>
+        <p>Billing Department</p>
+      </div>
+    `,
     scheduledFor: 3,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
@@ -103,7 +140,16 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Human Resources",
     senderAddress: "hr@company.com",
     title: "Benefits Update",
-    content: "Please review the new benefits package for the upcoming year.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Please review the new benefits package for the upcoming year.</p>
+        <ul>
+          <li>Updated health insurance plans</li>
+          <li>New wellness programs</li>
+        </ul>
+        <p>Human Resources</p>
+      </div>
+    `,
     scheduledFor: 5,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[0]],
@@ -115,7 +161,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Skillshare Training",
     senderAddress: "training@skillshare.com",
     title: "New Course Available",
-    content: "Check out our latest course on advanced programming techniques.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Check out our latest course on advanced programming techniques.</p>
+        <p>Enroll now to enhance your skills!</p>
+        <p>Skillshare Training Team</p>
+      </div>
+    `,
     scheduledFor: 8,
     experimentId: mockExperiments[0].id,
     attachments: [],
@@ -123,11 +175,18 @@ export const mockEmails: ResearcherEmail[] = [
   {
     id: "9i5l6k0h-2j9k-1l8l-g4h1-0j6l5m9g8i3h",
     createdAt: "2025-05-15T15:47:33.248Z",
-    isPhishing: false,
+    isPhishing: true,
     senderName: "Payroll Department",
     senderAddress: "payroll@company.com",
-    title: "Payslip Available",
-    content: "Your monthly payslip is now available for download.",
+    title: "Urgent: Verify Your Payroll Details",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p style="color: #c0392b;">Urgent: We detected an issue with your payroll account.</p>
+        <p>Please provide your bank details immediately to ensure timely payment.</p>
+        <p>Contact the payroll team directly to resolve this issue.</p>
+        <p>Payroll Department</p>
+      </div>
+    `,
     scheduledFor: 8,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
@@ -139,8 +198,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "IT Department",
     senderAddress: "it@company.com",
     title: "System Maintenance",
-    content:
-      "Scheduled maintenance will occur this weekend. Please save your work.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Scheduled maintenance will occur this weekend.</p>
+        <p>Please save your work to avoid data loss.</p>
+        <p>IT Department</p>
+      </div>
+    `,
     scheduledFor: 4,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]],
@@ -152,7 +216,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Marketing Team",
     senderAddress: "marketing@company.com",
     title: "Campaign Review",
-    content: "Please review the latest marketing campaign materials.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Please review the latest marketing campaign materials.</p>
+        <p>Feedback is appreciated by EOD Friday.</p>
+        <p>Marketing Team</p>
+      </div>
+    `,
     scheduledFor: 13,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]],
@@ -164,7 +234,13 @@ export const mockEmails: ResearcherEmail[] = [
     senderName: "Project Management",
     senderAddress: "projects@company.com",
     title: "Project Timeline Update",
-    content: "Important updates to the Q4 project timeline. Please review.",
+    content: `
+      <div style="font-family: Arial, sans-serif;">
+        <p>Important updates to the Q4 project timeline.</p>
+        <p>Please review the changes and provide feedback.</p>
+        <p>Project Management</p>
+      </div>
+    `,
     scheduledFor: 6,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],

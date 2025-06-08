@@ -1,18 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Box, Collapse, Group, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { IconChevronRight, TablerIcon } from "@tabler/icons-react";
-import {
-  Box,
-  Collapse,
-  Group,
-  Text,
-  ThemeIcon,
-  UnstyledButton,
-} from "@mantine/core";
-import classes from "./LinksGroup.module.css";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import classes from "./LinksGroup.module.css";
 
 interface LinksGroupProps {
   icon: LucideIcon | TablerIcon;
@@ -82,15 +75,14 @@ export default function LinksGroup({
       {hasLinks && (
         <Collapse in={opened}>
           {links.map((link) => (
-            <Text<"a">
-              component="a"
-              className={classes.link}
+            <UnstyledButton
+              className={`${classes.link}`}
+              component={Link}
               href={link.link}
               key={link.label}
-              onClick={(event) => event.preventDefault()}
             >
               {link.label}
-            </Text>
+            </UnstyledButton>
           ))}
         </Collapse>
       )}

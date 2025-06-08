@@ -18,7 +18,9 @@ export default function ExperimentEmailPreview({
   emailData: EmailCreatePayload;
 }) {
   return (
-    <Box className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
+    <Box
+      className="flex-1 flex flex-col h-full bg-white overflow-y-auto"
+    >
       <Group
         justify="space-between"
         p="md"
@@ -34,7 +36,7 @@ export default function ExperimentEmailPreview({
         </Group>
       </Group>
 
-      <Box p="xl">
+      <Box p="xl" style={{ position: "relative" }}>
         <Group justify="space-between">
           <Stack gap="xs">
             <Group>
@@ -44,7 +46,6 @@ export default function ExperimentEmailPreview({
                 {metadata.senderAddress || "<sender@email.com>"}
               </Text>
             </Group>
-
             <Text size="sm" c="dimmed">
               To: me
             </Text>
@@ -62,7 +63,12 @@ export default function ExperimentEmailPreview({
           </Text>
         </Group>
 
-        <Container fluid p={0} my="xl">
+        <Container
+          fluid
+          p={0}
+          my="xl"
+          style={{ position: "relative", minHeight: "200px" }}
+        >
           <TypographyStylesProvider>
             <div
               dangerouslySetInnerHTML={{
