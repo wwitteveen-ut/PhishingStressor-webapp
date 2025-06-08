@@ -20,6 +20,7 @@ export interface Email {
 export interface EmailProperties {
   isRead: boolean;
   isTrashed: boolean;
+  hasReplied: boolean;
 }
 
 export interface ZustandEmail

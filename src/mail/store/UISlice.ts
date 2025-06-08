@@ -1,6 +1,6 @@
 import { StateCreator } from "zustand";
-import { EmailProperties, UserEventType } from "./types";
 import { EmailClientState } from "./EmailClientStore";
+import { EmailProperties, UserEventType } from "./types";
 
 export interface UISlice {
   selectedCategory: string;
@@ -12,6 +12,7 @@ export interface UISlice {
   setSearchQuery: (query: string) => void;
   selectEmailId: (emailId: string) => void;
   setIsReplying: (isReplying: boolean) => void;
+  setHasReplied: (emailId: string) => void;
   toggleEmailRead: (emailId: string) => void;
   toggleEmailTrashed: (emailId: string) => void;
   selectCategory: (category: string) => void;
@@ -28,6 +29,7 @@ export const initialUISliceState: UISlice = {
   setSearchQuery: () => {},
   selectEmailId: () => {},
   setIsReplying: () => {},
+  setHasReplied: () => {},
   toggleEmailRead: () => {},
   toggleEmailTrashed: () => {},
   selectCategory: () => {},
@@ -82,7 +84,7 @@ export const createUISlice: StateCreator<
         };
       },
       undefined,
-      "ui/selectEmailId",
+      "ui/selectEmailId"
     );
 
     state.addSimpleEvent(UserEventType.TIME_OPENED);
@@ -93,6 +95,23 @@ export const createUISlice: StateCreator<
 
   setIsReplying: (isReplying: boolean) =>
     set({ isReplying: isReplying }, undefined, "ui/setIsReplying"),
+  setHasReplied: (emailId: string) =>
+    set(
+      (state) => ({
+        emails: state.emails.map((email) =>
+          email.id === emailId ? { ...email, hasReplied: true } : email
+        ),
+        emailProperties: {
+          ...state.emailProperties,
+          [emailId]: {
+            ...(state.emailProperties[emailId] ?? { hasReplied: false }),
+            hasReplied: true,
+          },
+        },
+      }),
+      undefined,
+      "ui/setHasReplied"
+    ),
 
   getUnreadCount: () => {
     const { emails, emailProperties } = get();
@@ -106,7 +125,7 @@ export const createUISlice: StateCreator<
     set(
       (state) => ({
         emails: state.emails.map((email) =>
-          email.id === emailId ? { ...email, isRead: !email.isRead } : email,
+          email.id === emailId ? { ...email, isRead: !email.isRead } : email
         ),
         emailProperties: {
           ...state.emailProperties,
@@ -117,7 +136,7 @@ export const createUISlice: StateCreator<
         },
       }),
       undefined,
-      "ui/toggleEmailRead",
+      "ui/toggleEmailRead"
     ),
 
   toggleEmailTrashed: (emailId: string) =>
@@ -126,11 +145,14 @@ export const createUISlice: StateCreator<
         const currentIsTrashed =
           state.emailProperties[emailId]?.isTrashed ?? false;
         const newIsTrashed = !currentIsTrashed;
+        const currentSelectedIsTrashed = state.selectedEmailId === emailId;
+
+        if (currentSelectedIsTrashed) {
+          state.addSimpleEvent(UserEventType.TIME_CLOSED);
+        }
         return {
           emails: state.emails.map((email) =>
-            email.id === emailId
-              ? { ...email, isTrashed: newIsTrashed }
-              : email,
+            email.id === emailId ? { ...email, isTrashed: newIsTrashed } : email
           ),
           emailProperties: {
             ...state.emailProperties,
@@ -139,10 +161,12 @@ export const createUISlice: StateCreator<
               isTrashed: newIsTrashed,
             },
           },
-          selectedEmailId: null,
+          selectedEmailId: currentSelectedIsTrashed
+            ? null
+            : state.selectedEmailId,
         };
       },
       undefined,
-      "ui/toggleEmailTrashed",
+      "ui/toggleEmailTrashed"
     ),
 });

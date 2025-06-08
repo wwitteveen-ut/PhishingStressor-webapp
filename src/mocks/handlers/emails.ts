@@ -1,7 +1,7 @@
+import { getApiUrl } from "@/shared/utils/apiHelper";
+import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { http, HttpResponse } from "msw";
 import { mockAttachments, mockEmails } from "../data/emails";
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
-import { getApiUrl } from "@/shared/utils/apiHelper";
 import { mockExperiments } from "../data/experiments";
 
 export const emailsHandlers = [
@@ -22,11 +22,11 @@ export const emailsHandlers = [
           statusText: "Email not found",
         });
       }
-    },
+    }
   ),
   http.get(
     await getExternalApiUrl(
-      `/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`,
+      `/experiments/:experimentId/emails/:emailId/attachments/:attachmentId`
     ),
     async ({ params }) => {
       const { attachmentId } = params;
@@ -46,11 +46,11 @@ export const emailsHandlers = [
           "Content-Disposition": `attachment; filename="${attachment.filename}"`,
         },
       });
-    },
+    }
   ),
   http.post(
     await getExternalApiUrl(
-      "/experiments/:experimentId/emails/:emailId/tracking",
+      "/experiments/:experimentId/emails/:emailId/tracking"
     ),
     async ({ params, request }) => {
       const { experimentId, emailId } = params;
@@ -66,14 +66,14 @@ export const emailsHandlers = [
       const trackingData = await request.json();
       console.log(
         `Received request with tracking info for email: ${emailId} in experiment: ${experimentId}`,
-        trackingData,
+        trackingData
       );
       return HttpResponse.json(trackingData);
-    },
+    }
   ),
   http.post(
     await getExternalApiUrl(
-      "/experiments/:experimentId/emails/:emailId/replies",
+      "/experiments/:experimentId/emails/:emailId/replies"
     ),
     async ({ params, request }) => {
       const { experimentId, emailId } = params;
@@ -86,13 +86,13 @@ export const emailsHandlers = [
         });
       }
 
-      const replyData = await request.json();
+      const replyData = await request.formData();
       console.log(
         `Received request to create reply for email: ${emailId} in experiment: ${experimentId}`,
-        replyData,
+        replyData
       );
       return HttpResponse.json(replyData);
-    },
+    }
   ),
   http.post(
     await getExternalApiUrl("/experiments/:experimentId/emails"),
@@ -110,10 +110,10 @@ export const emailsHandlers = [
       const emailData = await request.formData();
       console.log(
         `Received request to create email in experiment: ${experimentId}`,
-        emailData,
+        emailData
       );
       return HttpResponse.json(emailData);
-    },
+    }
   ),
   http.delete(
     await getExternalApiUrl("/experiments/:experimentId/emails/:emailId"),
@@ -129,9 +129,9 @@ export const emailsHandlers = [
       }
 
       console.log(
-        `Received request to delete email with id: ${emailId} for experiment: ${experimentId}`,
+        `Received request to delete email with id: ${emailId} for experiment: ${experimentId}`
       );
       return new HttpResponse(null, { status: 200 });
-    },
+    }
   ),
 ];
