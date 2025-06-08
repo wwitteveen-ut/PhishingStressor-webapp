@@ -16,10 +16,13 @@ type ComplexEventType = UserEventType.HEATMAP;
 export interface ParticipantSlice {
   emails: ZustandEmail[];
   userEvents: UserEvent[];
+  heatmapData: DataPoint[];
   pendingEventBatch: UserEvent[];
   isProcessingEvents: boolean;
   setEmails: (emails: ZustandEmail[]) => void;
   addSimpleEvent: (type: SimpleEventType) => void;
+  addComplexEvent: (type: ComplexEventType, extra: string) => void;
+  addHeatmapData: (data: DataPoint) => void;
   sendEventsToAPI: (emailId: string, events: UserEvent[]) => Promise<void>;
   clearEvents: () => void;
   processEventBatch: (emailId: string) => Promise<void>;
@@ -28,10 +31,13 @@ export interface ParticipantSlice {
 export const initialParticipantState: ParticipantSlice = {
   emails: [],
   userEvents: [],
+  heatmapData: [],
   pendingEventBatch: [],
   isProcessingEvents: false,
   setEmails: () => {},
   addSimpleEvent: () => {},
+  addComplexEvent: () => {},
+  addHeatmapData: () => {},
   sendEventsToAPI: async () => {},
   clearEvents: () => {},
   processEventBatch: async () => {},
@@ -82,8 +88,7 @@ export const createParticipantSlice: StateCreator<
       undefined,
       "participant/addSimpleEvent"
     ),
-
-  addComplexEvent: (type: ComplexEventType, extra: DataPoint) =>
+  addComplexEvent: (type: ComplexEventType, extra: string) =>
     set(
       (state) => ({
         userEvents: [
@@ -91,12 +96,20 @@ export const createParticipantSlice: StateCreator<
           {
             type,
             timestamp: Date.now().toString(),
-            extra: [extra],
+            extra,
           },
         ],
       }),
       undefined,
       "participant/addComplexEvent"
+    ),
+  addHeatmapData: (data: DataPoint) =>
+    set(
+      (state) => ({
+        heatmapData: [...state.heatmapData, data],
+      }),
+      undefined,
+      "participant/addHeatmapData"
     ),
 
   sendEventsToAPI: async (emailId: string, events: UserEvent[]) => {
@@ -113,7 +126,11 @@ export const createParticipantSlice: StateCreator<
   },
 
   clearEvents: () =>
-    set({ userEvents: [] }, undefined, "participant/clearEvents"),
+    set(
+      { userEvents: [], heatmapData: [] },
+      undefined,
+      "participant/clearEvents"
+    ),
 
   processEventBatch: async (emailId: string) => {
     const state = get();

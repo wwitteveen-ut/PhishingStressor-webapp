@@ -56,6 +56,13 @@ export const createUISlice: StateCreator<
     }
 
     if (currentSelectedId) {
+      if (state.heatmapData.length > 0) {
+        state.addComplexEvent(
+          UserEventType.HEATMAP,
+          JSON.stringify(state.heatmapData)
+        );
+      }
+
       state.addSimpleEvent(UserEventType.TIME_CLOSED);
 
       try {

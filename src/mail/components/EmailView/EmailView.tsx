@@ -1,9 +1,15 @@
 "use client";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
-import { Container } from "@mantine/core";
+import {
+  Box,
+  Container,
+  Group,
+  Stack,
+  Text,
+  TypographyStylesProvider,
+} from "@mantine/core";
 import { useMouse } from "@mantine/hooks";
-import { ArrowLeftIcon } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import EmailAttachmentList from "../EmailAttachmentList";
 import EmailReplySection from "../EmailReplySection";
 import TrashActionButton from "../TrashActionButton";
@@ -13,13 +19,26 @@ export default function EmailView() {
   const emails = useEmailClientStore((state) => state.emails);
   const email = emails.find((email) => email.id === emailId);
 
-  const { ref, x, y } = useMouse();
-
   const toggleEmailTrashed = useEmailClientStore(
     (state) => state.toggleEmailTrashed
   );
+  const addHeatmapData = useEmailClientStore((state) => state.addHeatmapData);
+
+  const { ref, x, y } = useMouse({ resetOnExit: true });
+  const latestCoords = useRef({ x: 0, y: 0 });
+
   useEffect(() => {
-    const interval = setInterval(() => console.log(x, y), 100);
+    latestCoords.current = { x, y };
+  }, [x, y]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!email) return;
+      if (latestCoords.current.x !== 0 || latestCoords.current.y !== 0) {
+        const { x, y } = latestCoords.current;
+        addHeatmapData({ x, y, value: 100 });
+      }
+    }, 200);
 
     return () => clearInterval(interval);
   }, []);
@@ -36,63 +55,67 @@ export default function EmailView() {
   }
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-white overflow-y-auto">
-      <div
-        className="p-4 border-b border-gray-200 flex items-center justify-between"
-        ref={ref}
-      >
-        <div className="flex items-center">
-          <button className="mr-4 text-gray-500 hover:text-gray-700 md:hidden">
-            <ArrowLeftIcon size={20} />
-          </button>
-          <h2 className="text-xl font-medium text-gray-800 truncate">
+    <Box flex={1} bg={"white"}>
+      <Stack gap={0} ref={ref}>
+        <Group
+          justify="space-between"
+          p="md"
+          className="border-b border-gray-200"
+        >
+          <Text size="xl" fw={500} truncate>
             {email.title}
-          </h2>
-        </div>
-        <div className="flex items-center space-x-2">
+          </Text>
           <TrashActionButton
             isTrashed={email.isTrashed}
             onClick={() => toggleEmailTrashed(email.id)}
           />
-        </div>
-      </div>
-      <div className="p-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div>
-              <div className="flex items-center">
-                <p className="font-medium text-gray-900">{email.senderName}</p>
-                <span className="mx-2 text-gray-500">&#8226;</span>
-                <p className="text-sm text-gray-500">{email.senderAddress}</p>
-              </div>
-              <div className="flex items-center text-sm text-gray-500">
-                <p>To: me</p>
-                {/* <button className="ml-2 text-gray-400 hover:text-gray-600">
-                  <ChevronDownIcon size={16} />
-                </button> */}
-              </div>
-            </div>
-          </div>
-          <div className="text-sm text-gray-500 ml-2">
-            {new Date(email.sendAt).toLocaleString([], {
-              weekday: "short",
-              month: "short",
-              day: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            })}
-          </div>
-        </div>
-        <Container fluid p={0} mt={"xl"}>
-          <p>{email.content}</p>
-        </Container>
-        <EmailAttachmentList
-          emailId={email.id}
-          attachments={email.attachments}
-        />
+        </Group>
 
-        <EmailReplySection email={email} />
-      </div>
-    </div>
+        <Box p="xl">
+          <Group justify="space-between">
+            <Stack gap="xs">
+              <Group>
+                <Text fw={500}>{email.senderName || "<Sender Name>"}</Text>
+                <Text c="dimmed">•</Text>
+                <Text size="sm" c="dimmed">
+                  {email.senderAddress || "<sender@email.com>"}
+                </Text>
+              </Group>
+
+              <Text size="sm" c="dimmed">
+                To: me
+              </Text>
+            </Stack>
+            <Text size="sm" c="dimmed">
+              {new Date(
+                email.scheduledFor * 60 * 1000 + Date.now()
+              ).toLocaleString([], {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </Text>
+          </Group>
+
+          <Container fluid p={0} my="xl">
+            <TypographyStylesProvider>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: email.content,
+                }}
+              />
+            </TypographyStylesProvider>
+          </Container>
+          <EmailAttachmentList
+            emailId={email.id}
+            attachments={email.attachments}
+          />
+
+          <EmailReplySection email={email} />
+        </Box>
+      </Stack>
+    </Box>
   );
 }

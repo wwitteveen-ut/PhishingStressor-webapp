@@ -1,5 +1,3 @@
-import { DataPoint } from "heatmap-ts";
-
 export interface EmailAttachmentData {
   filename: string;
   id: string;
@@ -42,5 +40,5 @@ export enum UserEventType {
 export interface UserEvent {
   type: UserEventType;
   timestamp: string;
-  extra?: DataPoint[];
+  extra?: string;
 }
