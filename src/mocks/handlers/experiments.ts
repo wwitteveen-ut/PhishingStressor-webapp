@@ -1,6 +1,7 @@
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { http, HttpResponse } from "msw";
 import { mockExperiments } from "../data/experiments";
+import { mockTrackingData } from "../data/tracking";
 
 export const experimentsHandlers = [
   http.get(await getExternalApiUrl("/experiments"), () => {
@@ -23,7 +24,7 @@ export const experimentsHandlers = [
     }
   ),
   http.get(
-    await getExternalApiUrl("/experiments/:experimentId/"),
+    await getExternalApiUrl("/experiments/:experimentId"),
     ({ params }) => {
       const { experimentId } = params;
       const experiment = mockExperiments.find((e) => e.id === experimentId);
@@ -36,6 +37,13 @@ export const experimentsHandlers = [
           statusText: "Experiment not found",
         });
       }
+    }
+  ),
+
+  http.get(
+    await getExternalApiUrl("/experiments/:experimentId/statistics"),
+    () => {
+      return HttpResponse.json(mockTrackingData);
     }
   ),
   http.post(await getExternalApiUrl(`/experiments`), async ({ request }) => {

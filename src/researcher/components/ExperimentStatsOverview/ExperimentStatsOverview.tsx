@@ -1,10 +1,8 @@
 "use client";
 
 import { UserEvent, UserEventType } from "@/mail/store/types";
-import { mockExperiments } from "@/mocks/data/experiments";
 import { EmailStats, IGroup, ParticipantStats } from "@/researcher/store/types";
-import { Button, Container, Group, Table, Title } from "@mantine/core";
-import { IconSortAscending, IconSortDescending } from "@tabler/icons-react";
+import { Button, Group, Paper, Table, Title } from "@mantine/core";
 import Link from "next/link";
 import { useState } from "react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
@@ -20,37 +18,37 @@ interface ExtendedParticipantStats extends Omit<ParticipantStats, "groupId"> {
 export default function ExperimentStatsOverview() {
   const experiment = useExperimentContext();
   const experimentStats = useExperimentStatsContext();
-
+  console.log(experimentStats);
   const [sortField, setSortField] =
     useState<keyof ParticipantStats>("loggedIn");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
-  const stats: ExtendedParticipantStats[] = Array.from(
-    experimentStats.entries()
-  ).map(([participantId, participantStats]) => {
-    const emails = participantStats.emails;
-    const emailsOpened = Object.values(emails).filter((email: EmailStats) =>
-      email.events.some(
-        (event: UserEvent) => event.type === UserEventType.TIME_OPENED
-      )
-    ).length;
-    const repliesSent = Object.values(emails).reduce(
-      (sum, email) => sum + email.replies.length,
-      0
-    );
-    const group = experiment.groups.find(
-      (g) => g.id === participantStats.groupId
-    ) as IGroup;
+  const stats: ExtendedParticipantStats[] = Object.entries(experimentStats).map(
+    ([participantId, participantStats]) => {
+      const emails = participantStats.emails;
+      const emailsOpened = Object.values(emails).filter((email) =>
+        (email as EmailStats).events.some(
+          (event: UserEvent) => event.type === UserEventType.TIME_OPENED
+        )
+      ).length;
+      const repliesSent = Object.values(emails).reduce(
+        (sum, email) => sum + (email as EmailStats).replies.length,
+        0
+      );
+      const group = experiment.groups.find(
+        (g) => g.id === participantStats.groupId
+      ) as IGroup;
 
-    return {
-      participantId,
-      group: group,
-      emailsOpened,
-      repliesSent,
-      loggedIn: participantStats.loggedIn,
-      emails: participantStats.emails,
-    };
-  });
+      return {
+        participantId,
+        group: group,
+        emailsOpened,
+        repliesSent,
+        loggedIn: participantStats.loggedIn,
+        emails: participantStats.emails,
+      };
+    }
+  );
 
   const handleSort = (field: keyof ParticipantStats) => {
     if (field === sortField) {
@@ -62,92 +60,24 @@ export default function ExperimentStatsOverview() {
   };
 
   return (
-    <Container size="lg" py="xl">
+    <Paper p="xl" shadow="md">
       <Title order={2} mb="lg">
-        Experiment {mockExperiments[0].name} Statistics
+        Experiment {experiment.name} Statistics
       </Title>
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>
-              <Group gap={4}>
-                Username
-                {/* <Button
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => handleSort("username")}
-                >
-                  {sortField === "username" && sortDirection === "asc" ? (
-                    <IconSortAscending size={16} />
-                  ) : (
-                    <IconSortDescending size={16} />
-                  )}
-                </Button> */}
-              </Group>
+              <Group gap={4}>Participant</Group>
+            </Table.Th>
+            <Table.Th>Logged In At</Table.Th>
+            <Table.Th>Group</Table.Th>
+
+            <Table.Th>
+              <Group gap={4}>Emails Opened</Group>
             </Table.Th>
             <Table.Th>
-              <Group gap={4}>
-                Group
-                <Button
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => handleSort("groupId")}
-                >
-                  {sortField === "groupId" && sortDirection === "asc" ? (
-                    <IconSortAscending size={16} />
-                  ) : (
-                    <IconSortDescending size={16} />
-                  )}
-                </Button>
-              </Group>
-            </Table.Th>
-            <Table.Th>
-              <Group gap={4}>
-                Emails Opened
-                {/* <Button
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => handleSort("emailsOpened")}
-                >
-                  {sortField === "emailsOpened" && sortDirection === "asc" ? (
-                    <IconSortAscending size={16} />
-                  ) : (
-                    <IconSortDescending size={16} />
-                  )}
-                </Button> */}
-              </Group>
-            </Table.Th>
-            <Table.Th>
-              <Group gap={4}>
-                Replies Sent
-                {/* <Button
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => handleSort("repliesSent")}
-                >
-                  {sortField === "repliesSent" && sortDirection === "asc" ? (
-                    <IconSortAscending size={16} />
-                  ) : (
-                    <IconSortDescending size={16} />
-                  )}
-                </Button> */}
-              </Group>
-            </Table.Th>
-            <Table.Th>
-              <Group gap={4}>
-                Clicks
-                {/* <Button
-                  variant="subtle"
-                  size="xs"
-                  onClick={() => handleSort("clicks")}
-                >
-                  {sortField === "clicks" && sortDirection === "asc" ? (
-                    <IconSortAscending size={16} />
-                  ) : (
-                    <IconSortDescending size={16} />
-                  )}
-                </Button> */}
-              </Group>
+              <Group gap={4}>Replies Sent</Group>
             </Table.Th>
             <Table.Th>Details</Table.Th>
           </Table.Tr>
@@ -155,10 +85,14 @@ export default function ExperimentStatsOverview() {
         <Table.Tbody>
           {stats.map((stat) => (
             <Table.Tr key={stat.participantId}>
-              <Table.Td>{stat.loggedIn.toLocaleDateString()}</Table.Td>
+              <Table.Td>{stat.participantId}</Table.Td>
+              <Table.Td>
+                {new Date(stat.loggedIn).toLocaleDateString()}
+                {new Date(stat.loggedIn).toLocaleTimeString()}
+              </Table.Td>
+              <Table.Td>{stat.group.name}</Table.Td>
               <Table.Td>{stat.emailsOpened}</Table.Td>
               <Table.Td>{stat.repliesSent}</Table.Td>
-              <Table.Td>{stat.group.name}</Table.Td>
               <Table.Td>
                 <Button
                   component={Link}
@@ -173,6 +107,6 @@ export default function ExperimentStatsOverview() {
           ))}
         </Table.Tbody>
       </Table>
-    </Container>
+    </Paper>
   );
 }

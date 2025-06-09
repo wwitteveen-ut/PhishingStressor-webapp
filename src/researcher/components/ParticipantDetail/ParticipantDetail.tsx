@@ -1,25 +1,25 @@
 "use client";
 
-import { participants } from "@/mocks/data/accounts";
-import { mockEmails } from "@/mocks/data/emails";
-import { mockExperiments } from "@/mocks/data/experiments";
-import { mockTrackingData } from "@/mocks/data/tracking";
-import { EmailCreatePayload } from "@/researcher/store/types";
+import { UserEvent } from "@/mail/store/types";
+import { getEmail } from "@/researcher/actions/actions";
+import { EmailCreatePayload, EmailStats } from "@/researcher/store/types";
 import {
   Badge,
   Card,
   Container,
   Group,
+  Loader,
   Tabs,
   Text,
   Timeline,
   Title,
 } from "@mantine/core";
 import { IconClick, IconClock, IconFile, IconMail } from "@tabler/icons-react";
-import HeatMap from "heatmap-ts";
-import { useEffect, useRef } from "react";
+import HeatMap, { DataPoint } from "heatmap-ts";
+import { useEffect, useRef, useState } from "react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
+import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentContext";
 
 export default function ParticipantDetail({
   participantId,
@@ -27,34 +27,72 @@ export default function ParticipantDetail({
   participantId: string;
 }) {
   const experiment = useExperimentContext();
-  const participant = participants.find((p) => p.id === participantId);
-  const participantData = mockTrackingData[experiment.id]?.[participantId];
+  const experimentStats = useExperimentStatsContext();
+  const participantData = experimentStats[participantId];
+  const [emailEvents, setEmailEvents] = useState<any[]>([]);
+  const [emails, setEmails] = useState<Record<string, any>>({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (!participant || !participantData) {
+  if (!participantData) {
     return <Text>Participant not found</Text>;
   }
 
   const groupName =
-    mockExperiments[0].groups.find((g) => g.id === participantData.groupId)
-      ?.name || "N/A";
-  const emailEvents = Object.entries(participantData.emails)
-    .flatMap(([emailId, data]) => {
-      const email = mockEmails.find((e) => e.id === emailId);
-      return data.events.map((event) => ({
-        ...event,
-        emailTitle: email?.title || "Unknown Email",
-        emailId,
-      }));
-    })
-    .sort(
-      (a, b) =>
-        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+    experiment.groups.find((g) => g.id === participantData.groupId)?.name ||
+    "N/A";
+
+  useEffect(() => {
+    const fetchEmailData = async () => {
+      setIsLoading(true);
+      try {
+        const eventsPromises = Object.entries(participantData.emails).map(
+          async ([emailId, data]) => {
+            const email = await getEmail(experiment.id, emailId);
+            return {
+              email,
+              events: data.events.map((event: UserEvent) => ({
+                ...event,
+                emailTitle: email?.title || "Unknown Email",
+                emailId,
+              })),
+            };
+          }
+        );
+
+        const resolvedData = await Promise.all(eventsPromises);
+        const events = resolvedData.flatMap((d) => d.events);
+        const emailMap = resolvedData.reduce((acc, d) => {
+          if (d.email) {
+            acc[d.email.id] = d.email;
+          }
+          return acc;
+        }, {} as Record<string, any>);
+
+        setEmailEvents(events);
+        setEmails(emailMap);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEmailData();
+  }, [experiment.id, participantData.emails]);
+
+  if (isLoading) {
+    return (
+      <Container size="lg" py="xl">
+        <Group justify="center">
+          <Loader />
+          <Text>Loading participant data...</Text>
+        </Group>
+      </Container>
     );
+  }
 
   return (
     <Container size="lg" py="xl">
       <Title order={2} mb="lg">
-        Participant: {participant.username}
+        Participant: {participantId}
       </Title>
       <Text>Group: {groupName}</Text>
       <Text>
@@ -109,7 +147,8 @@ export default function ParticipantDetail({
 
         <Tabs.Panel value="emails" pt="xs">
           {Object.entries(participantData.emails).map(([emailId, data]) => {
-            const email = mockEmails.find((e) => e.id === emailId);
+            const emailStats = data as EmailStats;
+            const email = emails[emailId];
             if (!email) return null;
             return (
               <Card
@@ -125,9 +164,9 @@ export default function ParticipantDetail({
                   From: {`${email.senderName} <${email.senderAddress}>`}
                 </Text>
                 <Text size="sm" mt="xs">
-                  Replies: {data.replies.length}
+                  Replies: {emailStats.replies.length}
                 </Text>
-                {data.replies.map((reply, index) => (
+                {emailStats.replies.map((reply, index) => (
                   <Text key={index} size="sm" mt="xs">
                     Reply at {new Date(reply.createdAt).toLocaleString()}:{" "}
                     {reply.content}
@@ -136,7 +175,7 @@ export default function ParticipantDetail({
                 <Text size="sm" mt="xs">
                   Events: {data.events.length}
                 </Text>
-                {data.events.map((event, index) => (
+                {emailStats.events.map((event, index) => (
                   <Group key={index} gap={4} mt="xs">
                     <Badge>{event.type}</Badge>
                     <Text size="xs">
@@ -157,7 +196,7 @@ export default function ParticipantDetail({
                     },
                     files: [],
                   }}
-                  emailId={email.id}
+                  emailId={emailId}
                   participantId={participantId}
                 />
               </Card>
@@ -180,18 +219,19 @@ export function EmailHeatmapOverlay({
   emailId,
   participantId,
 }: EmailHeatmapOverlayProps) {
-  const experiment = useExperimentContext();
+  const experimentStats = useExperimentStatsContext();
   const heatmapContainerRef = useRef<HTMLDivElement>(null);
   const heatmapInstanceRef = useRef<HeatMap | null>(null);
+  const heatmapJSON = experimentStats[participantId].emails[
+    emailId
+  ].events?.find((event) => event.type === "HEATMAP")?.extra;
 
-  const heatmapData = participantId
-    ? mockTrackingData[experiment.id]?.[participantId]?.emails?.[
-        emailId
-      ]?.events?.find((event) => event.type === "HEATMAP")?.extra || []
-    : [];
+  const heatmapData: DataPoint[] = heatmapJSON ? JSON.parse(heatmapJSON) : [];
+
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {
       console.log("Heatmap: No container or data", {
+        heatmapContainerRef,
         heatmapData,
         emailId,
         participantId,
@@ -219,14 +259,6 @@ export function EmailHeatmapOverlay({
           radius: 50,
           blur: 0.9,
         });
-      }
-
-      const canvas = heatmapContainerRef.current!.querySelector("canvas");
-      if (canvas) {
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
       }
 
       const points = heatmapData.map((point) => ({

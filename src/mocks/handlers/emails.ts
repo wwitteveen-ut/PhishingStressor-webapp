@@ -9,7 +9,7 @@ export const emailsHandlers = [
     return HttpResponse.json(mockEmails);
   }),
   http.get(
-    `${process.env.API_BASE_URL}/experiments/:experimentId/emails/:emailId`,
+    await getExternalApiUrl("/experiments/:experimentId/emails/:emailId"),
     ({ params }) => {
       const { emailId } = params;
       const email = mockEmails.find((e) => e.id === emailId);

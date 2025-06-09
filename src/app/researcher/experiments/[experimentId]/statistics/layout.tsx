@@ -11,7 +11,6 @@ export default async function Layout({
 }) {
   const { experimentId } = await params;
   const experimentStats = await getExperimentStats(experimentId);
-
   return (
     <ExperimentStatsProvider experimentStats={experimentStats}>
       {children}

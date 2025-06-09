@@ -55,7 +55,7 @@ export interface ApiUser {
   username: string;
 }
 
-export type ExperimentStats = Map<string, ParticipantStats>;
+export type ExperimentStats = Record<string, ParticipantStats>;
 
 export type ReplyData = {
   content: string;
@@ -69,5 +69,5 @@ export type EmailStats = {
 export interface ParticipantStats {
   groupId: string;
   loggedIn: Date;
-  emails: Map<string, EmailStats>;
+  emails: Record<string, EmailStats>;
 }

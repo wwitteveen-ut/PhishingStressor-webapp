@@ -8,6 +8,7 @@ import {
 declare module "next-auth" {
   interface Session {
     user: {
+      apiToken: string;
       username: string;
       experimentId: string;
       loggedIn: string;
@@ -15,6 +16,7 @@ declare module "next-auth" {
   }
 
   interface User {
+    apiToken: string;
     username: string;
     experimentId: string;
     loggedIn: string;
@@ -23,6 +25,7 @@ declare module "next-auth" {
 
 declare module "@auth/core/jwt" {
   interface JWT {
+    apiToken: string;
     username: string;
     experimentId: string;
     id?: string;
@@ -51,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         const result = await authenticateParticipant(
           credentials.username as string,
-          credentials.password as string,
+          credentials.password as string
         );
 
         console.log("auth result", result);
@@ -64,7 +67,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const token = result.data;
         token.username = credentials.username;
 
-        return token;
+        return {
+          ...token,
+          token: undefined,
+          apiToken: token.token,
+        };
       },
     }),
     Credentials({
@@ -82,7 +89,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
         const result = await authenticateResearcher(
           credentials.username as string,
-          credentials.password as string,
+          credentials.password as string
         );
 
         console.log("auth result", result);
@@ -94,13 +101,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const token = result.data;
 
-        return token;
+        return {
+          ...token,
+          token: undefined,
+          apiToken: token.token,
+        };
       },
     }),
   ],
   callbacks: {
     jwt({ token, user }) {
       if (user) {
+        token.apiToken = user.apiToken;
         token.loggedIn = user.loggedIn;
         token.id = user.id;
         token.experimentId = user.experimentId;
@@ -109,6 +121,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
+      session.user.apiToken = token.apiToken;
       session.user.experimentId = token.experimentId;
       session.user.loggedIn = token.loggedIn;
       session.user.username = token.username;

@@ -1,64 +1,84 @@
 "use server";
+
 import { auth } from "@/auth";
-import {
-  Email,
-  EmailAttachmentData,
-  UserEvent,
-  ZustandEmail,
-} from "../store/types";
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { getApiUrl } from "@/shared/utils/apiHelper";
+import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { cookies } from "next/headers";
+import { EmailAttachmentData, UserEvent, ZustandEmail } from "../store/types";
 
-export const getEmail = async (id: number): Promise<Email> => {
-  const token = await auth();
-  if (!token) {
-    throw new Error("not good!");
+async function makeAuthenticatedExternalRequest(
+  endpoint: string,
+  options: RequestInit = {}
+) {
+  const session = await auth();
+
+  if (!session?.user?.apiToken) {
+    throw new Error("Not authenticated or missing API token");
   }
-  const path = await getExternalApiUrl(
-    `/experiments/${token.user.experimentId}/emails/${id}`,
-  );
-  const response = await fetch(path);
 
-  const data = await response.json();
-  return data;
-};
+  const url = await getExternalApiUrl(endpoint);
 
-export const getParticipantEmails = async (): Promise<ZustandEmail[]> => {
+  return fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      Authorization: `Bearer ${session.user.apiToken}`,
+      ...(options.body instanceof FormData
+        ? {}
+        : { "Content-Type": "application/json" }),
+    },
+  });
+}
+
+async function makeAuthenticatedInternalRequest(
+  endpoint: string,
+  options: RequestInit = {}
+) {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get("authjs.session-token")?.value;
   const session = await auth();
+
   if (!session || !sessionCookie) {
     throw new Error("Unauthorized");
   }
 
-  const path = getApiUrl(`/emails`);
-  const response = await fetch(path, {
+  const url = getApiUrl(endpoint);
+
+  return fetch(url, {
+    ...options,
     headers: {
+      ...options.headers,
       Cookie: `authjs.session-token=${sessionCookie}`,
+      ...(options.body instanceof FormData
+        ? {}
+        : { "Content-Type": "application/json" }),
     },
   });
+}
 
-  if (response.ok) {
-    const emails = (await response.json()) as ZustandEmail[];
-    return emails;
+export const getParticipantEmails = async (): Promise<ZustandEmail[]> => {
+  const response = await makeAuthenticatedInternalRequest(`/emails`);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch emails: ${response.statusText}`);
   }
-  throw new Error(`Failed to fetch emails: ${response.statusText}`);
+
+  const emails = (await response.json()) as ZustandEmail[];
+  return emails;
 };
 
 export const downloadAttachment = async (
   emailId: string,
-  attachmentData: EmailAttachmentData,
+  attachmentData: EmailAttachmentData
 ) => {
-  const token = await auth();
-  if (!token) {
-    throw new Error("not good!");
+  const session = await auth();
+  if (!session?.user?.experimentId) {
+    throw new Error("Authentication failed: Missing experiment ID");
   }
 
-  const path = await getExternalApiUrl(
-    `/experiments/${token.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`,
+  const response = await makeAuthenticatedExternalRequest(
+    `/experiments/${session.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`
   );
-  const response = await fetch(path);
 
   if (!response.ok) {
     throw new Error(`Failed to download attachment: ${response.statusText}`);
@@ -77,24 +97,23 @@ export const downloadAttachment = async (
 
 export const sendReply = async (emailId: string, formData: FormData) => {
   try {
-    const token = await auth();
-    if (!token) {
-      throw new Error("Authentication failed: No token received");
+    const session = await auth();
+    if (!session?.user?.experimentId) {
+      throw new Error("Authentication failed: Missing experiment ID");
     }
 
-    const path = await getExternalApiUrl(
-      `/experiments/${token.user.experimentId}/emails/${emailId}/replies`,
+    const response = await makeAuthenticatedExternalRequest(
+      `/experiments/${session.user.experimentId}/emails/${emailId}/replies`,
+      {
+        method: "POST",
+        body: formData,
+      }
     );
-
-    const response = await fetch(path, {
-      method: "POST",
-      body: formData,
-    });
 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
-        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`,
+        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`
       );
     }
 
@@ -109,27 +128,26 @@ export const sendReply = async (emailId: string, formData: FormData) => {
 
 export const sendTrackingEvents = async (
   emailId: string,
-  userEvents: UserEvent[],
+  userEvents: UserEvent[]
 ): Promise<boolean> => {
   try {
-    const token = await auth();
-    if (!token) {
-      throw new Error("Authentication failed: No token received");
+    const session = await auth();
+    if (!session?.user?.experimentId) {
+      throw new Error("Authentication failed: Missing experiment ID");
     }
 
-    const path = await getExternalApiUrl(
-      `/experiments/${token.user.experimentId}/emails/${emailId}/tracking`,
+    const response = await makeAuthenticatedExternalRequest(
+      `/experiments/${session.user.experimentId}/emails/${emailId}/tracking`,
+      {
+        method: "POST",
+        body: JSON.stringify(userEvents),
+      }
     );
-
-    const response = await fetch(path, {
-      method: "POST",
-      body: JSON.stringify(userEvents),
-    });
 
     if (!response.ok) {
       const errorText = await response.text();
       throw new Error(
-        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`,
+        `Failed to send tracking events: ${response.status} ${response.statusText} - ${errorText}`
       );
     }
 
@@ -137,7 +155,7 @@ export const sendTrackingEvents = async (
     console.log("Tracking info sent successfully:", result);
     return true;
   } catch (error) {
-    console.error("Error sending reply:", error);
+    console.error("Error sending tracking events:", error);
     throw error;
   }
 };
