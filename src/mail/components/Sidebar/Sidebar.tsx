@@ -1,6 +1,5 @@
-import MailCategoryList from "@/mail/components/EmailCategoryList/EmailCategoryList";
-import React from "react";
 import { auth } from "@/auth";
+import MailCategoryList from "@/mail/components/EmailCategoryList/EmailCategoryList";
 import { redirect } from "next/navigation";
 
 export default async function Sidebar() {
@@ -22,7 +21,7 @@ export default async function Sidebar() {
       <div className="p-4 border-t border-gray-200">
         <div className="flex items-center">
           <div className="ml-3">
-            <p className="text-xs text-gray-500">{session.user.username}</p>
+            <p className="text-md text-gray-500">{session.user.username}</p>
           </div>
         </div>
       </div>
