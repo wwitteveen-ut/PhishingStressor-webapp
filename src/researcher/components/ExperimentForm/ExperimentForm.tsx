@@ -56,9 +56,13 @@ export default function ExperimentForm({
 
   const handleSubmit = async (values: ExperimentCreatePayload) => {
     startLoading();
-
     try {
-      await createExperiment(values);
+      const result = await createExperiment(values);
+      if (result.success && result.accounts) {
+        const csv = convertToCSV(result.accounts);
+        triggerDownload(csv, `${form.getValues()["name"]}csv`);
+      }
+      form.reset();
       close();
       return true;
     } catch (error) {
@@ -69,8 +73,28 @@ export default function ExperimentForm({
     }
   };
 
+  const convertToCSV = (accounts: { username: string; password: string }[]) => {
+    if (!accounts.length) return "";
+    return [
+      "username,password",
+      ...accounts.map((acc) => `"${acc.username}","${acc.password}"`),
+    ].join("\n");
+  };
+
+  const triggerDownload = (csvContent: string, fileName: string) => {
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const groups = form.getValues().groups.map((group, index) => (
-    <Group key={index} mt="xs" align="flex-end">
+    <Group key={index} align="center">
       <TextInput
         label="Group Name"
         placeholder="e.g. Alpha Team"
@@ -84,7 +108,10 @@ export default function ExperimentForm({
         placeholder="0"
         min={0}
         withAsterisk
+        clampBehavior="strict"
         style={{ width: 120 }}
+        allowNegative={false}
+        allowDecimal={false}
         {...form.getInputProps(`groups.${index}.capacity`)}
       />
 
@@ -134,6 +161,9 @@ export default function ExperimentForm({
                   required
                   min={0}
                   withAsterisk
+                  clampBehavior="strict"
+                  allowNegative={false}
+                  allowDecimal={false}
                   style={{ maxWidth: 120 }}
                   {...form.getInputProps(`duration`)}
                 />
@@ -150,7 +180,9 @@ export default function ExperimentForm({
                 error={form.errors.researchers && "Invalid name"}
               />
               <Box>
-                <Text size="sm">Experiment groups</Text>
+                <Text size="md" fw={600}>
+                  Research groups
+                </Text>
 
                 {groups.length > 0 ? (
                   groups

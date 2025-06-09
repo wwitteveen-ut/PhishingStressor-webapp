@@ -71,7 +71,10 @@ export async function getResearchers(): Promise<ApiUser[]> {
 
 export async function createExperiment(
   experimentPayload: ExperimentCreatePayload
-): Promise<boolean> {
+): Promise<{
+  success: boolean;
+  accounts?: { username: string; password: string }[];
+}> {
   try {
     const session = await auth();
     const researcherId = session?.user?.id;
@@ -86,10 +89,16 @@ export async function createExperiment(
       body: JSON.stringify(experimentPayload),
     });
 
-    return response.ok;
+    if (!response.ok) {
+      throw new Error("Failed to create experiment");
+    }
+
+    const data = await response.json();
+
+    return { success: true, accounts: data.accounts };
   } catch (error) {
     console.error("Error creating experiment:", error);
-    return false;
+    return { success: false };
   }
 }
 

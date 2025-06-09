@@ -1,5 +1,6 @@
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { http, HttpResponse } from "msw";
+import { participants } from "../data/accounts";
 import { mockExperiments } from "../data/experiments";
 import { mockTrackingData } from "../data/tracking";
 
@@ -53,7 +54,10 @@ export const experimentsHandlers = [
       experimentData
     );
 
-    return HttpResponse.json(experimentData);
+    return HttpResponse.json({
+      accounts: participants,
+      experiment: mockExperiments[0],
+    });
   }),
   http.delete(
     await getExternalApiUrl("/experiments/:experimentId"),

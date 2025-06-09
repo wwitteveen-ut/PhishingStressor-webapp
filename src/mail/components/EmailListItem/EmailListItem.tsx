@@ -1,13 +1,14 @@
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 import { ZustandEmail } from "@/mail/store/types";
 import {
-  Group,
+  ActionIcon,
   Box,
+  Group,
   Text,
   ThemeIcon,
   Tooltip,
-  ActionIcon,
 } from "@mantine/core";
+import { htmlToText } from "html-to-text";
 import { Paperclip, Trash, Undo } from "lucide-react";
 import classes from "./EmailListItem.module.css";
 
@@ -20,8 +21,9 @@ export default function EmailListItem({
 }) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
   const toggleEmailTrashed = useEmailClientStore(
-    (state) => state.toggleEmailTrashed,
+    (state) => state.toggleEmailTrashed
   );
+  const plainTextBody = htmlToText(email.content);
   return (
     <Box
       onClick={() => selectEmailId(email.id)}
@@ -81,7 +83,7 @@ export default function EmailListItem({
         </Text>
         <Group justify="space-between">
           <Text size="xs" c="gray.6" truncate style={{ flex: 1 }}>
-            {email.content}
+            {plainTextBody}
           </Text>
           {email.attachments.length > 0 && (
             <ThemeIcon color="gray.6" variant="transparent">
