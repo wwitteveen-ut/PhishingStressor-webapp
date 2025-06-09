@@ -79,13 +79,25 @@ export async function canRegisterResearcher(): Promise<boolean> {
   return res.json();
 }
 
-export const registerResearcher = async (formData: FormData) => {
+export const registerResearcher = async ({
+  username,
+  password,
+}: {
+  username: string;
+  password: string;
+}) => {
   try {
     const path = await getExternalApiUrl(`/auth/register`);
 
     const response = await fetch(path, {
       method: "POST",
-      body: formData,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username,
+        password,
+      }),
     });
 
     if (!response.ok) {

@@ -115,10 +115,10 @@ export default function ResearcherForm() {
     username: string;
     password: string;
   }) => {
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    const response = await registerResearcher(formData);
+    const response = await registerResearcher({
+      username,
+      password,
+    });
     if (response.ok) {
       const response = signIn("researcher", {
         username,
@@ -126,7 +126,6 @@ export default function ResearcherForm() {
         redirect: false,
       });
       const authResponse = await response;
-      console.log(authResponse);
       if (authResponse.error && authResponse.code) {
         setError(authResponse.code);
       } else if (authResponse.ok) {
