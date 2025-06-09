@@ -6,12 +6,12 @@ import {
   Badge,
   Button,
   Card,
-  Stack,
   Group,
+  Stack,
   Text,
 } from "@mantine/core";
-import { TrashIcon } from "lucide-react";
 import { modals } from "@mantine/modals";
+import { TrashIcon } from "lucide-react";
 
 import Link from "next/link";
 
@@ -55,7 +55,7 @@ export default function ExperimentListItem({
         <Text fw={500} size="lg" truncate>
           {experiment.name}
         </Text>
-        <Badge color="blue">{experiment.duration} days</Badge>
+        <Badge color="blue">{experiment.duration} minutes</Badge>
       </Group>
       <Stack gap="md">
         <div>

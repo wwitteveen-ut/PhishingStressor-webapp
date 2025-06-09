@@ -12,20 +12,11 @@ export default async function ExperimentFormContainer() {
 
   const researchers = await getResearchers();
   const researcherChoices = researchers
-    .filter((researcher) => researcher.username !== session.user.username)
+    .filter((researcher) => researcher.id !== session.user.id)
     .map((researcher) => ({
       label: researcher.username,
       value: researcher.id,
     }));
-  const ownResearcherId =
-    researchers.find(
-      (researcher) => researcher.username === session.user.username
-    )?.id ?? "";
 
-  return (
-    <ExperimentForm
-      ownResearcherId={ownResearcherId}
-      researcherChoices={researcherChoices}
-    />
-  );
+  return <ExperimentForm researcherChoices={researcherChoices} />;
 }

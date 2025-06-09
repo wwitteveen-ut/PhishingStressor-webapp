@@ -19,6 +19,7 @@ import { hasLength, isInRange, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { PlusIcon } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 export interface choice {
   label: string;
@@ -27,11 +28,10 @@ export interface choice {
 
 export default function ExperimentForm({
   researcherChoices,
-  ownResearcherId,
 }: {
   researcherChoices: choice[];
-  ownResearcherId: string;
 }) {
+  const { data: session } = useSession();
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, { open: startLoading, close: stopLoading }] =
     useDisclosure(false);
@@ -59,9 +59,6 @@ export default function ExperimentForm({
   const handleSubmit = async (values: ExperimentCreatePayload) => {
     startLoading();
     try {
-      if (!values.researcherIds.includes(ownResearcherId)) {
-        values.researcherIds.push(ownResearcherId);
-      }
       const result = await createExperiment(values);
       if (result.success && result.accounts) {
         const csv = convertToCSV(result.accounts);

@@ -4,6 +4,7 @@ import { ResearcherEmail } from "@/researcher/store/types";
 import { ActionIcon, Badge, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { AlertTriangle, Trash } from "lucide-react";
+import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 
 interface ExperimentEmailListItemProps {
   email: ResearcherEmail;
@@ -12,6 +13,7 @@ interface ExperimentEmailListItemProps {
 export default function ExperimentEmailListItem({
   email,
 }: ExperimentEmailListItemProps) {
+  const experiment = useExperimentContext();
   const openDeleteModal = () =>
     modals.openConfirmModal({
       title: "Please confirm your action",
@@ -32,7 +34,7 @@ export default function ExperimentEmailListItem({
     });
 
   const handleDelete = async () => {
-    await deleteEmail(email.experimentId, email.id);
+    await deleteEmail(experiment.id, email.id);
   };
 
   return (

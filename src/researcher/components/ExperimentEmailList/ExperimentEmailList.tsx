@@ -11,7 +11,7 @@ export default function ExperimentEmailList({
   emails,
 }: ExperimentEmailListProps) {
   return (
-    <Table verticalSpacing="md" highlightOnHover>
+    <Table verticalSpacing="md">
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Subject</Table.Th>
@@ -22,9 +22,17 @@ export default function ExperimentEmailList({
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {emails.map((email) => (
-          <ExperimentEmailListItem key={email.id} email={email} />
-        ))}
+        {emails.length === 0 ? (
+          <Table.Tr>
+            <Table.Td colSpan={5} style={{ textAlign: "center" }}>
+              No emails found
+            </Table.Td>
+          </Table.Tr>
+        ) : (
+          emails.map((email) => (
+            <ExperimentEmailListItem key={email.id} email={email} />
+          ))
+        )}
       </Table.Tbody>
     </Table>
   );

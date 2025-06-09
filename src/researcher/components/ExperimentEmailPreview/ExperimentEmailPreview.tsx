@@ -43,7 +43,7 @@ export default function ExperimentEmailPreview({
               <Text fw={500}>{metadata.senderName || "<Sender Name>"}</Text>
               <Text c="dimmed">•</Text>
               <Text size="sm" c="dimmed">
-                {metadata.senderAddress || "<sender@email.com>"}
+                {metadata.senderEmail || "<sender@email.com>"}
               </Text>
             </Group>
             <Text size="sm" c="dimmed">

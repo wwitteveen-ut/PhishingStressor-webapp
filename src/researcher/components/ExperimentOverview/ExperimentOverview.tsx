@@ -1,7 +1,6 @@
 "use client";
 
 import { useExperimentContext } from "@/researcher/components/ExperimentContext/ExperimentContext";
-import { ApiUser } from "@/researcher/store/types";
 import {
   Badge,
   Group,
@@ -16,23 +15,11 @@ import { choice } from "../ExperimentForm/ExperimentForm";
 import ExperimentResearcherList from "../ExperimentResearcherList";
 
 export default function ExperimentOverview({
-  researchers,
+  researcherChoices,
 }: {
-  researchers: ApiUser[];
+  researcherChoices: choice[];
 }) {
   const experiment = useExperimentContext();
-
-  const researcherChoices: choice[] = researchers
-    .map((r) => {
-      if (experiment.researchers.some((researcher) => researcher.id === r.id)) {
-        return undefined;
-      }
-      return {
-        label: r.username,
-        value: r.id,
-      };
-    })
-    .filter((choice): choice is choice => choice !== undefined);
 
   return (
     <Paper shadow="sm" p="lg" radius="md">

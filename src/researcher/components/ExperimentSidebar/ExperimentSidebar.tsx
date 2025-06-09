@@ -53,15 +53,16 @@ export default function ExperimentSidebar() {
     {
       label: "Statistics",
       icon: ChartArea,
-      initiallyOpened: true,
-      links: [
-        {
-          label: "Overview",
-          link: `/researcher/experiments/${experiment.id}/statistics`,
-        },
-        { label: "Second statistic", link: "/" },
-        { label: "Third statistic", link: "/" },
-      ],
+      mainLink: `/researcher/experiments/${experiment.id}/statistics`,
+      // initiallyOpened: true,
+      // links: [
+      //   {
+      //     label: "Overview",
+      //     link: `/researcher/experiments/${experiment.id}/statistics`,
+      //   },
+      //   { label: "Second statistic", link: "/" },
+      //   { label: "Third statistic", link: "/" },
+      // ],
     },
   ];
 

@@ -10,7 +10,7 @@ import classes from "./ExperimentEmailFormPage.module.css";
 
 export type EmailFormValues = {
   title: string;
-  senderAddress: string;
+  senderEmail: string;
   senderName: string;
   groups: string[];
   files: File[];
@@ -19,12 +19,12 @@ export type EmailFormValues = {
   scheduledFor: number;
 };
 
-export default function ExperimentEmailFormPage() {
+export default async function ExperimentEmailFormPage() {
   const [value, setValue] = useState("compose");
   const form = useForm({
     initialValues: {
       title: "",
-      senderAddress: "",
+      senderEmail: "",
       senderName: "",
       groups: [] as string[],
       files: [] as File[],
@@ -34,7 +34,7 @@ export default function ExperimentEmailFormPage() {
     },
     validate: {
       title: hasLength({ min: 1 }, "Subject is required"),
-      senderAddress: isEmail("Invalid email address"),
+      senderEmail: isEmail("Invalid email address"),
       senderName: hasLength({ min: 1 }, "Sender name is required"),
       groups: hasLength({ min: 1 }, "At least one group is required"),
       content: hasLength({ min: 1 }, "Content is required"),
@@ -43,7 +43,7 @@ export default function ExperimentEmailFormPage() {
     transformValues(values): EmailCreatePayload {
       return {
         metadata: {
-          senderAddress: values.senderAddress,
+          senderEmail: values.senderEmail,
           senderName: values.senderName,
           title: values.title,
           groups: values.groups,
