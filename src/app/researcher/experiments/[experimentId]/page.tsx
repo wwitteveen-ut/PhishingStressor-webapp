@@ -13,12 +13,18 @@ export default async function ExperimentOverviewPage() {
   }
 
   const researchers = await getResearchers();
+  const researcherChoices = researchers
+    .filter((researcher) => researcher.id !== session.user.id)
+    .map((researcher) => ({
+      label: researcher.username,
+      value: researcher.id,
+    }));
   return (
     <>
       <Title order={2} c="gray.9" mb="lg">
         Experiment Overview
       </Title>
-      <ExperimentOverview researchers={researchers} />
+      <ExperimentOverview researcherChoices={researcherChoices} />
     </>
   );
 }

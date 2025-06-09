@@ -40,8 +40,9 @@ export interface IGroup extends IGroupBase {
 export interface EmailCreate
   extends Omit<
     ResearcherEmail,
-    "id" | "createdAt" | "experimentId" | "attachments"
+    "id" | "createdAt" | "experimentId" | "attachments" | "senderAddress"
   > {
+  senderEmail: string;
   groups: string[];
 }
 

@@ -1,27 +1,28 @@
 "use client";
 
+import { createEmail } from "@/researcher/actions/actions";
+import { EmailCreatePayload } from "@/researcher/store/types";
 import {
-  TextInput,
-  Checkbox,
-  Button,
-  Group,
-  Stack,
-  Title,
   Box,
-  LoadingOverlay,
-  NumberInput,
-  MultiSelect,
+  Button,
+  Checkbox,
   FileButton,
+  Group,
+  LoadingOverlay,
+  MultiSelect,
+  NumberInput,
+  Stack,
+  TextInput,
+  Title,
 } from "@mantine/core";
+import { UseFormReturnType } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { Files, SendIcon, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import { createEmail } from "@/researcher/actions/actions";
-import { UseFormReturnType } from "@mantine/form";
-import { EmailFormValues } from "../ExperimentEmailFormPage/ExperimentEmailFormPage";
-import ExperimentEmailComposer from "../ExperimentEmailComposer";
-import { EmailCreatePayload } from "@/researcher/store/types";
 import ExperimentEmailAttachmentList from "../ExperimentEmailAttachmentList";
+import ExperimentEmailComposer from "../ExperimentEmailComposer";
+import { EmailFormValues } from "../ExperimentEmailFormPage/ExperimentEmailFormPage";
 
 export default function ExperimentEmailForm({
   form,
@@ -34,6 +35,7 @@ export default function ExperimentEmailForm({
   const [isSubmitting, { open: startSubmitting, close: stopSubmitting }] =
     useDisclosure(false);
   const experiment = useExperimentContext();
+  const router = useRouter();
 
   const handleSubmit = async () => {
     startSubmitting();
@@ -42,10 +44,10 @@ export default function ExperimentEmailForm({
     } catch (error) {
       console.error("Failed to save campaign:", error);
     } finally {
+      router.push(`/researcher/experiments/${experiment.id}/emails`);
       stopSubmitting();
     }
   };
-
   const groupChoices = experiment.groups.map((g) => ({
     value: g.id,
     label: g.name,
@@ -92,7 +94,7 @@ export default function ExperimentEmailForm({
                 label="Sender Email"
                 placeholder="e.g. john@example.com"
                 required
-                {...form.getInputProps("senderAddress")}
+                {...form.getInputProps("senderEmail")}
               />
             </Group>
             <MultiSelect

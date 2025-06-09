@@ -135,12 +135,18 @@ export const sendTrackingEvents = async (
     if (!session?.user?.experimentId) {
       throw new Error("Authentication failed: Missing experiment ID");
     }
+    console.log(userEvents);
 
     const response = await makeAuthenticatedExternalRequest(
       `/experiments/${session.user.experimentId}/emails/${emailId}/tracking`,
       {
         method: "POST",
-        body: JSON.stringify(userEvents),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          events: userEvents,
+        }),
       }
     );
 

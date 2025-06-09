@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Email, ZustandEmail } from "@/mail/store/types";
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
+import { makeAuthenticatedRequest } from "@/researcher/actions/actions";
 import { NextResponse } from "next/server";
 
 export const GET = auth(async function GET(req) {
@@ -8,10 +8,10 @@ export const GET = auth(async function GET(req) {
     const user = req.auth.user;
     const loggedIn = user.loggedIn;
     const loggedInDate = new Date(loggedIn);
-    const path = await getExternalApiUrl(
+
+    const response = await makeAuthenticatedRequest(
       `/experiments/${user.experimentId}/emails`
     );
-    const response = await fetch(path);
     const emails = (await response.json()) as Email[];
 
     const filteredEmails: ZustandEmail[] = emails
