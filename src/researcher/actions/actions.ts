@@ -2,6 +2,7 @@
 
 import { auth } from "@/auth";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
+import { revalidatePath } from "next/cache";
 import {
   ApiUser,
   EmailCreatePayload,
@@ -76,25 +77,25 @@ export async function createExperiment(
   accounts?: { username: string; password: string }[];
 }> {
   try {
-    const session = await auth();
-    const researcherId = session?.user?.id;
-    if (!researcherId) {
-      throw new Error("Not authenticated or missing id");
-    } else if (!experimentPayload.researchers.includes(researcherId)) {
-      experimentPayload.researchers.push(researcherId);
-    }
+    console.log(JSON.stringify(experimentPayload));
 
     const response = await makeAuthenticatedRequest(`/experiments`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(experimentPayload),
     });
 
     if (!response.ok) {
-      throw new Error("Failed to create experiment");
+      const errorText = await response.text();
+      throw new Error(
+        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`
+      );
     }
 
     const data = await response.json();
-
+    revalidatePath("/researcher/experiments");
     return { success: true, accounts: data.accounts };
   } catch (error) {
     console.error("Error creating experiment:", error);
@@ -110,6 +111,7 @@ export async function deleteExperiment(experimentId: string): Promise<boolean> {
         method: "DELETE",
       }
     );
+    revalidatePath("/researcher/experiments");
 
     return response.ok;
   } catch (error) {
@@ -132,6 +134,7 @@ export async function addResearcherToExperiment(
         }),
       }
     );
+    revalidatePath("/researcher/experiments/[experimentId]", "layout");
 
     return response.ok;
   } catch (error) {
@@ -154,6 +157,7 @@ export async function removeResearcherFromExperiment(
         }),
       }
     );
+    revalidatePath("/researcher/experiments/[experimentId]", "layout");
 
     return response.ok;
   } catch (error) {
@@ -173,6 +177,7 @@ export async function deleteEmail(
         method: "DELETE",
       }
     );
+    revalidatePath("/researcher/experiments/[experimentId]/statistics", "layout");
 
     return response.ok;
   } catch (error) {

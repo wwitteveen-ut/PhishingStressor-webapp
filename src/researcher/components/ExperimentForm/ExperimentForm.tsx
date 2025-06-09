@@ -27,8 +27,10 @@ export interface choice {
 
 export default function ExperimentForm({
   researcherChoices,
+  ownResearcherId,
 }: {
   researcherChoices: choice[];
+  ownResearcherId: string;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, { open: startLoading, close: stopLoading }] =
@@ -38,7 +40,7 @@ export default function ExperimentForm({
     initialValues: {
       name: "",
       duration: 0,
-      researchers: [""],
+      researcherIds: [""],
       groups: [{ name: "", capacity: 0 }],
     },
     validate: {
@@ -57,10 +59,13 @@ export default function ExperimentForm({
   const handleSubmit = async (values: ExperimentCreatePayload) => {
     startLoading();
     try {
+      if (!values.researcherIds.includes(ownResearcherId)) {
+        values.researcherIds.push(ownResearcherId);
+      }
       const result = await createExperiment(values);
       if (result.success && result.accounts) {
         const csv = convertToCSV(result.accounts);
-        triggerDownload(csv, `${form.getValues()["name"]}csv`);
+        triggerDownload(csv, `${form.getValues()["name"]}`);
       }
       form.reset();
       close();
@@ -171,12 +176,14 @@ export default function ExperimentForm({
 
               <MultiSelect
                 label="Researchers"
-                placeholder="Pick value"
+                placeholder="Pick researchers"
                 data={researcherChoices}
                 checkIconPosition="right"
                 searchable
                 nothingFoundMessage="Nothing found..."
-                onChange={(values) => form.setFieldValue("researchers", values)}
+                onChange={(values) =>
+                  form.setFieldValue("researcherIds", values)
+                }
                 error={form.errors.researchers && "Invalid name"}
               />
               <Box>

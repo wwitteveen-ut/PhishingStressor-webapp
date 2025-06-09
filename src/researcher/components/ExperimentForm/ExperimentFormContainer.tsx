@@ -1,8 +1,8 @@
 "use server";
-import { getResearchers } from "@/researcher/actions/actions";
-import ExperimentForm from "./ExperimentForm";
 import { auth } from "@/auth";
+import { getResearchers } from "@/researcher/actions/actions";
 import { redirect } from "next/navigation";
+import ExperimentForm from "./ExperimentForm";
 
 export default async function ExperimentFormContainer() {
   const session = await auth();
@@ -12,11 +12,20 @@ export default async function ExperimentFormContainer() {
 
   const researchers = await getResearchers();
   const researcherChoices = researchers
-    .filter((researcher) => researcher.id !== session.user.id)
+    .filter((researcher) => researcher.username !== session.user.username)
     .map((researcher) => ({
       label: researcher.username,
       value: researcher.id,
     }));
+  const ownResearcherId =
+    researchers.find(
+      (researcher) => researcher.username === session.user.username
+    )?.id ?? "";
 
-  return <ExperimentForm researcherChoices={researcherChoices} />;
+  return (
+    <ExperimentForm
+      ownResearcherId={ownResearcherId}
+      researcherChoices={researcherChoices}
+    />
+  );
 }

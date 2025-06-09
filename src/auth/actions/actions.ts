@@ -59,6 +59,7 @@ export async function authenticateResearcher(
     }
 
     const data = await res.json();
+    console.log(data);
     return { success: true, data };
   } catch (error: unknown) {
     console.error(

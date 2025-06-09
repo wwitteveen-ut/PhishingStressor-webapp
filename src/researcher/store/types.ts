@@ -23,7 +23,7 @@ export interface ResearcherEmail extends Email {
 export interface ExperimentCreatePayload {
   name: string;
   duration: number;
-  researchers: string[];
+  researcherIds: string[];
   groups: IGroupBase[];
 }
 

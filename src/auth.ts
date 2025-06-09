@@ -49,7 +49,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       authorize: async (credentials) => {
         if (!credentials.username || !credentials.password) {
-          console.log("Missing credentials");
+          console.warn("Missing credentials");
           return null;
         }
         const result = await authenticateParticipant(
@@ -57,10 +57,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           credentials.password as string
         );
 
-        console.log("auth result", result);
-
         if (!result.success) {
-          console.log("Authentication failed:", result.error);
+          console.error("Authentication failed:", result.error);
           throw new InvalidLoginError();
         }
 
@@ -92,15 +90,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           credentials.password as string
         );
 
-        console.log("auth result", result);
-
         if (!result.success) {
           console.log("Authentication failed:", result.error);
           throw new InvalidLoginError();
         }
 
         const token = result.data;
-
+        token.username = credentials.username;
+        console.log(token);
         return {
           ...token,
           token: undefined,
