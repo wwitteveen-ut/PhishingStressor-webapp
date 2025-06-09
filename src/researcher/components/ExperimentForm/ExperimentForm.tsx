@@ -40,7 +40,7 @@ export default function ExperimentForm({
     initialValues: {
       name: "",
       duration: 0,
-      researcherIds: [""],
+      researcherIds: [] as string[],
       groups: [{ name: "", capacity: 0 }],
     },
     validate: {
