@@ -63,7 +63,7 @@ export default function EmailReplySection({ email }: { email: ZustandEmail }) {
       {isReplying ? (
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <EmailComposer
-            replyTo={{ subject: "hello" }}
+            replyTo={email.title}
             form={form}
             onCancel={() => {
               setIsReplying(false);
