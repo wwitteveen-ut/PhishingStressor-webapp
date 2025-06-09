@@ -76,15 +76,17 @@ export const createParticipantSlice: StateCreator<
 
   addSimpleEvent: (type: SimpleEventType) =>
     set(
-      (state) => ({
-        userEvents: [
-          ...state.userEvents,
-          {
-            type,
-            timestamp: Date.now().toString(),
-          },
-        ],
-      }),
+      (state) => {
+        return {
+          userEvents: [
+            ...state.userEvents,
+            {
+              type,
+              timestamp: new Date().toISOString(),
+            },
+          ],
+        };
+      },
       undefined,
       "participant/addSimpleEvent"
     ),
@@ -95,7 +97,7 @@ export const createParticipantSlice: StateCreator<
           ...state.userEvents,
           {
             type,
-            timestamp: Date.now().toString(),
+            timestamp: new Date().toISOString(),
             extra,
           },
         ],
