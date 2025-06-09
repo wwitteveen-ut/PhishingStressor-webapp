@@ -265,6 +265,13 @@ export function EmailHeatmapOverlay({
           blur: 0.9,
         });
       }
+      const canvas = heatmapContainerRef.current!.querySelector("canvas");
+      if (canvas) {
+        canvas.width = width;
+        canvas.height = height;
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+      }
 
       const points = heatmapData.map((point) => ({
         x: Math.round(point.x * width),
@@ -299,7 +306,7 @@ export function EmailHeatmapOverlay({
   }, [heatmapData, emailId, participantId]);
 
   return (
-    <div style={{ position: "relative" }} ref={heatmapContainerRef}>
+    <div ref={heatmapContainerRef}>
       <ExperimentEmailPreview emailData={emailData} />
     </div>
   );
