@@ -6,6 +6,7 @@ import {
   EmailCreatePayload,
   Experiment,
   ExperimentCreatePayload,
+  ExperimentStats,
   ResearcherEmail,
 } from "../store/types";
 export async function getExperiment(experimentId: string): Promise<Experiment> {
@@ -33,7 +34,7 @@ export async function getResearchers(): Promise<ApiUser[]> {
 }
 
 export async function createExperiment(
-  experimentPayload: ExperimentCreatePayload,
+  experimentPayload: ExperimentCreatePayload
 ): Promise<boolean> {
   const path = await getExternalApiUrl(`/experiments`);
   const response = await fetch(path, {
@@ -55,10 +56,10 @@ export async function deleteExperiment(experimentId: string): Promise<boolean> {
 
 export async function addResearcherToExperiment(
   experimentId: string,
-  researcherId: string,
+  researcherId: string
 ): Promise<boolean> {
   const path = await getExternalApiUrl(
-    `/experiments/${experimentId}/researchers`,
+    `/experiments/${experimentId}/researchers`
   );
   const response = await fetch(path, {
     method: "POST",
@@ -72,10 +73,10 @@ export async function addResearcherToExperiment(
 
 export async function removeResearcherFromExperiment(
   experimentId: string,
-  researcherId: string,
+  researcherId: string
 ): Promise<boolean> {
   const path = await getExternalApiUrl(
-    `/experiments/${experimentId}/researchers`,
+    `/experiments/${experimentId}/researchers`
   );
   const response = await fetch(path, {
     method: "DELETE",
@@ -89,10 +90,10 @@ export async function removeResearcherFromExperiment(
 
 export async function deleteEmail(
   experimentId: string,
-  emailId: string,
+  emailId: string
 ): Promise<boolean> {
   const path = await getExternalApiUrl(
-    `/experiments/${experimentId}/emails/${emailId}`,
+    `/experiments/${experimentId}/emails/${emailId}`
   );
   const response = await fetch(path, {
     method: "DELETE",
@@ -102,7 +103,7 @@ export async function deleteEmail(
 }
 
 export async function getExperimentEmails(
-  experimentId: string,
+  experimentId: string
 ): Promise<ResearcherEmail[]> {
   const path = await getExternalApiUrl(`/experiments/${experimentId}/emails`);
   const response = await fetch(path);
@@ -111,9 +112,21 @@ export async function getExperimentEmails(
   return data;
 }
 
+export async function getExperimentStats(
+  experimentId: string
+): Promise<ExperimentStats> {
+  const path = await getExternalApiUrl(
+    `/experiments/${experimentId}/statistics`
+  );
+  const response = await fetch(path);
+
+  const data = await response.json();
+  return data;
+}
+
 export async function createEmail(
   experimentId: string,
-  emailPayload: EmailCreatePayload,
+  emailPayload: EmailCreatePayload
 ): Promise<boolean> {
   try {
     const path = await getExternalApiUrl(`/experiments/${experimentId}/emails`);
@@ -132,7 +145,7 @@ export async function createEmail(
     if (!response.ok) {
       const errorText = await response.text().catch(() => "Unknown error");
       throw new Error(
-        `Failed to create email: ${response.status} ${response.statusText} - ${errorText}`,
+        `Failed to create email: ${response.status} ${response.statusText} - ${errorText}`
       );
     }
 

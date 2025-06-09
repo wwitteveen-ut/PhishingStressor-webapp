@@ -1,4 +1,4 @@
-import { Email } from "@/mail/store/types";
+import { Email, UserEvent } from "@/mail/store/types";
 
 export interface Experiment {
   id: string;
@@ -24,10 +24,17 @@ export interface ExperimentCreatePayload {
   name: string;
   duration: number;
   researchers: string[];
-  groups: {
-    name: string;
-    capacity: number;
-  }[];
+  groups: IGroupBase[];
+}
+
+export interface IGroupBase {
+  name: string;
+  capacity: number;
+}
+
+export interface IGroup extends IGroupBase {
+  id: string;
+  experimentId: string;
 }
 
 export interface EmailCreate
@@ -46,4 +53,21 @@ export interface EmailCreatePayload {
 export interface ApiUser {
   id: string;
   username: string;
+}
+
+export type ExperimentStats = Map<string, ParticipantStats>;
+
+export type ReplyData = {
+  content: string;
+  createdAt: Date;
+};
+export type EmailStats = {
+  replies: ReplyData[];
+  events: UserEvent[];
+};
+
+export interface ParticipantStats {
+  groupId: string;
+  loggedIn: Date;
+  emails: Map<string, EmailStats>;
 }
