@@ -2,7 +2,11 @@
 
 import { UserEvent } from "@/mail/store/types";
 import { getEmail } from "@/researcher/actions/actions";
-import { EmailCreatePayload, EmailStats } from "@/researcher/store/types";
+import {
+  EmailCreatePayload,
+  EmailStats,
+  ResearcherEmail,
+} from "@/researcher/store/types";
 import {
   Badge,
   Card,
@@ -14,9 +18,9 @@ import {
   Timeline,
   Title,
 } from "@mantine/core";
-import { IconClick, IconClock, IconFile, IconMail } from "@tabler/icons-react";
+import { IconClock, IconFile, IconMail } from "@tabler/icons-react";
 import HeatMap, { DataPoint } from "heatmap-ts";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentContext";
@@ -29,13 +33,11 @@ export default function ParticipantDetail({
   const experiment = useExperimentContext();
   const experimentStats = useExperimentStatsContext();
   const participantData = experimentStats[participantId];
-  const [emailEvents, setEmailEvents] = useState<any[]>([]);
-  const [emails, setEmails] = useState<Record<string, any>>({});
+  const [emailEvents, setEmailEvents] = useState<
+    (UserEvent & { emailTitle: string; emailId: string })[]
+  >([]);
+  const [emails, setEmails] = useState<Record<string, ResearcherEmail>>({});
   const [isLoading, setIsLoading] = useState(true);
-
-  if (!participantData) {
-    return <Text>Participant not found</Text>;
-  }
 
   const groupName =
     experiment.groups.find((g) => g.id === participantData.groupId)?.name ||
@@ -66,7 +68,7 @@ export default function ParticipantDetail({
             acc[d.email.id] = d.email;
           }
           return acc;
-        }, {} as Record<string, any>);
+        }, {} as Record<string, ResearcherEmail>);
 
         setEmailEvents(events);
         setEmails(emailMap);
@@ -77,7 +79,9 @@ export default function ParticipantDetail({
 
     fetchEmailData();
   }, [experiment.id, participantData.emails]);
-
+  if (!participantData) {
+    return <Text>Participant not found</Text>;
+  }
   if (isLoading) {
     return (
       <Container size="lg" py="xl">
@@ -121,8 +125,6 @@ export default function ParticipantDetail({
                 bullet={
                   event.type === "TIME_OPENED" ? (
                     <IconMail size={16} />
-                  ) : event.type === "CLICK" ? (
-                    <IconClick size={16} />
                   ) : event.type === "ATTACHMENT_OPENED" ? (
                     <IconFile size={16} />
                   ) : (
@@ -226,7 +228,10 @@ export function EmailHeatmapOverlay({
     emailId
   ].events?.find((event) => event.type === "HEATMAP")?.extra;
 
-  const heatmapData: DataPoint[] = heatmapJSON ? JSON.parse(heatmapJSON) : [];
+  const heatmapData = useMemo(
+    () => (heatmapJSON ? JSON.parse(heatmapJSON) : []),
+    [heatmapJSON]
+  ) as DataPoint[];
 
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {

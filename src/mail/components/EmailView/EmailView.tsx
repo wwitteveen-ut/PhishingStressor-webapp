@@ -53,7 +53,7 @@ export default function EmailView() {
     }, 200);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [addHeatmapData, email, ref]);
 
   if (!email) {
     return (

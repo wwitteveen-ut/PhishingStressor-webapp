@@ -4,7 +4,6 @@ import { UserEvent, UserEventType } from "@/mail/store/types";
 import { EmailStats, IGroup, ParticipantStats } from "@/researcher/store/types";
 import { Button, Group, Paper, Table, Title } from "@mantine/core";
 import Link from "next/link";
-import { useState } from "react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentContext";
 
@@ -19,9 +18,9 @@ export default function ExperimentStatsOverview() {
   const experiment = useExperimentContext();
   const experimentStats = useExperimentStatsContext();
   console.log(experimentStats);
-  const [sortField, setSortField] =
-    useState<keyof ParticipantStats>("loggedIn");
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  // const [sortField, setSortField] =
+  //   useState<keyof ParticipantStats>("loggedIn");
+  // const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
   const stats: ExtendedParticipantStats[] = Object.entries(experimentStats).map(
     ([participantId, participantStats]) => {
@@ -50,14 +49,14 @@ export default function ExperimentStatsOverview() {
     }
   );
 
-  const handleSort = (field: keyof ParticipantStats) => {
-    if (field === sortField) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortDirection("asc");
-    }
-  };
+  // const handleSort = (field: keyof ParticipantStats) => {
+  //   if (field === sortField) {
+  //     setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+  //   } else {
+  //     setSortField(field);
+  //     setSortDirection("asc");
+  //   }
+  // };
 
   return (
     <Paper p="xl" shadow="md">
