@@ -37,12 +37,13 @@ export default function ExperimentForm({
   const form = useForm({
     initialValues: {
       name: "",
-      duration: 60,
+      duration: 0,
       researchers: [""],
       groups: [{ name: "", capacity: 0 }],
     },
     validate: {
       name: hasLength({ min: 2, max: 20 }, "Name must be 2-10 characters long"),
+      duration: isInRange({ min: 1 }, "Minimum duration is 1 minute"),
       groups: {
         name: hasLength(
           { min: 2, max: 20 },
@@ -115,17 +116,29 @@ export default function ExperimentForm({
           />
           <form onSubmit={form.onSubmit(handleSubmit)}>
             <Stack>
-              <TextInput
-                data-autofocus
-                required
-                label="Experiment name"
-                placeholder="Experiment 1"
-                value={form.values.name}
-                onChange={(event) =>
-                  form.setFieldValue("name", event.currentTarget.value)
-                }
-                error={form.errors.name && "Invalid name"}
-              />
+              <Group grow>
+                <TextInput
+                  data-autofocus
+                  required
+                  label="Experiment name"
+                  placeholder="Experiment 1"
+                  value={form.values.name}
+                  onChange={(event) =>
+                    form.setFieldValue("name", event.currentTarget.value)
+                  }
+                  error={form.errors.name && "Invalid name"}
+                />
+                <NumberInput
+                  label="Duration"
+                  placeholder="0"
+                  required
+                  min={0}
+                  withAsterisk
+                  style={{ maxWidth: 120 }}
+                  {...form.getInputProps(`duration`)}
+                />
+              </Group>
+
               <MultiSelect
                 label="Researchers"
                 placeholder="Pick value"

@@ -73,6 +73,14 @@ export async function createExperiment(
   experimentPayload: ExperimentCreatePayload
 ): Promise<boolean> {
   try {
+    const session = await auth();
+    const researcherId = session?.user?.id;
+    if (!researcherId) {
+      throw new Error("Not authenticated or missing id");
+    } else if (!experimentPayload.researchers.includes(researcherId)) {
+      experimentPayload.researchers.push(researcherId);
+    }
+
     const response = await makeAuthenticatedRequest(`/experiments`, {
       method: "POST",
       body: JSON.stringify(experimentPayload),
