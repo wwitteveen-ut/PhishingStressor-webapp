@@ -16,32 +16,21 @@ export default function EmailReplySection({ email }: { email: ZustandEmail }) {
   const form = useForm({
     initialValues: {
       content: "",
-      attachments: [] as File[],
+    },
+    validate: {
+      content: (value) =>
+        value.trim().length === 0 ? "Content cannot be empty" : null,
     },
   });
 
-  const handleSubmit = (values: { content: string; attachments: File[] }) => {
-    const formData = new FormData();
-    formData.append("content", values.content);
-    // values.attachments.forEach((file, index) => {
-    //   formData.append(`attachment${index}`, file);
-    // });
-    sendReply(email.id, formData);
-    setHasReplied(email.id);
-    setIsReplying(false);
-    form.reset();
+  const handleSubmit = async (values: { content: string }) => {
+    const response = await sendReply(email.id, values);
+    if (response) {
+      setHasReplied(email.id);
+      setIsReplying(false);
+      form.reset();
+    }
   };
-
-  if (email.hasReplied) {
-    return (
-      <Container fluid p={0} mt="md">
-        <Group c="green" gap={5} px={"xs"}>
-          <Check size={20} strokeWidth={2.5} />
-          <Text fw={600}>Already replied</Text>
-        </Group>
-      </Container>
-    );
-  }
 
   if (email.isTrashed) {
     return (
@@ -60,6 +49,13 @@ export default function EmailReplySection({ email }: { email: ZustandEmail }) {
 
   return (
     <Container fluid p={0} mt="md">
+      {email.hasReplied && (
+        <Group c="green" gap={5} px={"xs"} mb={"xs"}>
+          <Check size={20} strokeWidth={2.5} />
+          <Text fw={600}>Already replied</Text>
+        </Group>
+      )}
+
       {isReplying ? (
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <EmailComposer

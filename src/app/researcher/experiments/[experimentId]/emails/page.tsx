@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { getExperimentEmails } from "@/researcher/actions/actions";
 import ExperimentEmailList from "@/researcher/components/ExperimentEmailList";
 import { Button, Group, Paper, Title } from "@mantine/core";
+import { MailPlus } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -26,6 +27,7 @@ export default async function ExperimentsPage({
         <Button
           component={Link}
           href={`/researcher/experiments/${experimentId}/emails/compose`}
+          leftSection={<MailPlus size={18}/>}
         >
           Create new email
         </Button>

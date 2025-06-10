@@ -5,7 +5,7 @@ import { UseFormReturnType } from "@mantine/form";
 
 interface EmailComposerProps {
   replyTo: string;
-  form: UseFormReturnType<{ content: string; attachments: File[] }>;
+  form: UseFormReturnType<{ content: string }>;
   onCancel?: () => void;
 }
 

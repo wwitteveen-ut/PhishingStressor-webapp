@@ -19,7 +19,7 @@ export type EmailFormValues = {
   scheduledFor: number;
 };
 
-export default async function ExperimentEmailFormPage() {
+export default function ExperimentEmailFormPage() {
   const [value, setValue] = useState("compose");
   const form = useForm({
     initialValues: {

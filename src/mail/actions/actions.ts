@@ -95,7 +95,10 @@ export const downloadAttachment = async (
   };
 };
 
-export const sendReply = async (emailId: string, formData: FormData) => {
+export const sendReply = async (
+  emailId: string,
+  replyData: { content: string }
+) => {
   try {
     const session = await auth();
     if (!session?.user?.experimentId) {
@@ -106,23 +109,21 @@ export const sendReply = async (emailId: string, formData: FormData) => {
       `/experiments/${session.user.experimentId}/emails/${emailId}/replies`,
       {
         method: "POST",
-        body: formData,
+        body: JSON.stringify(replyData),
       }
     );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`
-      );
+      const error = await response.json();
+      return { success: false, error: error };
     }
 
     const result = await response.json();
     console.log("Reply sent successfully:", result);
-    return result;
+    return { success: true, result };
   } catch (error) {
     console.error("Error sending reply:", error);
-    throw error;
+    return { success: false };
   }
 };
 
