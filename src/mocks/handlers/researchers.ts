@@ -22,16 +22,18 @@ export const researcherHandlers = [
 
       const { id } = (await request.json()) as { id: string };
       console.log(
-        `Received request to add researcher with id: ${id} to the experiment`,
+        `Received request to add researcher with id: ${id} to the experiment`
       );
       return new HttpResponse(null, { status: 200 });
-    },
+    }
   ),
 
   http.delete(
-    await getExternalApiUrl("/experiments/:experimentId/researchers"),
+    await getExternalApiUrl(
+      "/experiments/:experimentId/researchers/:researcherId"
+    ),
     async ({ params, request }) => {
-      const { experimentId } = params;
+      const { experimentId, researcherId } = params;
       const experiment = mockExperiments.find((e) => e.id === experimentId);
 
       if (!experiment) {
@@ -41,12 +43,10 @@ export const researcherHandlers = [
         });
       }
 
-      const { id } = (await request.json()) as { id: string };
-
       console.log(
-        `Received request to delete researcher with id: ${id} from the experiment`,
+        `Received request to delete researcher with id: ${researcherId} from the experiment`
       );
       return new HttpResponse(null, { status: 200 });
-    },
+    }
   ),
 ];

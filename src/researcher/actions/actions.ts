@@ -12,7 +12,7 @@ import {
   ResearcherEmail,
 } from "../store/types";
 
-async function makeAuthenticatedRequest(
+export async function makeAuthenticatedRequest(
   endpoint: string,
   options: RequestInit = {}
 ) {
@@ -77,8 +77,14 @@ export async function createExperiment(
   accounts?: { username: string; password: string }[];
 }> {
   try {
-    console.log(JSON.stringify(experimentPayload));
-
+    const session = await auth();
+    const researcherId = session?.user?.id;
+    if (!researcherId) {
+      throw new Error("Not authenticated or missing researcherId");
+    }
+    if (!experimentPayload.researcherIds.includes(researcherId)) {
+      experimentPayload.researcherIds.push(researcherId);
+    }
     const response = await makeAuthenticatedRequest(`/experiments`, {
       method: "POST",
       headers: {
@@ -149,12 +155,9 @@ export async function removeResearcherFromExperiment(
 ): Promise<boolean> {
   try {
     const response = await makeAuthenticatedRequest(
-      `/experiments/${experimentId}/researchers`,
+      `/experiments/${experimentId}/researchers/${researcherId}`,
       {
         method: "DELETE",
-        body: JSON.stringify({
-          id: researcherId,
-        }),
       }
     );
     revalidatePath("/researcher/experiments/[experimentId]", "layout");
@@ -177,8 +180,7 @@ export async function deleteEmail(
         method: "DELETE",
       }
     );
-    revalidatePath("/researcher/experiments/[experimentId]/statistics", "layout");
-
+    revalidatePath("/researcher/experiments/[experimentId]", "layout");
     return response.ok;
   } catch (error) {
     console.error("Error deleting email:", error);
@@ -257,6 +259,7 @@ export async function createEmail(
         `Failed to create email: ${response.status} ${response.statusText} - ${errorText}`
       );
     }
+    revalidatePath("/researcher/experiments/[experimentId]", "layout");
 
     return true;
   } catch (error) {
