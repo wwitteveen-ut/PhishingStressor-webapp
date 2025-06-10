@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { Email, ZustandEmail } from "@/mail/store/types";
-import { makeAuthenticatedRequest } from "@/researcher/actions/actions";
+import { makeAuthenticatedRequest } from "@/shared/utils/makeAuthenticatedRequest";
 import { NextResponse } from "next/server";
 
 export const GET = auth(async function GET(req) {

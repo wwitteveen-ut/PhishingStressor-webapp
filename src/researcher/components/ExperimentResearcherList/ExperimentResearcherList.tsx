@@ -6,6 +6,7 @@ import {
   Button,
   Group,
   Paper,
+  Skeleton,
   Stack,
   Text,
   ThemeIcon,
@@ -25,7 +26,7 @@ interface ResearcherListProps {
 export default function ExperimentResearcherList({
   researcherChoices = [],
 }: ResearcherListProps) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const experiment = useExperimentContext();
 
   const handleDelete = async (researcherId: string) => {
@@ -62,6 +63,36 @@ export default function ExperimentResearcherList({
       </Text>
     </Group>
   );
+
+  if (status === "loading") {
+    return (
+      <Stack gap="sm">
+        {header}
+        <Stack gap="xs">
+          {Array.from({ length: experiment.researchers?.length || 0 }).map(
+            (_, i) => (
+              <Paper
+                key={i}
+                bg={"gray.0"}
+                p="xs"
+                radius={"sm"}
+                shadow="0"
+                pl={"md"}
+              >
+                <Group justify="space-between">
+                  <Stack gap={1}>
+                    <Skeleton width={250} height={20} animate />
+
+                    <Skeleton width={180} height={24} animate />
+                  </Stack>
+                </Group>
+              </Paper>
+            )
+          )}
+        </Stack>
+      </Stack>
+    );
+  }
 
   if (!experiment.researchers?.length) {
     return (

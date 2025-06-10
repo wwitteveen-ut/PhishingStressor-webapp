@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@/auth";
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
+import { makeAuthenticatedRequest } from "@/shared/utils/makeAuthenticatedRequest";
 import { revalidatePath } from "next/cache";
 import {
   ApiUser,

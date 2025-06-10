@@ -1,12 +1,12 @@
 "use client";
 
-import { modals } from "@mantine/modals";
-import { Group, ActionIcon, Select } from "@mantine/core";
+import { addResearcherToExperiment } from "@/researcher/actions/actions";
+import { ActionIcon, Group, Select } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
-import { addResearcherToExperiment } from "@/researcher/actions/actions";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import { modals } from "@mantine/modals";
 import { IconUserPlus } from "@tabler/icons-react";
+import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import type { choice } from "../ExperimentForm/ExperimentForm";
 
 export default function AddResearcherForm({
@@ -19,19 +19,19 @@ export default function AddResearcherForm({
   researcherChoices = researcherChoices.filter(
     (choice) =>
       !experiment.researchers.some(
-        (researcher) => researcher.id === choice.value,
-      ),
+        (researcher) => researcher.id === choice.value
+      )
   );
 
   const [loading, { open: startLoading, close: stopLoading }] = useDisclosure();
 
   const form = useForm({
     initialValues: {
-      researcherId: "",
+      researcherId: null as string | null,
     },
     validate: {
       researcherId: (value) => {
-        if (!value.trim()) return "Please select a researcher";
+        if (!value || !value.trim()) return "Please select a researcher";
         if (!researcherChoices.some((choice) => choice.value === value)) {
           return "Please select a valid researcher";
         }
@@ -40,10 +40,11 @@ export default function AddResearcherForm({
     },
   });
 
-  const handleSubmit = async (values: { researcherId: string }) => {
+  const handleSubmit = async (values: { researcherId: string | null }) => {
     startLoading();
 
     try {
+      if (!values.researcherId) throw new Error("Researcher ID is required");
       await addResearcherToExperiment(experiment.id, values.researcherId);
       modals.closeAll();
       return true;
@@ -51,6 +52,7 @@ export default function AddResearcherForm({
       console.error("Failed to add researcher:", error);
       return false;
     } finally {
+      form.reset();
       stopLoading();
     }
   };
