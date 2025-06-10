@@ -1,16 +1,13 @@
 "use server";
 
-import { auth } from "@/auth";
+import { Role } from "@/auth";
 import { getResearchers } from "@/researcher/actions/actions";
 import ExperimentOverview from "@/researcher/components/ExperimentOverview";
+import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 import { Title } from "@mantine/core";
-import { redirect } from "next/navigation";
 
 export default async function ExperimentOverviewPage() {
-  const session = await auth();
-  if (!session) {
-    redirect("/login/researcher");
-  }
+  const session = await validateUserRoleAndGetSession(Role.RESEARCHER);
 
   const researchers = await getResearchers();
   const researcherChoices = researchers

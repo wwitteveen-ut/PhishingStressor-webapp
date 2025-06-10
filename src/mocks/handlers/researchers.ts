@@ -1,7 +1,7 @@
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 import { http, HttpResponse } from "msw";
 import { researchers } from "../data/accounts";
 import { mockExperiments } from "../data/experiments";
+import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
 export const researcherHandlers = [
   http.get(await getExternalApiUrl("/researchers"), () => {

@@ -2,6 +2,7 @@
 
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
 
+
 export async function authenticateParticipant(
   username: string,
   password: string

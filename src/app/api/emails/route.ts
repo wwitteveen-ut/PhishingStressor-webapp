@@ -1,6 +1,6 @@
-import { auth } from "@/auth";
+import { auth, Role } from "@/auth";
 import { Email, ZustandEmail } from "@/mail/store/types";
-import { makeAuthenticatedRequest } from "@/shared/utils/makeAuthenticatedRequest";
+import { makeAuthenticatedRequest } from "@/shared/utils/authHelper";
 import { NextResponse } from "next/server";
 
 export const GET = auth(async function GET(req) {
@@ -10,7 +10,8 @@ export const GET = auth(async function GET(req) {
     const loggedInDate = new Date(loggedIn);
 
     const response = await makeAuthenticatedRequest(
-      `/experiments/${user.experimentId}/emails`
+      `/experiments/${user.experimentId}/emails`,
+      Role.PARTICIPANT
     );
     const emails = (await response.json()) as Email[];
 

@@ -1,13 +1,10 @@
-import { auth } from "@/auth";
+import { Role } from "@/auth";
 import ExperimentEmailFormPage from "@/researcher/components/ExperimentEmailFormPage";
+import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 import { Container, Paper } from "@mantine/core";
-import { redirect } from "next/navigation";
 
 export default async function ExperimentsPage({}) {
-  const session = await auth();
-  if (!session) {
-    redirect("/login/researcher");
-  }
+  await validateUserRoleAndGetSession(Role.RESEARCHER);
 
   return (
     <Container ml={0}>

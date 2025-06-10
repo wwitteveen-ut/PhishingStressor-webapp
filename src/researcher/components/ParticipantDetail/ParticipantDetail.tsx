@@ -69,7 +69,6 @@ export default function ParticipantDetail({
           }
           return acc;
         }, {} as Record<string, ResearcherEmail>);
-
         setEmailEvents(events);
         setEmails(emailMap);
       } finally {
@@ -151,6 +150,7 @@ export default function ParticipantDetail({
           {Object.entries(participantData.emails).map(([emailId, data]) => {
             const emailStats = data as EmailStats;
             const email = emails[emailId];
+            console.log("emails", emailId, emails);
             if (!email) return null;
             return (
               <Card
@@ -190,7 +190,7 @@ export default function ParticipantDetail({
                     metadata: {
                       title: email.title,
                       senderName: email.senderName,
-                      senderAddress: email.senderAddress,
+                      senderEmail: email.senderAddress,
                       content: email.content,
                       scheduledFor: email.scheduledFor,
                       groups: [],
@@ -224,23 +224,34 @@ export function EmailHeatmapOverlay({
   const experimentStats = useExperimentStatsContext();
   const heatmapContainerRef = useRef<HTMLDivElement>(null);
   const heatmapInstanceRef = useRef<HeatMap | null>(null);
-  const heatmapJSON = experimentStats[participantId].emails[
-    emailId
-  ].events?.find((event) => event.type === "HEATMAP")?.extra;
+  const heatmapData = useMemo(() => {
+    const heatmapEvents =
+      experimentStats[participantId].emails[emailId].events?.filter(
+        (event) => event.type === "HEATMAP"
+      ) || [];
 
-  const heatmapData = useMemo(
-    () => (heatmapJSON ? JSON.parse(heatmapJSON) : []),
-    [heatmapJSON]
-  ) as DataPoint[];
+    const allDataPoints = heatmapEvents.reduce<DataPoint[]>((res, event) => {
+      try {
+        if (event?.extra && typeof event.extra === "string") {
+          const parsed = JSON.parse(event.extra);
+          if (Array.isArray(parsed)) {
+            return res.concat(parsed);
+          }
+        }
+      } catch (error) {
+        console.warn(
+          `Failed to parse extra data for event: ${JSON.stringify(event)}`,
+          error
+        );
+      }
+      return res;
+    }, []);
+
+    return allDataPoints;
+  }, [experimentStats, participantId, emailId]);
 
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {
-      console.log("Heatmap: No container or data", {
-        heatmapContainerRef,
-        heatmapData,
-        emailId,
-        participantId,
-      });
       return;
     }
 
@@ -250,10 +261,6 @@ export function EmailHeatmapOverlay({
         heatmapContainerRef.current.getBoundingClientRect();
 
       if (width === 0 || height === 0) {
-        console.warn("Heatmap: Container has zero dimensions", {
-          width,
-          height,
-        });
         return;
       }
 
@@ -263,7 +270,7 @@ export function EmailHeatmapOverlay({
           maxOpacity: 0.6,
           width: width,
           height: height,
-          radius: 50,
+          radius: 30,
           blur: 0.9,
         });
       }
@@ -280,8 +287,6 @@ export function EmailHeatmapOverlay({
         min: 1,
         data: points,
       });
-
-      console.log("Heatmap: Initialized/Updated with points", points);
     };
 
     updateHeatmapSize();

@@ -1,21 +1,18 @@
-import { auth } from "@/auth";
+import { Role } from "@/auth";
 import { getExperimentEmails } from "@/researcher/actions/actions";
 import ExperimentEmailList from "@/researcher/components/ExperimentEmailList";
+import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 import { Button, Group, Paper, Title } from "@mantine/core";
 import { MailPlus } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default async function ExperimentsPage({
   params,
 }: {
   params: Promise<{ experimentId: string }>;
 }) {
+  await validateUserRoleAndGetSession(Role.RESEARCHER);
   const { experimentId } = await params;
-  const session = await auth();
-  if (!session) {
-    redirect("/login/researcher");
-  }
 
   const emails = await getExperimentEmails(experimentId);
   return (
@@ -27,7 +24,7 @@ export default async function ExperimentsPage({
         <Button
           component={Link}
           href={`/researcher/experiments/${experimentId}/emails/compose`}
-          leftSection={<MailPlus size={18}/>}
+          leftSection={<MailPlus size={18} />}
         >
           Create new email
         </Button>

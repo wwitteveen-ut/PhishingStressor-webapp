@@ -1,34 +1,10 @@
 "use server";
 
-import { auth } from "@/auth";
+import { auth, Role } from "@/auth";
 import { getApiUrl } from "@/shared/utils/apiHelper";
-import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
+import { makeAuthenticatedRequest } from "@/shared/utils/authHelper";
 import { cookies } from "next/headers";
 import { EmailAttachmentData, UserEvent, ZustandEmail } from "../store/types";
-
-async function makeAuthenticatedExternalRequest(
-  endpoint: string,
-  options: RequestInit = {}
-) {
-  const session = await auth();
-
-  if (!session?.user?.apiToken) {
-    throw new Error("Not authenticated or missing API token");
-  }
-
-  const url = await getExternalApiUrl(endpoint);
-
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${session.user.apiToken}`,
-      ...(options.body instanceof FormData
-        ? {}
-        : { "Content-Type": "application/json" }),
-    },
-  });
-}
 
 async function makeAuthenticatedInternalRequest(
   endpoint: string,
@@ -76,8 +52,9 @@ export const downloadAttachment = async (
     throw new Error("Authentication failed: Missing experiment ID");
   }
 
-  const response = await makeAuthenticatedExternalRequest(
-    `/experiments/${session.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`
+  const response = await makeAuthenticatedRequest(
+    `/experiments/${session.user.experimentId}/emails/${emailId}/attachments/${attachmentData.id}`,
+    Role.PARTICIPANT
   );
 
   if (!response.ok) {
@@ -105,8 +82,9 @@ export const sendReply = async (
       throw new Error("Authentication failed: Missing experiment ID");
     }
 
-    const response = await makeAuthenticatedExternalRequest(
+    const response = await makeAuthenticatedRequest(
       `/experiments/${session.user.experimentId}/emails/${emailId}/replies`,
+      Role.PARTICIPANT,
       {
         method: "POST",
         body: JSON.stringify(replyData),
@@ -138,8 +116,9 @@ export const sendTrackingEvents = async (
     }
     console.log(userEvents);
 
-    const response = await makeAuthenticatedExternalRequest(
+    const response = await makeAuthenticatedRequest(
       `/experiments/${session.user.experimentId}/emails/${emailId}/tracking`,
+      Role.PARTICIPANT,
       {
         method: "POST",
         headers: {
@@ -158,8 +137,6 @@ export const sendTrackingEvents = async (
       );
     }
 
-    const result = await response.json();
-    console.log("Tracking info sent successfully:", result);
     return true;
   } catch (error) {
     console.error("Error sending tracking events:", error);

@@ -46,11 +46,11 @@ export default function EmailView() {
           addHeatmapData({
             x: x / width,
             y: y / height,
-            value: 100,
+            value: 10,
           });
         }
       }
-    }, 200);
+    }, 100);
 
     return () => clearInterval(interval);
   }, [addHeatmapData, email, ref]);

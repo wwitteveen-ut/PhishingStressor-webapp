@@ -1,7 +1,7 @@
 "use server";
 
-import { auth } from "@/auth";
-import { makeAuthenticatedRequest } from "@/shared/utils/makeAuthenticatedRequest";
+import { auth, Role } from "@/auth";
+import { makeAuthenticatedRequest } from "@/shared/utils/authHelper";
 import { revalidatePath } from "next/cache";
 import {
   ApiUser,
@@ -12,32 +12,10 @@ import {
   ResearcherEmail,
 } from "../store/types";
 
-export async function makeAuthenticatedRequest(
-  endpoint: string,
-  options: RequestInit = {}
-) {
-  const session = await auth();
-  if (!session?.user?.apiToken) {
-    throw new Error("Not authenticated or missing API token");
-  }
-
-  const url = await getExternalApiUrl(endpoint);
-
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      Authorization: `Bearer ${session.user.apiToken}`,
-      ...(options.body instanceof FormData
-        ? {}
-        : { "Content-Type": "application/json" }),
-    },
-  });
-}
-
 export async function getExperiment(experimentId: string): Promise<Experiment> {
   const response = await makeAuthenticatedRequest(
-    `/experiments/${experimentId}`
+    `/experiments/${experimentId}`,
+    Role.RESEARCHER
   );
 
   if (!response.ok) {
@@ -49,7 +27,10 @@ export async function getExperiment(experimentId: string): Promise<Experiment> {
 }
 
 export async function getExperiments(): Promise<Experiment[]> {
-  const response = await makeAuthenticatedRequest(`/experiments`);
+  const response = await makeAuthenticatedRequest(
+    `/experiments`,
+    Role.RESEARCHER
+  );
 
   if (!response.ok) {
     throw new Error(`Failed to fetch experiments: ${response.status}`);
@@ -60,7 +41,10 @@ export async function getExperiments(): Promise<Experiment[]> {
 }
 
 export async function getResearchers(): Promise<ApiUser[]> {
-  const response = await makeAuthenticatedRequest(`/researchers`);
+  const response = await makeAuthenticatedRequest(
+    `/researchers`,
+    Role.RESEARCHER
+  );
 
   if (!response.ok) {
     throw new Error(`Failed to fetch researchers: ${response.status}`);
@@ -85,13 +69,17 @@ export async function createExperiment(
     if (!experimentPayload.researcherIds.includes(researcherId)) {
       experimentPayload.researcherIds.push(researcherId);
     }
-    const response = await makeAuthenticatedRequest(`/experiments`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(experimentPayload),
-    });
+    const response = await makeAuthenticatedRequest(
+      `/experiments`,
+      Role.RESEARCHER,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(experimentPayload),
+      }
+    );
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -113,6 +101,7 @@ export async function deleteExperiment(experimentId: string): Promise<boolean> {
   try {
     const response = await makeAuthenticatedRequest(
       `/experiments/${experimentId}`,
+      Role.RESEARCHER,
       {
         method: "DELETE",
       }
@@ -133,6 +122,7 @@ export async function addResearcherToExperiment(
   try {
     const response = await makeAuthenticatedRequest(
       `/experiments/${experimentId}/researchers`,
+      Role.RESEARCHER,
       {
         method: "POST",
         body: JSON.stringify({
@@ -156,6 +146,7 @@ export async function removeResearcherFromExperiment(
   try {
     const response = await makeAuthenticatedRequest(
       `/experiments/${experimentId}/researchers/${researcherId}`,
+      Role.RESEARCHER,
       {
         method: "DELETE",
       }
@@ -176,6 +167,7 @@ export async function deleteEmail(
   try {
     const response = await makeAuthenticatedRequest(
       `/experiments/${experimentId}/emails/${emailId}`,
+      Role.RESEARCHER,
       {
         method: "DELETE",
       }
@@ -192,7 +184,8 @@ export async function getExperimentEmails(
   experimentId: string
 ): Promise<ResearcherEmail[]> {
   const response = await makeAuthenticatedRequest(
-    `/experiments/${experimentId}/emails`
+    `/experiments/${experimentId}/emails`,
+    Role.RESEARCHER
   );
 
   if (!response.ok) {
@@ -207,14 +200,15 @@ export async function getExperimentStats(
   experimentId: string
 ): Promise<ExperimentStats> {
   const response = await makeAuthenticatedRequest(
-    `/experiments/${experimentId}/statistics`
+    `/experiments/${experimentId}/statistics`,
+    Role.RESEARCHER
   );
 
   if (!response.ok) {
     throw new Error(`Failed to fetch experiment stats: ${response.status}`);
   }
-
   const data = await response.json();
+
   return data;
 }
 
@@ -223,7 +217,8 @@ export const getEmail = async (
   emailId: string
 ): Promise<ResearcherEmail> => {
   const response = await makeAuthenticatedRequest(
-    `/experiments/${experimentId}/emails/${emailId}`
+    `/experiments/${experimentId}/emails/${emailId}`,
+    Role.RESEARCHER
   );
 
   if (!response.ok) {
@@ -231,6 +226,7 @@ export const getEmail = async (
   }
 
   const data = await response.json();
+
   return data;
 };
 
@@ -247,6 +243,7 @@ export async function createEmail(
 
     const response = await makeAuthenticatedRequest(
       `/experiments/${experimentId}/emails`,
+      Role.RESEARCHER,
       {
         method: "POST",
         body: formData,

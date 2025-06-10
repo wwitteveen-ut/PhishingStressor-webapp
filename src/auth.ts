@@ -1,22 +1,23 @@
-import NextAuth, { CredentialsSignin, type DefaultSession } from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import {
   authenticateParticipant,
   authenticateResearcher,
 } from "./auth/actions/actions";
 
+export enum Role {
+  PARTICIPANT = "Participant",
+  RESEARCHER = "Researcher",
+}
+
 declare module "next-auth" {
   interface Session {
-    user: {
-      apiToken: string;
-      username: string;
-      experimentId: string;
-      loggedIn: string;
-    } & DefaultSession["user"];
+    user: User;
   }
 
   interface User {
     apiToken: string;
+    role: Role;
     username: string;
     experimentId: string;
     loggedIn: string;
@@ -27,6 +28,7 @@ declare module "@auth/core/jwt" {
   interface JWT {
     apiToken: string;
     username: string;
+    role: Role;
     experimentId: string;
     id?: string;
     loggedIn: string;
@@ -64,6 +66,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const token = result.data;
         token.username = credentials.username;
+        token.role = Role.PARTICIPANT;
 
         return {
           ...token,
@@ -97,7 +100,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         const token = result.data;
         token.username = credentials.username;
-        console.log(token);
+        token.role = Role.RESEARCHER;
         return {
           ...token,
           token: undefined,
@@ -110,6 +113,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     jwt({ token, user }) {
       if (user) {
         token.apiToken = user.apiToken;
+        token.role = user.role;
         token.loggedIn = user.loggedIn;
         token.id = user.id;
         token.experimentId = user.experimentId;
@@ -119,6 +123,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     session({ session, token }) {
       session.user.apiToken = token.apiToken;
+      session.user.role = token.role;
       session.user.experimentId = token.experimentId;
       session.user.loggedIn = token.loggedIn;
       session.user.username = token.username;

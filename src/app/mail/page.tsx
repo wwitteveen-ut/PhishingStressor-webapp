@@ -1,13 +1,9 @@
 "use server";
-import { auth } from "@/auth";
+import { Role } from "@/auth";
 import { EmailClient } from "@/mail/components/EmailClient";
-import { redirect } from "next/navigation";
+import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 
 export default async function Page() {
-  const session = await auth();
-  if (!session) {
-    redirect("/login");
-  }
-
+  await validateUserRoleAndGetSession(Role.PARTICIPANT);
   return <EmailClient />;
 }
