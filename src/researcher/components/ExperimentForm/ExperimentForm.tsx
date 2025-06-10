@@ -31,7 +31,6 @@ export default function ExperimentForm({
 }: {
   researcherChoices: choice[];
 }) {
-  const { data: session } = useSession();
   const [opened, { open, close }] = useDisclosure(false);
   const [isLoading, { open: startLoading, close: stopLoading }] =
     useDisclosure(false);

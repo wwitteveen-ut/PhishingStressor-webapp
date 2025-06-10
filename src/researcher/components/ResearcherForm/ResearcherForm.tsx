@@ -6,6 +6,7 @@ import {
   Button,
   Container,
   Group,
+  LoadingOverlay,
   Paper,
   PasswordInput,
   Popover,
@@ -76,6 +77,8 @@ export default function ResearcherForm() {
   const [error, setError] = useState<string | null>(null);
   const [popoverOpened, setPopoverOpened] = useState(false);
   const [visible, { toggle }] = useDisclosure(false);
+  const [isLoading, { open: startLoading, close: stopLoading }] =
+    useDisclosure(false);
 
   const form = useForm({
     initialValues: {
@@ -115,130 +118,145 @@ export default function ResearcherForm() {
     username: string;
     password: string;
   }) => {
-    const response = await registerResearcher({
-      username,
-      password,
-    });
-    if (response.ok) {
-      const response = signIn("researcher", {
+    startLoading();
+    try {
+      const response = await registerResearcher({
         username,
         password,
-        redirect: false,
       });
-      const authResponse = await response;
-      if (authResponse.error && authResponse.code) {
-        setError(authResponse.code);
-      } else if (authResponse.ok) {
-        router.push("/researcher/experiments");
+      if (!response.success && response.error) {
+        setError(response.error.message);
+        return;
       }
+      if (response.success) {
+        const authResponse = await signIn("researcher", {
+          username,
+          password,
+          redirect: false,
+        });
+        if (authResponse?.error && authResponse?.code) {
+          setError(authResponse.code);
+        } else if (authResponse?.ok) {
+          router.push("/researcher/experiments");
+        }
+      }
+    } finally {
+      stopLoading();
     }
   };
 
   return (
     <Container size="md" className="w-100">
-      <Stack gap={"xs"}>
-        <div className="flex items-center justify-center">
-          <ThemeIcon variant="transparent" size={69}>
-            <Beaker size={69} />
-          </ThemeIcon>
-        </div>
+      <Box pos="relative">
+        <LoadingOverlay
+          visible={isLoading}
+          zIndex={1000}
+          overlayProps={{ radius: "sm", blur: 2 }}
+        />
+        <Stack gap={"xs"}>
+          <div className="flex items-center justify-center">
+            <ThemeIcon variant="transparent" size={69}>
+              <Beaker size={69} />
+            </ThemeIcon>
+          </div>
 
-        <Title
-          order={1}
-          className="text-center text-3xl font-bold text-gray-900"
-        >
-          PhishingStressor
-        </Title>
-        <Title
-          order={4}
-          className="text-center text-2xl font-medium text-gray-400"
-        >
-          Register as researcher
-        </Title>
-        <form onSubmit={form.onSubmit(handleSubmit)}>
-          <Stack gap={"md"}>
-            <TextInput
-              leftSection={<User size={16} />}
-              placeholder="Username"
-              required
-              className="w-full"
-              key={form.key("username")}
-              {...form.getInputProps("username")}
-            />
-            <Popover
-              opened={popoverOpened}
-              position="bottom"
-              width="target"
-              transitionProps={{ transition: "pop" }}
-            >
-              <Popover.Target>
-                <div
-                  onFocusCapture={() => setPopoverOpened(true)}
-                  onBlurCapture={() => setPopoverOpened(false)}
-                >
-                  <PasswordInput
-                    required
-                    leftSection={<RectangleEllipsis size={16} />}
-                    placeholder="Password"
-                    key={form.key("password")}
-                    visible={visible}
-                    onVisibilityChange={toggle}
-                    {...form.getInputProps("password")}
-                  />
-                </div>
-              </Popover.Target>
-              <Popover.Dropdown>
-                <Progress color={color} value={strength} size={5} mb="xs" />
-                <PasswordRequirement
-                  label="Includes at least 6 characters"
-                  meets={form.getValues().password.length > 5}
-                />
-                {checks}
-              </Popover.Dropdown>
-            </Popover>
-            <PasswordInput
-              leftSection={<RectangleEllipsis size={16} />}
-              placeholder="Confirm password"
-              required
-              className="w-full"
-              visible={visible}
-              onVisibilityChange={toggle}
-              error={form.errors.confirmPassword && "hello"}
-              key={form.key("confirmPassword")}
-              {...form.getInputProps("confirmPassword")}
-            />
-            {error && (
-              <Paper bg={"red.0"} radius={"xs"}>
-                <Group gap={0} flex={1} justify="center">
-                  <ThemeIcon c={"red"} variant="transparent">
-                    <AlertCircle size={16} />
-                  </ThemeIcon>
-                  <Text c="red.6" size="sm">
-                    {error}
-                  </Text>
-                </Group>
-              </Paper>
-            )}
-            <Button
-              type="submit"
-              fullWidth
-              rightSection={<ArrowRight size={16} />}
-            >
-              Register
-            </Button>
-          </Stack>
-        </form>
-        <div className="text-center">
-          <Button
-            variant="subtle"
-            rightSection={<ArrowRight size={18} />}
-            component={Link}
-            href="/login/researcher"
+          <Title
+            order={1}
+            className="text-center text-3xl font-bold text-gray-900"
           >
-            Go to Researcher login
-          </Button>
-        </div>
-      </Stack>
+            PhishingStressor
+          </Title>
+          <Title
+            order={4}
+            className="text-center text-2xl font-medium text-gray-400"
+          >
+            Register as researcher
+          </Title>
+          <form onSubmit={form.onSubmit(handleSubmit)}>
+            <Stack gap={"md"}>
+              <TextInput
+                leftSection={<User size={16} />}
+                placeholder="Username"
+                required
+                className="w-full"
+                key={form.key("username")}
+                {...form.getInputProps("username")}
+              />
+              <Popover
+                opened={popoverOpened}
+                position="bottom"
+                width="target"
+                transitionProps={{ transition: "pop" }}
+              >
+                <Popover.Target>
+                  <div
+                    onFocusCapture={() => setPopoverOpened(true)}
+                    onBlurCapture={() => setPopoverOpened(false)}
+                  >
+                    <PasswordInput
+                      required
+                      leftSection={<RectangleEllipsis size={16} />}
+                      placeholder="Password"
+                      key={form.key("password")}
+                      visible={visible}
+                      onVisibilityChange={toggle}
+                      {...form.getInputProps("password")}
+                    />
+                  </div>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <Progress color={color} value={strength} size={5} mb="xs" />
+                  <PasswordRequirement
+                    label="Includes at least 6 characters"
+                    meets={form.getValues().password.length > 5}
+                  />
+                  {checks}
+                </Popover.Dropdown>
+              </Popover>
+              <PasswordInput
+                leftSection={<RectangleEllipsis size={16} />}
+                placeholder="Confirm password"
+                required
+                className="w-full"
+                visible={visible}
+                onVisibilityChange={toggle}
+                error={form.errors.confirmPassword && "hello"}
+                key={form.key("confirmPassword")}
+                {...form.getInputProps("confirmPassword")}
+              />
+              {error && (
+                <Paper bg={"red.0"} radius={"xs"}>
+                  <Group gap={0} flex={1} justify="center">
+                    <ThemeIcon c={"red"} variant="transparent">
+                      <AlertCircle size={16} />
+                    </ThemeIcon>
+                    <Text c="red.6" size="sm">
+                      {error}
+                    </Text>
+                  </Group>
+                </Paper>
+              )}
+              <Button
+                type="submit"
+                fullWidth
+                rightSection={<ArrowRight size={16} />}
+              >
+                Register
+              </Button>
+            </Stack>
+          </form>
+          <div className="text-center">
+            <Button
+              variant="subtle"
+              rightSection={<ArrowRight size={18} />}
+              component={Link}
+              href="/login/researcher"
+            >
+              Go to Researcher login
+            </Button>
+          </div>
+        </Stack>
+      </Box>
     </Container>
   );
 }

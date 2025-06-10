@@ -101,15 +101,12 @@ export const registerResearcher = async ({
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(
-        `Failed to send reply: ${response.status} ${response.statusText} - ${errorText}`
-      );
+      const error = await response.json();
+      return { success: false, error: error };
     }
 
     const result = await response.json();
-    console.log("Reply sent successfully:", result);
-    return result;
+    return { success: true, result };
   } catch (error) {
     console.error("Error sending reply:", error);
     throw error;
