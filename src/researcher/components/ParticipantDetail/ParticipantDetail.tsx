@@ -261,16 +261,11 @@ export function EmailHeatmapOverlay({
         heatmapInstanceRef.current = new HeatMap({
           container: heatmapContainerRef.current!,
           maxOpacity: 0.6,
+          width: width,
+          height: height,
           radius: 50,
           blur: 0.9,
         });
-      }
-      const canvas = heatmapContainerRef.current!.querySelector("canvas");
-      if (canvas) {
-        canvas.width = width;
-        canvas.height = height;
-        canvas.style.width = `${width}px`;
-        canvas.style.height = `${height}px`;
       }
 
       const points = heatmapData.map((point) => ({

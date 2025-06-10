@@ -68,56 +68,60 @@ export default function EmailView() {
 
   return (
     <Box flex={1} bg={"white"}>
-      <Stack gap={0} ref={ref}>
-        <Group
-          justify="space-between"
-          p="md"
-          className="border-b border-gray-200"
-        >
-          <Text size="xl" fw={500} truncate>
-            {email.title}
-          </Text>
-          <TrashActionButton
-            isTrashed={email.isTrashed}
-            onClick={() => toggleEmailTrashed(email.id)}
-          />
-        </Group>
-
-        <Box p="xl">
-          <Group justify="space-between">
-            <Stack gap="xs">
-              <Group>
-                <Text fw={500}>{email.senderName || "<Sender Name>"}</Text>
-                <Text c="dimmed">•</Text>
-                <Text size="sm" c="dimmed">
-                  {email.senderAddress || "<sender@email.com>"}
-                </Text>
-              </Group>
-
-              <Text size="sm" c="dimmed">
-                To: me
-              </Text>
-            </Stack>
-            <Text size="sm" c="dimmed">
-              {new Date(email.sendAt).toLocaleString([], {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })}
+      <Stack gap={0}>
+        <Box ref={ref}>
+          <Group
+            justify="space-between"
+            p="md"
+            className="border-b border-gray-200"
+          >
+            <Text size="xl" fw={500} truncate>
+              {email.title}
             </Text>
+            <TrashActionButton
+              isTrashed={email.isTrashed}
+              onClick={() => toggleEmailTrashed(email.id)}
+            />
           </Group>
 
-          <Container fluid p={0} my="xl">
-            <TypographyStylesProvider>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: email.content,
-                }}
-              />
-            </TypographyStylesProvider>
-          </Container>
+          <Box p="xl">
+            <Group justify="space-between">
+              <Stack gap="xs">
+                <Group>
+                  <Text fw={500}>{email.senderName || "<Sender Name>"}</Text>
+                  <Text c="dimmed">•</Text>
+                  <Text size="sm" c="dimmed">
+                    {email.senderAddress || "<sender@email.com>"}
+                  </Text>
+                </Group>
+
+                <Text size="sm" c="dimmed">
+                  To: me
+                </Text>
+              </Stack>
+              <Text size="sm" c="dimmed">
+                {new Date(email.sendAt).toLocaleString([], {
+                  weekday: "short",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </Text>
+            </Group>
+
+            <Container fluid p={0} my="xl">
+              <TypographyStylesProvider>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: email.content,
+                  }}
+                />
+              </TypographyStylesProvider>
+            </Container>
+          </Box>
+        </Box>
+        <Box p={"xl"}>
           <EmailAttachmentList
             emailId={email.id}
             attachments={email.attachments}
