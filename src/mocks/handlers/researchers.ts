@@ -32,7 +32,7 @@ export const researcherHandlers = [
     await getExternalApiUrl(
       "/experiments/:experimentId/researchers/:researcherId"
     ),
-    async ({ params, request }) => {
+    async ({ params }) => {
       const { experimentId, researcherId } = params;
       const experiment = mockExperiments.find((e) => e.id === experimentId);
 

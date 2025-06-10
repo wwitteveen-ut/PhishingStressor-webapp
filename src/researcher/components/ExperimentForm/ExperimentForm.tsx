@@ -19,7 +19,6 @@ import { hasLength, isInRange, useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconTrash } from "@tabler/icons-react";
 import { PlusIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 export interface choice {
   label: string;
