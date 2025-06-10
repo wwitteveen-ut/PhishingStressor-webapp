@@ -1,5 +1,6 @@
 "use client";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
+import { UserEventType } from "@/mail/store/types";
 import {
   Box,
   Container,
@@ -23,9 +24,12 @@ export default function EmailView() {
     (state) => state.toggleEmailTrashed
   );
   const addHeatmapData = useEmailClientStore((state) => state.addHeatmapData);
+  const addSimpleEvent = useEmailClientStore((state) => state.addSimpleEvent);
+  const addComplexEvent = useEmailClientStore((state) => state.addComplexEvent);
 
   const { ref, x, y } = useMouse({ resetOnExit: true });
   const latestCoords = useRef({ x: 0, y: 0 });
+  const hoverStartTime = useRef<{ [key: string]: number }>({});
 
   useEffect(() => {
     latestCoords.current = { x, y };
@@ -53,6 +57,73 @@ export default function EmailView() {
     }, 100);
 
     return () => clearInterval(interval);
+  }, [addHeatmapData, email, ref]);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (!email || !ref.current) return;
+
+      const rect = ref.current.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      const width = ref.current.clientWidth;
+      const height = ref.current.clientHeight;
+
+      if (width > 0 && height > 0) {
+        addComplexEvent(
+          UserEventType.CLICK,
+          JSON.stringify({
+            x: x / width,
+            y: y / height,
+            value: 25,
+          })
+        );
+      }
+    };
+
+    const currentRef = ref.current;
+    currentRef?.addEventListener("click", handleClick);
+    return () => currentRef?.removeEventListener("click", handleClick);
+  }, [addHeatmapData, email, ref]);
+
+  useEffect(() => {
+    const handleLinkClick = (event: MouseEvent) => {
+      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
+      addSimpleEvent(UserEventType.LINK_CLICK);
+    };
+
+    const handleMouseEnter = (event: MouseEvent) => {
+      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
+      hoverStartTime.current[event.target.href] = Date.now();
+    };
+
+    const handleMouseLeave = (event: MouseEvent) => {
+      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
+
+      const href = event.target.href;
+      const startTime = hoverStartTime.current[href];
+      if (startTime) {
+        const duration = Date.now() - startTime;
+        addComplexEvent(UserEventType.LINK_HOVER, JSON.stringify(duration));
+        delete hoverStartTime.current[href];
+      }
+    };
+
+    const links = ref.current?.querySelectorAll("a");
+
+    links?.forEach((link: HTMLAnchorElement) => {
+      link.addEventListener("click", handleLinkClick);
+      link.addEventListener("mouseenter", handleMouseEnter);
+      link.addEventListener("mouseleave", handleMouseLeave);
+    });
+
+    return () => {
+      links?.forEach((link: HTMLAnchorElement) => {
+        link.removeEventListener("click", handleLinkClick);
+        link.removeEventListener("mouseenter", handleMouseEnter);
+        link.removeEventListener("mouseleave", handleMouseLeave);
+      });
+    };
   }, [addHeatmapData, email, ref]);
 
   if (!email) {
