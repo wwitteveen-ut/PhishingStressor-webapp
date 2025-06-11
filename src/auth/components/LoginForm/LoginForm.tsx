@@ -49,7 +49,7 @@ export default function LoginForm({
 
   const router = useRouter();
   const form = useForm({
-    mode: "uncontrolled",
+    mode: "controlled",
     initialValues: {
       username: "",
       password: "",
@@ -136,6 +136,7 @@ export default function LoginForm({
                 required
                 className="w-full"
                 key={form.key("username")}
+                autoComplete="false"
                 {...form.getInputProps("username")}
               />
               <PasswordInput

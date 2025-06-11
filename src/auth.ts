@@ -119,8 +119,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       authorize: async (credentials) => {
         if (!credentials.username || !credentials.password) {
-          console.log("Missing credentials");
-          return null;
+          throw new InvalidLoginError();
         }
         const result = await authenticateResearcher(
           credentials.username as string,
