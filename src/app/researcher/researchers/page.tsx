@@ -5,7 +5,7 @@ import { getResearchers } from "@/researcher/actions/actions";
 import ResearcherSidebar from "@/researcher/components/ResearcherSidebar";
 import ResearcherList from "@/researcher/components/ResearcherTable";
 import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
-import { Container } from "@mantine/core";
+import { Container, ScrollArea } from "@mantine/core";
 
 export default async function ExperimentsPage() {
   await validateUserRoleAndGetSession(Role.RESEARCHER);
@@ -14,8 +14,12 @@ export default async function ExperimentsPage() {
   return (
     <>
       <ResearcherSidebar />
-      <Container fluid w={"100%"} mx={"lg"} mt={"xl"}>
-        <ResearcherList researchers={researchers} />
+      <Container fluid w={"100%"} m={0}>
+        <ScrollArea h={"100%"}>
+          <Container fluid py={"xl"}>
+            <ResearcherList researchers={researchers} />
+          </Container>
+        </ScrollArea>
       </Container>
     </>
   );

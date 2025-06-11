@@ -1,7 +1,7 @@
 "use client";
 
 import { ApiUser } from "@/researcher/store/types";
-import { Paper, Stack, Table, Title } from "@mantine/core";
+import { Group, Paper, Stack, Table, Title } from "@mantine/core";
 
 export default function ResearcherTable({
   researchers,
@@ -16,11 +16,11 @@ export default function ResearcherTable({
   ));
 
   return (
-    <Stack justify="flex-start" flex={1}>
-      <Title order={2} mb="lg">
-        All researchers
-      </Title>
-      <Paper shadow="sm" p="lg" radius="md" mah={"90vh"}>
+    <Stack justify="flex-start" flex={1} m={0}>
+      <Group justify="space-between" mb="lg">
+        <Title order={2}>All Researchers</Title>
+      </Group>
+      <Paper shadow="sm" p="lg" radius="md" withBorder>
         <Table>
           <Table.Thead>
             <Table.Tr>
