@@ -1,6 +1,7 @@
 "use server";
-import { getParticipantEmails } from "@/mail/actions/actions";
 import { auth } from "@/auth";
+import { getParticipantEmails } from "@/mail/actions/actions";
+import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { EmailClient } from "./EmailClient";
 
@@ -11,7 +12,11 @@ async function EmailClientContainer() {
   }
   const emails = await getParticipantEmails();
 
-  return <EmailClient emails={emails} />;
+  return (
+    <SessionProvider>
+      <EmailClient emails={emails} />
+    </SessionProvider>
+  );
 }
 
 export default EmailClientContainer;

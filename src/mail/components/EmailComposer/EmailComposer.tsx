@@ -28,7 +28,7 @@ export default function EmailComposer({
           placeholder="Compose your email..."
           autosize
           size="md"
-          minRows={10}
+          minRows={8}
           {...form.getInputProps("content")}
         />
       </div>

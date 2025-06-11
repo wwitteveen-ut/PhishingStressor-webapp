@@ -43,7 +43,7 @@ class InvalidLoginError extends CredentialsSignin {
 }
 
 class NoLongerAccessToExperimentError extends CredentialsSignin {
-  code = "The account no longer has access to the experiment";
+  code = "No access to experiment";
 }
 
 class ExperimentExpiredError extends CredentialsSignin {

@@ -1,3 +1,4 @@
+import { notifications } from "@mantine/notifications";
 import { DataPoint } from "heatmap-ts";
 import { StateCreator } from "zustand/vanilla";
 import { sendTrackingEvents } from "../actions/actions";
@@ -56,24 +57,54 @@ export const createParticipantSlice: StateCreator<
   ...initialParticipantState,
   setEmails: (emails: ZustandEmail[]) =>
     set(
-      (state) => ({
-        emails: emails
-          .map((email) => ({
-            ...email,
-            isRead:
-              state.emailProperties[email.id]?.isRead ?? email.isRead ?? false,
-            isTrashed:
-              state.emailProperties[email.id]?.isTrashed ??
-              email.isTrashed ??
-              false,
-            hasReplied:
-              state.emailProperties[email.id]?.hasReplied ??
-              email.hasReplied ??
-              false,
-          }))
-          .sort((a, b) => b.scheduledFor - a.scheduledFor),
-        emailProperties: state.emailProperties,
-      }),
+      (state) => {
+        const existingEmailIds = new Set(Object.keys(state.emailProperties));
+        const newEmails = emails.filter(
+          (email) => !existingEmailIds.has(email.id)
+        );
+
+        if (newEmails.length > 0) {
+          notifications.show({
+            title: `Received ${newEmails.length} new email${
+              newEmails.length === 1 ? "" : "s"
+            }!`,
+            message: "",
+          });
+        }
+
+        return {
+          emails: emails
+            .map((email) => ({
+              ...email,
+              isRead:
+                state.emailProperties[email.id]?.isRead ??
+                email.isRead ??
+                false,
+              isTrashed:
+                state.emailProperties[email.id]?.isTrashed ??
+                email.isTrashed ??
+                false,
+              hasReplied:
+                state.emailProperties[email.id]?.hasReplied ??
+                email.hasReplied ??
+                false,
+            }))
+            .sort((a, b) => b.scheduledFor - a.scheduledFor),
+          emailProperties: {
+            ...state.emailProperties,
+            ...Object.fromEntries(
+              newEmails.map((email) => [
+                email.id,
+                {
+                  isTrashed: false,
+                  isRead: false,
+                  hasReplied: false,
+                },
+              ])
+            ),
+          },
+        };
+      },
       undefined,
       "participant/setEmails"
     ),

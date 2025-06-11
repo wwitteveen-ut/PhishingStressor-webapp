@@ -3,12 +3,14 @@ import { EmailClientState } from "./EmailClientStore";
 import { EmailProperties, UserEventType } from "./types";
 
 export interface UISlice {
+  username: string;
   selectedCategory: string;
   emailProperties: Record<string, EmailProperties>;
   searchQuery: string;
   selectedEmailId: string | null;
   previousEmailId: string | null;
   isReplying: boolean;
+  setUsername: (query: string) => void;
   setSearchQuery: (query: string) => void;
   selectEmailId: (emailId: string) => void;
   setIsReplying: (isReplying: boolean) => void;
@@ -17,15 +19,18 @@ export interface UISlice {
   toggleEmailTrashed: (emailId: string) => void;
   selectCategory: (category: string) => void;
   getUnreadCount: () => number;
+  reset: () => void;
 }
 
 export const initialUISliceState: UISlice = {
+  username: "",
   selectedCategory: "inbox",
   emailProperties: {},
   searchQuery: "",
   selectedEmailId: null,
   previousEmailId: null,
   isReplying: false,
+  setUsername: () => {},
   setSearchQuery: () => {},
   selectEmailId: () => {},
   setIsReplying: () => {},
@@ -34,6 +39,7 @@ export const initialUISliceState: UISlice = {
   toggleEmailTrashed: () => {},
   selectCategory: () => {},
   getUnreadCount: () => 0,
+  reset: () => {},
 };
 
 export const createUISlice: StateCreator<
@@ -43,7 +49,8 @@ export const createUISlice: StateCreator<
   UISlice
 > = (set, get) => ({
   ...initialUISliceState,
-
+  setUsername: (username: string) =>
+    set({ username: username }, undefined, "ui/setUsername"),
   setSearchQuery: (query: string) =>
     set({ searchQuery: query }, undefined, "ui/setSearchQuery"),
 
@@ -175,5 +182,13 @@ export const createUISlice: StateCreator<
       },
       undefined,
       "ui/toggleEmailTrashed"
+    ),
+  reset: () =>
+    set(
+      {
+        emailProperties: {},
+      },
+      undefined,
+      "ui/reset"
     ),
 });

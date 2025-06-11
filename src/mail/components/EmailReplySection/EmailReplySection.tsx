@@ -5,6 +5,7 @@ import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 import { ZustandEmail } from "@/mail/store/types";
 import { Button, Container, Group, Text, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
 import { Check, ReplyIcon, Send } from "lucide-react";
 import EmailComposer from "../EmailComposer/EmailComposer";
 
@@ -27,6 +28,11 @@ export default function EmailReplySection({ email }: { email: ZustandEmail }) {
     const response = await sendReply(email.id, values);
     if (response) {
       setHasReplied(email.id);
+      notifications.show({
+        title: `Sent reply!`,
+        color: "green",
+        message: "",
+      });
       setIsReplying(false);
       form.reset();
     }

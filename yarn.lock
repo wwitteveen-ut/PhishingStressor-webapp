@@ -451,12 +451,12 @@
   resolved "https://registry.yarnpkg.com/@mantine/modals/-/modals-8.0.2.tgz#d37155b0064fb7c9eace43e04ad14ede7d849443"
   integrity sha512-AAYDotb7vWZcBdCph4rjy7VNn9AyReRa+bea+g5xplC2G03Fxcd9Lve2rodhuNx/l6IQe7INRkD+fzXvpDGnew==
 
-"@mantine/notifications@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-8.0.0.tgz#5280e8650e7432863340e968aaf34cd473c9037b"
-  integrity sha512-sWldvQmq4YJsknHURBNKkc3CAU0qDb0LuQGKIZGxqFlwEiXNIAI8mtfr7stgzVx+mteVW1g+HBb7FaZp07jRxQ==
+"@mantine/notifications@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@mantine/notifications/-/notifications-8.1.0.tgz#023670a3af8bc251630b4ebe13ba6d9386059945"
+  integrity sha512-MuTl3OVOaZko+fCxbi+1J2/7Ho6443aMDBV93UGwLfRfi6SwCMgv9Luj7LXG7JKLgYgWy3Uj9gOSXS6efNfmww==
   dependencies:
-    "@mantine/store" "8.0.0"
+    "@mantine/store" "8.1.0"
     react-transition-group "4.4.5"
 
 "@mantine/nprogress@^8.0.0":
@@ -470,6 +470,11 @@
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@mantine/store/-/store-8.0.0.tgz#3101628eff4fa6081da44e1b1236ee717e2c31c4"
   integrity sha512-42RWCsXMNuhpX+d/hwr5aHj+HWyi5ltbc0R0xdiUnAmqSB7CHbWxDDLh4+DbmqPrN9pTeYvpPGp3v/CG2vuGBg==
+
+"@mantine/store@8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@mantine/store/-/store-8.1.0.tgz#0b8e32d2dceb1ed8bbba61b83c1b0fed6f5b139d"
+  integrity sha512-PobjhLuTIPtv3EkWkz+axmcPqrA8E2rSrUCm76CiddkZf6INaV9bQGzt7UpyoKQzu8jWuy/WUltdKPScwUfQBg==
 
 "@mantine/tiptap@^8.0.1":
   version "8.0.1"

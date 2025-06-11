@@ -42,7 +42,7 @@ export default function ExperimentEmailForm({
     try {
       await createEmail(experiment.id, form.getTransformedValues());
     } catch (error) {
-      console.error("Failed to save campaign:", error);
+      console.error("Failed to save email:", error);
     } finally {
       router.push(`/researcher/experiments/${experiment.id}/emails`);
       stopSubmitting();

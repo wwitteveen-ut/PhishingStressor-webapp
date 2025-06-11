@@ -1,11 +1,11 @@
 import { createStore } from "zustand";
 import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
-import { createUISlice, initialUISliceState, UISlice } from "./UISlice";
 import {
   createParticipantSlice,
   initialParticipantState,
   ParticipantSlice,
 } from "./ParticipantSlice";
+import { createUISlice, initialUISliceState, UISlice } from "./UISlice";
 
 export type EmailClientState = UISlice & ParticipantSlice;
 
@@ -28,13 +28,14 @@ const createEmailClientStore = () =>
             partialize: (state) =>
               ({
                 ...initialEmailClientState,
+                username: state.username,
                 emailProperties: state.emailProperties,
-              }) as EmailClientState,
-          },
-        ),
+              } as EmailClientState),
+          }
+        )
       ),
-      { name: "EmailClientStore" },
-    ),
+      { name: "EmailClientStore" }
+    )
   );
 
 export default createEmailClientStore;
