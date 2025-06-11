@@ -1,23 +1,23 @@
 "use client";
 
-import React from "react";
+import LinksGroup from "@/shared/components/LinksGroup";
 import {
-  Paper,
-  Group,
-  Title,
   Button,
-  ScrollArea,
   Divider,
+  Group,
+  Paper,
+  ScrollArea,
+  Stack,
   ThemeIcon,
+  Title,
 } from "@mantine/core";
 import {
-  LayoutDashboardIcon,
-  LucideIcon,
-  LogOut,
-  Users,
   FlaskConical,
+  LayoutDashboardIcon,
+  LogOut,
+  LucideIcon,
+  Users,
 } from "lucide-react";
-import LinksGroup from "@/shared/components/LinksGroup";
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
@@ -44,18 +44,6 @@ export default function ResearcherSidebar() {
       mainLink: "/researcher/researchers",
     },
   ];
-
-  const headerComponent = (
-    <>
-      <Group p="md" gap="xs">
-        <ThemeIcon variant="white">
-          <LayoutDashboardIcon size={24} />
-        </ThemeIcon>
-        <Title order={6}>PhishingStressor Dashboard</Title>
-      </Group>
-      <Divider />
-    </>
-  );
 
   const footerComponent = (
     <>
@@ -89,7 +77,7 @@ export default function ResearcherSidebar() {
         flexDirection: "column",
       }}
     >
-      {headerComponent}
+      <ResearcherSidebarHeader />
       <ScrollArea style={{ flex: 1, padding: "8px" }}>
         {mainMenu.map((item) => (
           <LinksGroup
@@ -105,5 +93,24 @@ export default function ResearcherSidebar() {
       </ScrollArea>
       {footerComponent}
     </Paper>
+  );
+}
+
+export function ResearcherSidebarHeader() {
+  return (
+    <>
+      <Group p="md" gap="xs">
+        <ThemeIcon variant="white" size={45}>
+          <LayoutDashboardIcon size={45} />
+        </ThemeIcon>
+        <Stack gap={0}>
+          <Title order={4}>PhishingStressor</Title>
+          <Title order={4} c={"blue.6"}>
+            Dashboard
+          </Title>
+        </Stack>
+      </Group>
+      <Divider />
+    </>
   );
 }

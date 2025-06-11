@@ -1,22 +1,11 @@
 "use client";
 
 import LinksGroup from "@/shared/components/LinksGroup";
-import {
-  Button,
-  Divider,
-  Group,
-  Paper,
-  ScrollArea,
-  Stack,
-  Text,
-  ThemeIcon,
-  Title,
-} from "@mantine/core";
+import { Button, Divider, Paper, ScrollArea, Stack, Text } from "@mantine/core";
 import { TablerIcon } from "@tabler/icons-react";
 import {
   ArrowRightLeft,
   ChartArea,
-  LayoutDashboardIcon,
   LogOut,
   LucideIcon,
   Mail,
@@ -26,6 +15,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import { ResearcherSidebarHeader } from "../ResearcherSidebar";
 
 interface MenuItem {
   label: string;
@@ -66,18 +56,6 @@ export default function ExperimentSidebar() {
     },
   ];
 
-  const headerComponent = (
-    <>
-      <Group p="md" gap="xs">
-        <ThemeIcon variant="white">
-          <LayoutDashboardIcon size={24} />
-        </ThemeIcon>
-        <Title order={6}>PhishingStressor Dashboard</Title>
-      </Group>
-      <Divider />
-    </>
-  );
-
   const footerComponent = (
     <>
       <Divider />
@@ -110,7 +88,7 @@ export default function ExperimentSidebar() {
         flexDirection: "column",
       }}
     >
-      {headerComponent}
+      <ResearcherSidebarHeader />
       <Button
         component={Link}
         href={"/researcher/experiments"}
