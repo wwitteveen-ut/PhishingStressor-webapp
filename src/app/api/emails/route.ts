@@ -14,7 +14,10 @@ export const GET = auth(async function GET(req) {
       Role.PARTICIPANT
     );
     if (!response.ok) {
-      throw new Error(await response.text());
+      return NextResponse.json(
+        { message: "Not authenticated" },
+        { status: 401 }
+      );
     }
     const emails = (await response.json()) as Email[];
 

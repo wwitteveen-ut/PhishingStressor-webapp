@@ -40,7 +40,7 @@ export const getParticipantEmails = async (): Promise<ZustandEmail[]> => {
   const response = await makeAuthenticatedInternalRequest(`/emails`);
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch emails: ${response.statusText}`);
+    return [];
   }
 
   const emails = (await response.json()) as ZustandEmail[];
