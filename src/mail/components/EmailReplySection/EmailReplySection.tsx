@@ -56,7 +56,7 @@ export default function EmailReplySection({ email }: { email: ZustandEmail }) {
   return (
     <Container fluid p={0} mt="md">
       {email.hasReplied && (
-        <Group c="green" gap={5} px={"xs"} mb={"xs"}>
+        <Group c="green" gap={5} mb={"xs"}>
           <Check size={20} strokeWidth={2.5} />
           <Text fw={600}>Already replied</Text>
         </Group>
