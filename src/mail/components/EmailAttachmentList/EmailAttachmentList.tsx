@@ -4,7 +4,6 @@ import EmailAttachmentListItem from "../EmailAttachmentListItem";
 export default function EmailAttachmentList({
   emailId,
   attachments,
-  isPreview = false,
 }: EmailAttachmentListProps) {
   if (!attachments || attachments.length === 0) {
     return null;
@@ -20,7 +19,6 @@ export default function EmailAttachmentList({
           <EmailAttachmentListItem
             emailId={emailId}
             attachmentData={attachment}
-            isPreview={isPreview}
             key={index}
           />
         ))}

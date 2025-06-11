@@ -181,7 +181,7 @@ export default function EmailView() {
               </Text>
             </Group>
 
-            <Container fluid p={0} my="xl">
+            <Container fluid p={0} mt="xl">
               <TypographyStylesProvider>
                 <div
                   dangerouslySetInnerHTML={{
@@ -192,7 +192,7 @@ export default function EmailView() {
             </Container>
           </Box>
         </Box>
-        <Box p={"xl"}>
+        <Box px={"xl"}>
           <EmailAttachmentList
             emailId={email.id}
             attachments={email.attachments}

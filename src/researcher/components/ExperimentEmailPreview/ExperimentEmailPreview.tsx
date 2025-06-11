@@ -61,7 +61,7 @@ export default function ExperimentEmailPreview({
           </Text>
         </Group>
 
-        <Container fluid p={0} my="xl">
+        <Container fluid p={0} mt="xl">
           <TypographyStylesProvider>
             <div
               dangerouslySetInnerHTML={{
