@@ -1,6 +1,6 @@
 "use client";
 
-import { UserEvent } from "@/mail/store/types";
+import { UserEvent, UserEventType } from "@/mail/store/types";
 import { getEmail } from "@/researcher/actions/actions";
 import {
   EmailCreatePayload,
@@ -13,17 +13,18 @@ import {
   Container,
   Group,
   Loader,
+  Paper,
   Tabs,
   Text,
-  Timeline,
   Title,
 } from "@mantine/core";
-import { IconClock, IconFile, IconMail } from "@tabler/icons-react";
+import { IconClock, IconMail } from "@tabler/icons-react";
 import HeatMap, { DataPoint } from "heatmap-ts";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
-import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentContext";
+import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
 export default function ParticipantDetail({
   participantId,
@@ -31,7 +32,7 @@ export default function ParticipantDetail({
   participantId: string;
 }) {
   const experiment = useExperimentContext();
-  const experimentStats = useExperimentStatsContext();
+  const { experimentStats } = useExperimentStatsContext();
   const participantData = experimentStats[participantId];
   const [emailEvents, setEmailEvents] = useState<
     (UserEvent & { emailTitle: string; emailId: string })[]
@@ -93,7 +94,7 @@ export default function ParticipantDetail({
   }
 
   return (
-    <Container size="lg" py="xl">
+    <Paper p="lg" shadow="md" radius={"sm"}>
       <Title order={2} mb="lg">
         Participant: {participantId}
       </Title>
@@ -113,44 +114,31 @@ export default function ParticipantDetail({
         </Tabs.List>
 
         <Tabs.Panel value="timeline" pt="xs">
-          <Timeline
-            active={emailEvents.length - 1}
-            bulletSize={24}
-            lineWidth={2}
-          >
-            {emailEvents.map((event, index) => (
-              <Timeline.Item
-                key={index}
-                bullet={
-                  event.type === "TIME_OPENED" ? (
-                    <IconMail size={16} />
-                  ) : event.type === "ATTACHMENT_OPENED" ? (
-                    <IconFile size={16} />
-                  ) : (
-                    <IconClock size={16} />
-                  )
-                }
-                title={event.emailTitle}
-              >
-                <Text size="sm">
-                  {event.type.replace("_", " ").toLowerCase()}
-                </Text>
-                <Text size="xs" c="dimmed">
-                  {new Date(event.timestamp).toLocaleString()}
-                </Text>
-                {event.type === "HEATMAP" && (
-                  <Text size="xs">Heatmap points: {event.extra?.length}</Text>
-                )}
-              </Timeline.Item>
-            ))}
-          </Timeline>
+          {Object.entries(participantData.emails).map(
+            ([emailId, emailData]) => {
+              const email = emails[emailId];
+
+              const emailEvents = emailData.events.map((event) => ({
+                ...event,
+                emailTitle: email.title,
+                emailId,
+              }));
+
+              return (
+                <ExperimentEmailEventsTimeline
+                  key={emailId}
+                  email={email}
+                  emailEvents={emailEvents}
+                />
+              );
+            }
+          )}
         </Tabs.Panel>
 
         <Tabs.Panel value="emails" pt="xs">
           {Object.entries(participantData.emails).map(([emailId, data]) => {
             const emailStats = data as EmailStats;
             const email = emails[emailId];
-            console.log("emails", emailId, emails);
             if (!email) return null;
             return (
               <Card
@@ -186,48 +174,43 @@ export default function ParticipantDetail({
                   </Group>
                 ))}
                 <EmailHeatmapOverlay
-                  emailData={{
-                    metadata: {
-                      title: email.title,
-                      senderName: email.senderName,
-                      senderEmail: email.senderAddress,
-                      content: email.content,
-                      scheduledFor: email.scheduledFor,
-                      groups: [],
-                      isPhishing: false,
-                    },
-                    files: [],
-                  }}
                   emailId={emailId}
                   participantId={participantId}
+                  eventType={UserEventType.HEATMAP}
+                />
+                <EmailHeatmapOverlay
+                  emailId={emailId}
+                  participantId={participantId}
+                  eventType={UserEventType.CLICK}
                 />
               </Card>
             );
           })}
         </Tabs.Panel>
       </Tabs>
-    </Container>
+    </Paper>
   );
 }
 
 interface EmailHeatmapOverlayProps {
-  emailData: EmailCreatePayload;
   emailId: string;
   participantId: string;
+  eventType: UserEventType;
 }
 
 export function EmailHeatmapOverlay({
-  emailData,
   emailId,
   participantId,
+  eventType,
 }: EmailHeatmapOverlayProps) {
-  const experimentStats = useExperimentStatsContext();
+  const { experimentStats, experimentEmails } = useExperimentStatsContext();
+  const emailData = experimentEmails[emailId];
   const heatmapContainerRef = useRef<HTMLDivElement>(null);
   const heatmapInstanceRef = useRef<HeatMap | null>(null);
   const heatmapData = useMemo(() => {
     const heatmapEvents =
-      experimentStats[participantId].emails[emailId].events?.filter(
-        (event) => event.type === "HEATMAP"
+      experimentStats[participantId].emails[emailId]?.events?.filter(
+        (event) => event.type === eventType
       ) || [];
 
     const allDataPoints = heatmapEvents.reduce<DataPoint[]>((res, event) => {
@@ -248,8 +231,8 @@ export function EmailHeatmapOverlay({
     }, []);
 
     return allDataPoints;
-  }, [experimentStats, participantId, emailId]);
-
+  }, [experimentStats, emailId]);
+  
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {
       return;
@@ -305,9 +288,23 @@ export function EmailHeatmapOverlay({
     };
   }, [heatmapData, emailId, participantId]);
 
+  if (!heatmapData.length) {
+    return <Text>No data for {eventType}</Text>;
+  }
   return (
     <div ref={heatmapContainerRef}>
-      <ExperimentEmailPreview emailData={emailData} />
+      <ExperimentEmailPreview emailData={{
+        metadata: {
+          title: emailData.title,
+          senderName: emailData.senderName,
+          senderEmail: emailData.senderAddress,
+          content: emailData.content,
+          scheduledFor: emailData.scheduledFor,
+          groups: [],
+          isPhishing: false,
+        },
+        files: [],
+      }} />
     </div>
   );
 }

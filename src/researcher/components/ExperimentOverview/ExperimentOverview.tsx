@@ -22,7 +22,7 @@ export default function ExperimentOverview({
   const experiment = useExperimentContext();
 
   return (
-    <Paper shadow="sm" p="lg" radius="md">
+    <Paper shadow="sm" p="lg" radius="sm">
       <Stack gap="md">
         <TextInput
           label="Experiment ID"

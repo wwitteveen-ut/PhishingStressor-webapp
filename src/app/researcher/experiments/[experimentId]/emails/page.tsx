@@ -29,7 +29,7 @@ export default async function ExperimentsPage({
           Create new email
         </Button>
       </Group>
-      <Paper shadow="sm" p="lg" radius="md">
+      <Paper shadow="sm" p="lg" radius="sm">
         <ExperimentEmailList emails={emails} />
       </Paper>
     </>

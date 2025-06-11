@@ -31,6 +31,23 @@ export const mockTrackingData = {
               { x: 0.322, y: 0.289, value: 100 },
             ]),
           },
+          {
+            type: "CLICK",
+            timestamp: "2025-06-01T09:04:00.000Z",
+            extra: JSON.stringify([
+              { x: 0.200, y: 0.410, value: 100 },
+              { x: 0.202, y: 0.412, value: 100 },
+            ]),
+          },
+          {
+            type: "LINK_CLICK",
+            timestamp: "2025-06-01T09:06:00.000Z",
+          },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:07:00.000Z",
+            extra: JSON.stringify({ duration: 1500 }),
+          },
           { type: "TIME_CLOSED", timestamp: "2025-06-01T09:12:00.000Z" },
         ],
       },
@@ -48,6 +65,19 @@ export const mockTrackingData = {
               { x: 0.539, y: 0.326, value: 100 },
             ]),
           },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:11:30.000Z",
+            extra: JSON.stringify({ duration: 2000 }),
+          },
+          {
+            type: "CLICK",
+            timestamp: "2025-06-01T09:11:45.000Z",
+            extra: JSON.stringify([
+              { x: 0.380, y: 0.340, value: 100 },
+              { x: 0.382, y: 0.342, value: 100 },
+            ]),
+          },
           { type: "TIME_CLOSED", timestamp: "2025-06-01T09:12:00.000Z" },
         ],
       },
@@ -58,6 +88,11 @@ export const mockTrackingData = {
           {
             type: "ATTACHMENT_DOWNLOADED",
             timestamp: "2025-06-01T09:16:00.000Z",
+          },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:16:30.000Z",
+            extra: JSON.stringify({ duration: 1000 }),
           },
         ],
       },
@@ -80,6 +115,14 @@ export const mockTrackingData = {
               { x: 0.509, y: 0.296, value: 100 },
             ]),
           },
+          {
+            type: "CLICK",
+            timestamp: "2025-06-01T09:17:45.000Z",
+            extra: JSON.stringify([
+              { x: 0.680, y: 0.338, value: 100 },
+              { x: 0.682, y: 0.340, value: 100 },
+            ]),
+          },
         ],
       },
       [mockEmails[2].id]: {
@@ -99,6 +142,15 @@ export const mockTrackingData = {
               { x: 0.345, y: 0.299, value: 100 },
               { x: 0.323, y: 0.293, value: 100 },
             ]),
+          },
+          {
+            type: "LINK_CLICK",
+            timestamp: "2025-06-01T09:19:30.000Z",
+          },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:19:15.000Z",
+            extra: JSON.stringify({ duration: 1200 }),
           },
         ],
       },
@@ -132,12 +184,30 @@ export const mockTrackingData = {
               { x: 0.29, y: 0.49, value: 100 },
             ]),
           },
+          {
+            type: "CLICK",
+            timestamp: "2025-06-01T09:33:30.000Z",
+            extra: JSON.stringify([
+              { x: 0.255, y: 0.455, value: 100 },
+              { x: 0.257, y: 0.457, value: 100 },
+            ]),
+          },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:34:00.000Z",
+            extra: JSON.stringify({ duration: 1800 }),
+          },
         ],
       },
       [mockEmails[5].id]: {
         replies: [],
         events: [
           { type: "TIME_OPENED", timestamp: "2025-06-01T09:40:00.000Z" },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:41:00.000Z",
+            extra: JSON.stringify({ duration: 900 }),
+          },
           { type: "TIME_CLOSED", timestamp: "2025-06-01T09:42:00.000Z" },
         ],
       },
@@ -165,6 +235,23 @@ export const mockTrackingData = {
               { x: 0.17, y: 0.37, value: 100 },
               { x: 0.18, y: 0.38, value: 100 },
             ]),
+          },
+          {
+            type: "CLICK",
+            timestamp: "2025-06-01T09:48:30.000Z",
+            extra: JSON.stringify([
+              { x: 0.155, y: 0.355, value: 100 },
+              { x: 0.157, y: 0.357, value: 100 },
+            ]),
+          },
+          {
+            type: "LINK_CLICK",
+            timestamp: "2025-06-01T09:49:00.000Z",
+          },
+          {
+            type: "LINK_HOVERED",
+            timestamp: "2025-06-01T09:48:45.000Z",
+            extra: JSON.stringify({ duration: 2500 }),
           },
         ],
       },
