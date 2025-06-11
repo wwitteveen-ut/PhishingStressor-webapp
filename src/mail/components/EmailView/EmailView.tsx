@@ -84,7 +84,7 @@ export default function EmailView() {
     const currentRef = ref.current;
     currentRef?.addEventListener("click", handleClick);
     return () => currentRef?.removeEventListener("click", handleClick);
-  }, [addHeatmapData, email, ref]);
+  }, [addHeatmapData, email, ref, addComplexEvent]);
 
   useEffect(() => {
     const handleLinkClick = (event: MouseEvent) => {
@@ -124,7 +124,7 @@ export default function EmailView() {
         link.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, [addHeatmapData, email, ref]);
+  }, [addHeatmapData, email, ref, addComplexEvent]);
 
   if (!email) {
     return (
