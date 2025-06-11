@@ -162,7 +162,7 @@ export default function EmailView() {
                   <Text fw={500}>{email.senderName || "<Sender Name>"}</Text>
                   <Text c="dimmed">•</Text>
                   <Text size="sm" c="dimmed">
-                    {email.senderAddress || "<sender@email.com>"}
+                    {email.senderAddress}
                   </Text>
                 </Group>
 
