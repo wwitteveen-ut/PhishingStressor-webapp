@@ -124,7 +124,7 @@ export default function EmailView() {
         link.removeEventListener("mouseleave", handleMouseLeave);
       });
     };
-  }, [addHeatmapData, email, ref, addComplexEvent]);
+  }, [addHeatmapData, email, ref, addComplexEvent, addSimpleEvent]);
 
   if (!email) {
     return (
