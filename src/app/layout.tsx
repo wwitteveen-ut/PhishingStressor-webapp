@@ -32,7 +32,7 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider>
-          <Notifications limit={5} autoClose={2000} position="bottom-left" />
+          <Notifications limit={5} autoClose={2000} />
           <ModalsProvider>{children}</ModalsProvider>
         </MantineProvider>
       </body>
