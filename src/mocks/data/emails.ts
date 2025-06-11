@@ -1,5 +1,5 @@
 import { ResearcherEmail } from "@/researcher/store/types";
-import { mockExperiments } from "./experiments";
+import { mockExperiments, mockGroups } from "./experiments";
 
 export const mockAttachments = [
   {
@@ -36,6 +36,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 0,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0], mockAttachments[1]],
   },
@@ -57,6 +58,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 0,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
   },
@@ -75,6 +77,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 0,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [],
   },
@@ -94,6 +97,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 1,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]],
   },
@@ -112,6 +116,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 2,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]],
   },
@@ -130,6 +135,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 3,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
   },
@@ -151,6 +157,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 5,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[0]],
   },
@@ -169,6 +176,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 8,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [],
   },
@@ -188,6 +196,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 8,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
   },
@@ -206,6 +215,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 4,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[0]],
   },
@@ -224,6 +234,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 13,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3], mockAttachments[2]],
   },
@@ -242,6 +253,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 6,
+    groups: mockGroups,
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
   },

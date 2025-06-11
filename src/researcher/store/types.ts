@@ -8,16 +8,12 @@ export interface Experiment {
     id: string;
     username: string;
   }[];
-  groups: {
-    id: string;
-    experimentId: string;
-    name: string;
-    capacity: number;
-  }[];
+  groups: IGroup[];
 }
 
 export interface ResearcherEmail extends Email {
   isPhishing: boolean;
+  groups: IGroup[];
 }
 
 export interface ExperimentCreatePayload {
@@ -40,7 +36,12 @@ export interface IGroup extends IGroupBase {
 export interface EmailCreate
   extends Omit<
     ResearcherEmail,
-    "id" | "createdAt" | "experimentId" | "attachments" | "senderAddress"
+    | "id"
+    | "createdAt"
+    | "experimentId"
+    | "attachments"
+    | "senderAddress"
+    | "groups"
   > {
   senderEmail: string;
   groups: string[];
