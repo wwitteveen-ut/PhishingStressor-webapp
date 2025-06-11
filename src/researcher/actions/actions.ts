@@ -33,7 +33,11 @@ export async function getExperiments(): Promise<Experiment[]> {
   );
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch experiments: ${response.status}`);
+    throw new Error(
+      `Failed to fetch experiments: ${
+        response.status
+      } with error: ${await response.text()}`
+    );
   }
 
   const data = await response.json();

@@ -27,8 +27,8 @@ import {
 } from "lucide-react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface ILoginFormProps {
   variant?: "participant" | "researcher";
@@ -39,9 +39,14 @@ export default function LoginForm({
   variant = "participant",
   canRegister = false,
 }: ILoginFormProps) {
-  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<{
+    type: "warning" | "error";
+    message: string;
+  } | null>(null);
   const [isLoading, { open: startLoading, close: stopLoading }] =
     useDisclosure(false);
+  const searchParams = useSearchParams();
+
   const router = useRouter();
   const form = useForm({
     mode: "uncontrolled",
@@ -50,6 +55,18 @@ export default function LoginForm({
       password: "",
     },
   });
+
+  useEffect(() => {
+    if (searchParams.get("warning")) {
+      setMessage({
+        type: "warning",
+        message: searchParams.get("warning") as string,
+      });
+      const newUrl = new URL(window.location.href);
+      newUrl.searchParams.delete("warning");
+      window.history.replaceState({}, "", newUrl.toString());
+    }
+  }, [searchParams]);
 
   const credentialsAction = async ({
     username,
@@ -66,7 +83,10 @@ export default function LoginForm({
     });
     const authResponse = await response;
     if (authResponse.error && authResponse.code) {
-      setError(authResponse.code);
+      setMessage({
+        type: "error",
+        message: authResponse.code,
+      });
     } else if (authResponse.ok) {
       router.push(
         variant === "participant" ? "/mail" : "/researcher/experiments"
@@ -127,14 +147,23 @@ export default function LoginForm({
                 key={form.key("password")}
                 {...form.getInputProps("password")}
               />
-              {error && (
-                <Paper bg={"red.0"} radius={"xs"}>
+              {message && (
+                <Paper
+                  bg={message.type === "warning" ? "yellow.0" : "red.0"}
+                  radius={"xs"}
+                >
                   <Group gap={0} flex={1} justify="center">
-                    <ThemeIcon c={"red"} variant="transparent">
+                    <ThemeIcon
+                      c={message.type === "warning" ? "yellow" : "red"}
+                      variant="transparent"
+                    >
                       <AlertCircle size={16} />
                     </ThemeIcon>
-                    <Text c="red.6" size="sm">
-                      {error}
+                    <Text
+                      c={message.type === "warning" ? "yellow.6" : "red.6"}
+                      size="sm"
+                    >
+                      {message.message}
                     </Text>
                   </Group>
                 </Paper>
