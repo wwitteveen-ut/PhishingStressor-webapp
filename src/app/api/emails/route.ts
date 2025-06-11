@@ -13,6 +13,9 @@ export const GET = auth(async function GET(req) {
       `/experiments/${user.experimentId}/emails`,
       Role.PARTICIPANT
     );
+    if (!response.ok) {
+      throw new Error(await response.text());
+    }
     const emails = (await response.json()) as Email[];
 
     const filteredEmails: ZustandEmail[] = emails

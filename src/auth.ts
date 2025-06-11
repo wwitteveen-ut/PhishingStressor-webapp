@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import {
   authenticateParticipant,
   authenticateResearcher,
+  getParticipantExperimentDetails,
 } from "./auth/actions/actions";
 
 export enum Role {
@@ -12,7 +13,7 @@ export enum Role {
 
 declare module "next-auth" {
   interface Session {
-    user: User;
+    user: Omit<User, "experimentExpiry">;
   }
 
   interface User {
@@ -21,6 +22,7 @@ declare module "next-auth" {
     username: string;
     experimentId: string;
     loggedIn: string;
+    experimentExpiry?: number;
   }
 }
 
@@ -32,11 +34,20 @@ declare module "@auth/core/jwt" {
     experimentId: string;
     id?: string;
     loggedIn: string;
+    experimentExpiry?: number;
   }
 }
 
 class InvalidLoginError extends CredentialsSignin {
   code = "Invalid username or password";
+}
+
+class NoLongerAccessToExperimentError extends CredentialsSignin {
+  code = "The account no longer has access to the experiment";
+}
+
+class ExperimentExpiredError extends CredentialsSignin {
+  code = "The experiment session has expired";
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -61,17 +72,40 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!result.success) {
           console.error("Authentication failed:", result.error);
-          throw new InvalidLoginError();
+          throw new NoLongerAccessToExperimentError();
         }
 
         const token = result.data;
+
+        const participantExperiment = await getParticipantExperimentDetails(
+          token
+        );
+        if (!participantExperiment.success) {
+          console.error(
+            "Failed to get participant experiment details:",
+            participantExperiment.error
+          );
+          throw new NoLongerAccessToExperimentError();
+        }
+
+        const duration = participantExperiment.data.duration;
+        const loginTime = new Date(token.loggedIn);
+        const expirationTime = new Date(
+          loginTime.getTime() + duration * 60 * 1000
+        );
+
+        if (new Date() > expirationTime) {
+          throw new ExperimentExpiredError();
+        }
+
         token.username = credentials.username;
         token.role = Role.PARTICIPANT;
-
+        console.log(participantExperiment.data);
         return {
           ...token,
           token: undefined,
           apiToken: token.token,
+          experimentExpiry: expirationTime.getTime(),
         };
       },
     }),
@@ -92,7 +126,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           credentials.username as string,
           credentials.password as string
         );
-
         if (!result.success) {
           console.log("Authentication failed:", result.error);
           throw new InvalidLoginError();
@@ -118,7 +151,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         token.id = user.id;
         token.experimentId = user.experimentId;
         token.username = user.username;
+        token.experimentExpiry = user.experimentExpiry;
       }
+
+      if (token.role === Role.PARTICIPANT && token.experimentExpiry) {
+        if (Date.now() > token.experimentExpiry) {
+          return null;
+        }
+      }
+
       return token;
     },
     session({ session, token }) {
@@ -130,11 +171,24 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       session.user.id = token.id ?? "";
       return session;
     },
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isOnProtected = !nextUrl.pathname.startsWith("/login");
+
+      if (isOnProtected) {
+        if (isLoggedIn) return true;
+        return false;
+      } else if (isLoggedIn) {
+        return Response.redirect(new URL("/", nextUrl));
+      }
+      return true;
+    },
   },
   pages: {
     signIn: "/login",
   },
   session: {
     strategy: "jwt",
+    maxAge: 5 * 60,
   },
 });

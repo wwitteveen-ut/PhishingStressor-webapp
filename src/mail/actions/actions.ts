@@ -33,6 +33,10 @@ async function makeAuthenticatedInternalRequest(
 }
 
 export const getParticipantEmails = async (): Promise<ZustandEmail[]> => {
+  const session = await auth();
+  if (!session?.user?.apiToken) {
+    throw new Error("Not authenticated or missing API token");
+  }
   const response = await makeAuthenticatedInternalRequest(`/emails`);
 
   if (!response.ok) {

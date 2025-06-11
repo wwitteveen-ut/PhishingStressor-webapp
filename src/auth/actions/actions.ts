@@ -1,7 +1,7 @@
 "use server";
 
+import { Experiment } from "@/researcher/store/types";
 import { getExternalApiUrl } from "@/shared/utils/externalApiHelper";
-
 
 export async function authenticateParticipant(
   username: string,
@@ -113,3 +113,34 @@ export const registerResearcher = async ({
     throw error;
   }
 };
+
+interface Token {
+  token: string;
+  experimentId: string;
+}
+
+export async function getParticipantExperimentDetails(
+  token: Token
+): Promise<
+  | { success: true; data: Omit<Experiment, "groups" | "researchers"> }
+  | { success: false; error: string }
+> {
+  try {
+    const url = await getExternalApiUrl(`/experiments/${token.experimentId}`);
+
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token.token}`,
+      },
+    });
+    if (!response.ok) {
+      return { success: false, error: "Failed to fetch experiment details" };
+    }
+
+    const data = await response.json();
+    return { success: true, data };
+  } catch (error) {
+    console.error("Error fetching experiment details:", error);
+    return { success: false, error: "Failed to fetch experiment details" };
+  }
+}

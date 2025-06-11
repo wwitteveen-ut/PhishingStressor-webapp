@@ -57,16 +57,15 @@ export default function LoginForm({
   });
 
   useEffect(() => {
-    if (searchParams.get("warning")) {
+    const warning = searchParams.get("warning");
+    if (warning) {
       setMessage({
         type: "warning",
-        message: searchParams.get("warning") as string,
+        message: warning,
       });
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete("warning");
-      window.history.replaceState({}, "", newUrl.toString());
+      router.replace(window.location.pathname, { scroll: false });
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const credentialsAction = async ({
     username,
@@ -150,6 +149,7 @@ export default function LoginForm({
               {message && (
                 <Paper
                   bg={message.type === "warning" ? "yellow.0" : "red.0"}
+                  p={2}
                   radius={"xs"}
                 >
                   <Group gap={0} flex={1} justify="center">
@@ -157,11 +157,12 @@ export default function LoginForm({
                       c={message.type === "warning" ? "yellow" : "red"}
                       variant="transparent"
                     >
-                      <AlertCircle size={16} />
+                      <AlertCircle size={16} strokeWidth="2.5" />
                     </ThemeIcon>
                     <Text
-                      c={message.type === "warning" ? "yellow.6" : "red.6"}
+                      c={message.type === "warning" ? "yellow.8" : "red.6"}
                       size="sm"
+                      fw={600}
                     >
                       {message.message}
                     </Text>
