@@ -58,7 +58,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 0,
-    groups: mockGroups,
+    groups: [mockGroups[0]],
     experimentId: mockExperiments[0].id,
     attachments: [mockAttachments[3]],
   },
@@ -77,7 +77,7 @@ export const mockEmails: ResearcherEmail[] = [
       </div>
     `,
     scheduledFor: 0,
-    groups: mockGroups,
+    groups: [mockGroups[0], mockGroups[1]],
     experimentId: mockExperiments[0].id,
     attachments: [],
   },
