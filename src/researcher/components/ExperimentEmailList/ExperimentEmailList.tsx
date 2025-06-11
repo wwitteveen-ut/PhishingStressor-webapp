@@ -11,12 +11,14 @@ export default function ExperimentEmailList({
   emails,
 }: ExperimentEmailListProps) {
   return (
-    <Table verticalSpacing="md">
+    <Table mt={0} striped>
       <Table.Thead>
         <Table.Tr>
+          <Table.Th>ID</Table.Th>
           <Table.Th>Subject</Table.Th>
           <Table.Th>Sender</Table.Th>
           <Table.Th>Schedule</Table.Th>
+          <Table.Th>Groups</Table.Th>
           <Table.Th>Type</Table.Th>
           <Table.Th>Actions</Table.Th>
         </Table.Tr>
@@ -24,7 +26,7 @@ export default function ExperimentEmailList({
       <Table.Tbody>
         {emails.length === 0 ? (
           <Table.Tr>
-            <Table.Td colSpan={5} style={{ textAlign: "center" }}>
+            <Table.Td colSpan={7} style={{ textAlign: "center" }}>
               No emails found
             </Table.Td>
           </Table.Tr>

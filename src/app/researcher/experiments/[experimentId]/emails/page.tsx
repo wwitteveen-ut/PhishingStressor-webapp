@@ -17,7 +17,7 @@ export default async function ExperimentsPage({
   const emails = await getExperimentEmails(experimentId);
   return (
     <>
-      <Group justify="space-between" align="center" mb="lg">
+      <Group justify="space-between" align="top" mb="lg">
         <Title order={2} c="gray.9">
           Experiment Emails
         </Title>

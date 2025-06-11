@@ -1,6 +1,6 @@
 "use client";
 import { EmailCreatePayload } from "@/researcher/store/types";
-import { Center, SegmentedControl, Tabs } from "@mantine/core";
+import { Center, SegmentedControl, Tabs, Text, ThemeIcon } from "@mantine/core";
 import { hasLength, isEmail, isInRange, useForm } from "@mantine/form";
 import { Eye, MailPlus } from "lucide-react";
 import { useState } from "react";
@@ -63,18 +63,26 @@ export default function ExperimentEmailFormPage() {
         data={[
           {
             label: (
-              <Center style={{ gap: 10 }}>
-                <MailPlus size={16} />
-                <span>Compose</span>
+              <Center>
+                <ThemeIcon variant="transparent">
+                  <MailPlus size={16} />
+                </ThemeIcon>
+                <Text fz={"sm"} c={"blue.5"} fw={600}>
+                  Compose
+                </Text>
               </Center>
             ),
             value: "compose",
           },
           {
             label: (
-              <Center style={{ gap: 10 }}>
-                <Eye size={16} />
-                <span>Preview</span>
+              <Center>
+                <ThemeIcon variant="transparent">
+                  <Eye size={16} />
+                </ThemeIcon>
+                <Text fz={"sm"} c={"blue.5"} fw={600}>
+                  Preview
+                </Text>
               </Center>
             ),
             value: "preview",

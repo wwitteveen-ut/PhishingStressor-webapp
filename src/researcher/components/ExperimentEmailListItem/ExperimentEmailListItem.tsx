@@ -40,6 +40,9 @@ export default function ExperimentEmailListItem({
   return (
     <Table.Tr>
       <Table.Td>
+        <Text fw={500}>{email.id}</Text>
+      </Table.Td>
+      <Table.Td>
         <Text fw={500}>{email.title}</Text>
       </Table.Td>
       <Table.Td>
@@ -53,6 +56,29 @@ export default function ExperimentEmailListItem({
               : `${email.scheduledFor} min after login`}
           </Text>
         </Group>
+      </Table.Td>
+      <Table.Td>
+        {email.groups.length > 1 ? (
+          <Tooltip
+            bg={"gray.2"}
+            withArrow
+            arrowSize={9}
+            arrowRadius={2}
+            label={
+              <Group>
+                {email.groups.map((group) => (
+                  <Badge radius={"xs"} variant="white" key={group.id}>
+                    {group.name}
+                  </Badge>
+                ))}
+              </Group>
+            }
+          >
+            <Badge variant="light">Groups ({email.groups.length})</Badge>
+          </Tooltip>
+        ) : (
+          <Badge variant="light">{email.groups[0].name}</Badge>
+        )}
       </Table.Td>
       <Table.Td>
         <Badge
