@@ -1,17 +1,8 @@
 import { UserEventType } from "@/mail/store/types";
+import { getEventStyle } from "@/shared/utils/eventsHelper";
 import { Button, Card, Collapse, Group, Text, Timeline } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
-import {
-  CircleDot,
-  FileDown,
-  Link,
-  MailOpen,
-  MailX,
-  MousePointer,
-  MousePointerClick,
-  SquareArrowOutUpRight,
-} from "lucide-react";
 
 export default function ExperimentEmailEventsTimeline({
   emailEvents,
@@ -53,57 +44,20 @@ export default function ExperimentEmailEventsTimeline({
       </Group>
       <Collapse in={opened}>
         <Timeline active={emailEvents.length - 1} bulletSize={24} lineWidth={2}>
-          {emailEvents.map((event, index) => (
-            <Timeline.Item
-              key={index}
-              color={
-                event.type === UserEventType.TIME_OPENED
-                  ? "blue.4"
-                  : event.type === UserEventType.TIME_CLOSED
-                  ? "gray.4"
-                  : event.type === UserEventType.HEATMAP
-                  ? "orange.5"
-                  : event.type === UserEventType.CLICK
-                  ? "green.4"
-                  : event.type === UserEventType.LINK_CLICK
-                  ? "red.4"
-                  : event.type === UserEventType.LINK_HOVER
-                  ? "yellow.4"
-                  : event.type === UserEventType.ATTACHMENT_DOWNLOADED
-                  ? "violet.4"
-                  : "gray.5"
-              }
-              bullet={
-                event.type === UserEventType.TIME_OPENED ? (
-                  <MailOpen size={16} />
-                ) : event.type === UserEventType.TIME_CLOSED ? (
-                  <MailX size={16} />
-                ) : event.type === UserEventType.HEATMAP ? (
-                  <MousePointer size={16} />
-                ) : event.type === UserEventType.CLICK ? (
-                  <MousePointerClick size={16} />
-                ) : event.type === UserEventType.LINK_CLICK ? (
-                  <SquareArrowOutUpRight size={16} />
-                ) : event.type === UserEventType.LINK_HOVER ? (
-                  <Link size={16} />
-                ) : event.type === UserEventType.ATTACHMENT_DOWNLOADED ? (
-                  <FileDown size={16} />
-                ) : (
-                  <CircleDot size={16} />
-                )
-              }
-            >
-              <Text size="sm">
-                {event.type.replace("_", " ").toLowerCase()}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {new Date(event.timestamp).toLocaleString()}
-              </Text>
-              {event.type === "HEATMAP" && (
-                <Text size="xs">Heatmap points: {event.extra?.length}</Text>
-              )}
-            </Timeline.Item>
-          ))}
+          {emailEvents.map((event, index) => {
+            const { color, icon } = getEventStyle(event.type);
+            return (
+              <Timeline.Item key={index} color={color} bullet={icon}>
+                <Text size="sm">{getEventStyle(event.type).text}</Text>
+                <Text size="xs" c="dimmed">
+                  {new Date(event.timestamp).toLocaleString()}
+                </Text>
+                {event.type === UserEventType.HEATMAP && (
+                  <Text size="xs">Heatmap points: {event.extra?.length}</Text>
+                )}
+              </Timeline.Item>
+            );
+          })}
         </Timeline>
       </Collapse>
     </Card>

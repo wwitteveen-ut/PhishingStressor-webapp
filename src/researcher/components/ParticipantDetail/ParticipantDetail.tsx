@@ -2,13 +2,13 @@
 
 import { UserEventType } from "@/mail/store/types";
 import { EmailStats } from "@/researcher/store/types";
+import { getEventStyle } from "@/shared/utils/eventsHelper";
 import {
   Badge,
   Box,
   Button,
   Card,
   Collapse,
-  Divider,
   Group,
   Paper,
   ScrollArea,
@@ -17,6 +17,7 @@ import {
   Tabs,
   Text,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import {
   IconChevronDown,
@@ -186,24 +187,28 @@ export function EmailHeatmapOverlay({
 
   if (!heatmapData.length) {
     return (
-      <Box p="md">
-        <Title order={4} c="blue.5">
-          Heatmap for {emailData.title}
-        </Title>
-        <Text>No data for {eventType}</Text>
+      <Box py="md">
+        <Tooltip label="No data for this event type">
+          <Button
+            variant="transparent"
+            disabled
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            leftSection={getEventStyle(eventType, 16).icon}
+          >
+            Heatmap for {emailData.title} ({eventType})
+          </Button>
+        </Tooltip>
       </Box>
     );
   }
 
   return (
-    <Box p="md">
+    <Box py="md">
       <Group justify="space-between" align="center" mb="sm">
-        <Title order={4} c="blue.5">
-          Heatmap for {emailData.title} ({eventType})
-        </Title>
         <Button
           variant="subtle"
           onClick={() => setIsCollapsed(!isCollapsed)}
+          leftSection={getEventStyle(eventType, 16).icon}
           rightSection={
             isCollapsed ? (
               <IconChevronDown size={16} />
@@ -212,10 +217,9 @@ export function EmailHeatmapOverlay({
             )
           }
         >
-          {isCollapsed ? "Show Heatmap" : "Hide Heatmap"}
+          Heatmap for {emailData.title} ({eventType})
         </Button>
       </Group>
-      <Divider c="blue.5" />
       <Collapse in={!isCollapsed}>
         <div ref={heatmapContainerRef}>
           <ExperimentEmailPreview
@@ -342,8 +346,18 @@ export function EmailSelector({ participantId }: { participantId: string }) {
                     No replies available.
                   </Text>
                 )}
+                <EmailHeatmapOverlay
+                  emailId={selectedEmailId!}
+                  participantId={participantId}
+                  eventType={UserEventType.HEATMAP}
+                />
+                <EmailHeatmapOverlay
+                  emailId={selectedEmailId!}
+                  participantId={participantId}
+                  eventType={UserEventType.CLICK}
+                />
               </Box>
-              <ScrollArea h={350}>
+              <ScrollArea h={350} type="always" scrollbarSize={4}>
                 <ExperimentEmailEventsTimeline
                   collapsable={false}
                   emailEvents={emailStats.events.map((event) => ({
@@ -354,17 +368,6 @@ export function EmailSelector({ participantId }: { participantId: string }) {
                 />
               </ScrollArea>
             </Group>
-
-            <EmailHeatmapOverlay
-              emailId={selectedEmailId!}
-              participantId={participantId}
-              eventType={UserEventType.HEATMAP}
-            />
-            <EmailHeatmapOverlay
-              emailId={selectedEmailId!}
-              participantId={participantId}
-              eventType={UserEventType.CLICK}
-            />
           </Stack>
         </Card>
       ) : (
