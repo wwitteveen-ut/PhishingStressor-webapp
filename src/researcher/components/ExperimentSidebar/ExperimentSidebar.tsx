@@ -38,17 +38,7 @@ export default function ExperimentSidebar() {
     {
       label: "Emails",
       icon: Mail,
-      initiallyOpened: pathname.includes("/emails"),
-      links: [
-        {
-          label: "Emails",
-          link: `/researcher/experiments/${experiment.id}/emails`,
-        },
-        {
-          label: "Email Timeline",
-          link: `/researcher/experiments/${experiment.id}/emails/timeline`,
-        },
-      ],
+      mainLink: `/researcher/experiments/${experiment.id}/emails`,
     },
     {
       label: "Statistics",

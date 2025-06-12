@@ -3,9 +3,10 @@ import { deleteEmail } from "@/researcher/actions/actions";
 import { ResearcherEmail } from "@/researcher/store/types";
 import { ActionIcon, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { Trash } from "lucide-react";
+import { Eye, Trash } from "lucide-react";
 import { EmailStatusBadge, GroupsBadge } from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import ExperimentEmailPreview from "../ExperimentEmailPreview";
 
 interface ExperimentEmailListItemProps {
   email: ResearcherEmail;
@@ -34,6 +35,28 @@ export default function ExperimentEmailListItem({
       onConfirm: () => handleDelete(),
     });
 
+  const openModal = (email: ResearcherEmail) => {
+    modals.open({
+      title: "Email Details",
+      size: "xl",
+      children: (
+        <ExperimentEmailPreview
+          emailData={{
+            metadata: {
+              title: email.title,
+              senderName: email.senderName,
+              senderEmail: email.senderAddress,
+              groups: [],
+              content: "",
+              isPhishing: false,
+              scheduledFor: 0,
+            },
+            files: [],
+          }}
+        />
+      ),
+    });
+  };
   const handleDelete = async () => {
     await deleteEmail(experiment.id, email.id);
   };
@@ -67,7 +90,16 @@ export default function ExperimentEmailListItem({
       <Table.Td>
         <EmailStatusBadge isPhishing={email.isPhishing} />
       </Table.Td>
-      <Table.Td style={{ textAlign: "right" }}>
+      <Table.Td style={{ textAlign: "left" }}>
+        <Tooltip label={"View email"}>
+          <ActionIcon
+            color="blue"
+            variant="subtle"
+            onClick={() => openModal(email)}
+          >
+            <Eye size={20} />
+          </ActionIcon>
+        </Tooltip>
         <Tooltip label={"Delete email"}>
           <ActionIcon color="red" variant="subtle" onClick={openDeleteModal}>
             <Trash size={20} />

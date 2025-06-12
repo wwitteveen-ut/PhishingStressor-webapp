@@ -57,7 +57,7 @@ export default function ParticipantEmailStatsOverview({
   const handleEmailChange = (emailId: string) => {
     if (experimentEmails[emailId]) {
       router.push(
-        `/researcher/experiments/${experiment.id}/statistics/${participantId}/${emailId}`
+        `/researcher/experiments/${experiment.id}/statistics/participants/${participantId}/${emailId}`
       );
     }
   };
@@ -113,6 +113,7 @@ export default function ParticipantEmailStatsOverview({
           rightSection={<IconChevronDown size={16} />}
         />
       </Group>
+      <Divider mb="md" />
       {selectedEmail && emailStats ? (
         <Card
           shadow="0"
