@@ -3,9 +3,8 @@
 import { UserEventType } from "@/mail/store/types";
 import { EmailStats } from "@/researcher/store/types";
 import {
-  Badge,
-  Box,
   Card,
+  Divider,
   Group,
   Paper,
   ScrollArea,
@@ -18,6 +17,7 @@ import { IconChevronDown } from "@tabler/icons-react";
 import { MessageCircleDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EmailHeatmapOverlay from "../EmailHeatmapOverlay";
+import EmailInfo from "../EmailInfo";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
@@ -63,14 +63,20 @@ export default function ParticipantEmailStatsOverview({
   };
 
   return (
-    <Paper shadow="sm" p="lg" radius="sm">
+    <Paper
+      shadow="sm"
+      p="lg"
+      radius="sm"
+      h="93vh"
+      style={{ overflow: "hidden" }}
+    >
       <Group align="center" gap="xs" mb="md">
-        <Title order={4} c="blue.5">
-          Selected Email
+        <Title order={5} c="blue.4">
+          Selected Email:
         </Title>
         <Select
-          variant="filled"
           placeholder="Choose an email to view details"
+          variant="filled"
           onChange={(value) => {
             if (value) {
               handleEmailChange(value);
@@ -94,58 +100,73 @@ export default function ParticipantEmailStatsOverview({
               items: emailOptions.filter((email) => email.disabled),
             },
           ]}
+          styles={{
+            input: {
+              fontWeight: 600,
+              fontSize: "1.1rem",
+              color: "var(--mantine-color-blue-5)",
+            },
+          }}
           value={emailId}
           nothingFoundMessage="No emails found"
-          flex={1}
           searchable
           rightSection={<IconChevronDown size={16} />}
         />
       </Group>
       {selectedEmail && emailStats ? (
-        <Card shadow="none" radius="md" p="0">
-          <Stack>
-            <Group>
-              <Text size="sm" c="dimmed">
-                From:{" "}
-                {`${selectedEmail.senderName} <${selectedEmail.senderAddress}>`}
-              </Text>
-              {selectedEmail.isPhishing && <Badge color="red">Phishing</Badge>}
-              {selectedEmail.groups.length > 0 && (
-                <Badge color="blue">
-                  {selectedEmail.groups.map((group) => group).join(", ")}
-                </Badge>
-              )}
-            </Group>
+        <Card
+          shadow="0"
+          radius="md"
+          p="0"
+          style={{ height: "calc(100% - 80px)", overflow: "hidden" }}
+        >
+          <Stack h="100%" style={{ overflow: "hidden" }}>
+            <EmailInfo email={selectedEmail} />
 
-            <Group flex={1} align="flex-start">
-              <Box style={{ flex: 1 }}>
+            <Group align="flex-start" style={{ height: "calc(100% - 60px)" }}>
+              <ScrollArea
+                style={{ height: "100%", flex: 1, minWidth: 0 }}
+                type="always"
+                scrollbarSize={4}
+              >
                 {emailStats.replies.length > 0 ? (
-                  <Stack gap="sm" mt="xs" align="flex-start">
-                    {emailStats.replies.map((reply, index) => (
-                      <Paper
-                        key={index}
-                        shadow="xs"
-                        p="sm"
-                        radius="md"
-                        withBorder
-                        style={{ width: "100%" }}
-                      >
-                        <Group align="center" gap="xs">
-                          <MessageCircleDashed size={16} color="gray" />
-                          <Stack gap={4}>
-                            <Text size="xs" fw={500} c="dimmed">
-                              {new Date(reply.createdAt).toLocaleString()}
-                            </Text>
-                            <Text size="sm" style={{ lineHeight: 1.5 }}>
-                              {reply.content}
-                            </Text>
-                          </Stack>
-                        </Group>
-                      </Paper>
-                    ))}
-                  </Stack>
+                  <>
+                    <Title order={5} c="blue.4">
+                      Replies
+                    </Title>
+                    <Stack gap="sm" mt="xs" align="flex-start">
+                      {emailStats.replies.map((reply, index) => (
+                        <Paper
+                          key={index}
+                          shadow="xs"
+                          p="sm"
+                          radius="md"
+                          withBorder
+                          style={{ width: "100%" }}
+                        >
+                          <Group align="center" gap="xs">
+                            <MessageCircleDashed size={16} color="gray" />
+                            <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
+                              <Text size="xs" fw={500} c="dimmed">
+                                {new Date(reply.createdAt).toLocaleString()}
+                              </Text>
+                              <Text
+                                size="sm"
+                                style={{
+                                  lineHeight: 1.5,
+                                  wordWrap: "break-word",
+                                }}
+                              >
+                                {reply.content}
+                              </Text>
+                            </Stack>
+                          </Group>
+                        </Paper>
+                      ))}
+                    </Stack>
+                  </>
                 ) : (
-                  <Text size="sm" c="dimmed" mt="xs">
+                  <Text size="md" c="dimmed" fw={600} mt="xs" ml="sm">
                     No replies available.
                   </Text>
                 )}
@@ -159,8 +180,21 @@ export default function ParticipantEmailStatsOverview({
                   participantId={participantId}
                   eventType={UserEventType.CLICK}
                 />
-              </Box>
-              <ScrollArea h={350} type="always" scrollbarSize={4}>
+              </ScrollArea>
+              <Divider
+                size="xs"
+                mx="xs"
+                orientation="vertical"
+                style={{ flexShrink: 0 }}
+              />
+              <ScrollArea
+                style={{ height: "100%", width: "300px", flexShrink: 0 }}
+                type="always"
+                scrollbarSize={5}
+              >
+                <Title order={5} c="blue.4">
+                  Email Events
+                </Title>
                 <ExperimentEmailEventsTimeline
                   collapsable={false}
                   emailEvents={emailStats.events.map((event) => ({

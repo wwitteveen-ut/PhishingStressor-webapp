@@ -15,6 +15,7 @@ export default function ExperimentEmailList({
       <Table.Thead>
         <Table.Tr>
           <Table.Th>ID</Table.Th>
+          <Table.Th>Created At</Table.Th>
           <Table.Th>Subject</Table.Th>
           <Table.Th>Sender</Table.Th>
           <Table.Th>Schedule</Table.Th>

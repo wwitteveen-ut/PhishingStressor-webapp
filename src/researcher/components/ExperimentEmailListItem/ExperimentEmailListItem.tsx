@@ -1,9 +1,10 @@
 "use client";
 import { deleteEmail } from "@/researcher/actions/actions";
 import { ResearcherEmail } from "@/researcher/store/types";
-import { ActionIcon, Badge, Group, Table, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { AlertTriangle, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
+import { EmailStatusBadge, GroupsBadge } from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 
 interface ExperimentEmailListItemProps {
@@ -43,6 +44,9 @@ export default function ExperimentEmailListItem({
         <Text fw={500}>{email.id}</Text>
       </Table.Td>
       <Table.Td>
+        <Text fw={500}>{new Date(email.createdAt).toLocaleString()}</Text>
+      </Table.Td>
+      <Table.Td>
         <Text fw={500}>{email.title}</Text>
       </Table.Td>
       <Table.Td>
@@ -58,36 +62,10 @@ export default function ExperimentEmailListItem({
         </Group>
       </Table.Td>
       <Table.Td>
-        {email.groups.length > 1 ? (
-          <Tooltip
-            bg={"gray.2"}
-            withArrow
-            arrowSize={9}
-            arrowRadius={2}
-            label={
-              <Group>
-                {email.groups.map((group) => (
-                  <Badge radius={"xs"} variant="white" key={group.id}>
-                    {group.name}
-                  </Badge>
-                ))}
-              </Group>
-            }
-          >
-            <Badge variant="light">Groups ({email.groups.length})</Badge>
-          </Tooltip>
-        ) : (
-          <Badge variant="light">{email.groups[0].name}</Badge>
-        )}
+        <GroupsBadge groups={email.groups} />
       </Table.Td>
       <Table.Td>
-        <Badge
-          color={email.isPhishing ? "red" : "green"}
-          variant="light"
-          leftSection={<AlertTriangle size={12} />}
-        >
-          {email.isPhishing ? "Phishing" : "Regular"}
-        </Badge>
+        <EmailStatusBadge isPhishing={email.isPhishing} />
       </Table.Td>
       <Table.Td style={{ textAlign: "right" }}>
         <Tooltip label={"Delete email"}>
