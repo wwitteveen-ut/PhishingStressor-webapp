@@ -1,6 +1,14 @@
 "use client";
 
-import { Button, Paper, Text, Title } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Divider,
+  Paper,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import Link from "next/link";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { GlobalStats } from "../ExperimentStatsCard/ExperimentStatsCard";
@@ -25,15 +33,37 @@ export default function ParticipantDetail({
         Participant: {participantId}
       </Title>
       <GlobalStats participantId={participantId} />
-
-      {Object.entries(participantData.emails).map(([emailId]) => (
-        <Button
-          component={Link}
-          href={`/researcher/experiments/${experiment.id}/statistics/participants/${participantId}/${emailId}`}
-        >
-          {emailId}
-        </Button>
-      ))}
+      <Divider mb="lg" />
+      <Container size="xs" ml="0">
+        <Stack gap="xs">
+          <Title order={3} mb="sm">
+            All Emails statistics ({Object.keys(participantData.emails).length})
+          </Title>
+          {Object.entries(participantData.emails).map(([emailId]) => {
+            const email = experimentEmails[emailId];
+            return (
+              <Paper key={emailId} withBorder p="xs" pl="0" shadow="none">
+                <Button
+                  component={Link}
+                  variant="subtle"
+                  fullWidth
+                  href={`/researcher/experiments/${experiment.id}/statistics/participants/${participantId}/${emailId}`}
+                  pl="0"
+                >
+                  <Stack gap={2} align="flex-start" justify="start">
+                    <Text size="sm" fw={500}>
+                      {email.title}
+                    </Text>
+                    <Text size="xs" c="dimmed">
+                      From: {email.senderName} ({email.senderAddress})
+                    </Text>
+                  </Stack>
+                </Button>
+              </Paper>
+            );
+          })}
+        </Stack>
+      </Container>
     </Paper>
   );
 }

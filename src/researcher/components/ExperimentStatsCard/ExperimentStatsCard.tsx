@@ -171,23 +171,17 @@ export function GlobalStats({ participantId }: { participantId: string }) {
   ] as const;
 
   return (
-    <div
-      style={{
-        padding: `calc(${theme.spacing.xl} * 1.5)`,
-      }}
-    >
-      <SimpleGrid cols={{ base: 3, xs: 3, sm: 3, md: 4, lg: 6, xl: 6 }}>
-        {stats.map((stat) => (
-          <ExperimentStatsCard
-            key={stat.title}
-            title={stat.title}
-            icon={<stat.icon size={22} strokeWidth={1.5} />}
-            value={stat.value}
-            caption={stat.caption}
-          />
-        ))}
-      </SimpleGrid>
-    </div>
+    <SimpleGrid cols={{ base: 3, xs: 3, sm: 3, md: 4, lg: 6, xl: 6 }}>
+      {stats.map((stat) => (
+        <ExperimentStatsCard
+          key={stat.title}
+          title={stat.title}
+          icon={<stat.icon size={22} strokeWidth={1.5} />}
+          value={stat.value}
+          caption={stat.caption}
+        />
+      ))}
+    </SimpleGrid>
   );
 }
 
