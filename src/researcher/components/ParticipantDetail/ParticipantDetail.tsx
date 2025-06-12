@@ -1,27 +1,32 @@
 "use client";
 
-import { UserEvent, UserEventType } from "@/mail/store/types";
-import { getEmail } from "@/researcher/actions/actions";
-import {
-  EmailCreatePayload,
-  EmailStats,
-  ResearcherEmail,
-} from "@/researcher/store/types";
+import { UserEventType } from "@/mail/store/types";
+import { EmailStats } from "@/researcher/store/types";
 import {
   Badge,
+  Box,
+  Button,
   Card,
-  Container,
+  Collapse,
+  Divider,
   Group,
-  Loader,
   Paper,
+  ScrollArea,
+  Select,
+  Stack,
   Tabs,
   Text,
   Title,
 } from "@mantine/core";
-import { IconClock, IconMail } from "@tabler/icons-react";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconClock,
+  IconMail,
+} from "@tabler/icons-react";
 import HeatMap, { DataPoint } from "heatmap-ts";
+import { MessageCircleDashed } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
@@ -31,66 +36,11 @@ export default function ParticipantDetail({
 }: {
   participantId: string;
 }) {
-  const experiment = useExperimentContext();
-  const { experimentStats } = useExperimentStatsContext();
+  const { experimentStats, experimentEmails } = useExperimentStatsContext();
   const participantData = experimentStats[participantId];
-  const [emailEvents, setEmailEvents] = useState<
-    (UserEvent & { emailTitle: string; emailId: string })[]
-  >([]);
-  const [emails, setEmails] = useState<Record<string, ResearcherEmail>>({});
-  const [isLoading, setIsLoading] = useState(true);
 
-  const groupName =
-    experiment.groups.find((g) => g.id === participantData.groupId)?.name ||
-    "N/A";
-
-  useEffect(() => {
-    const fetchEmailData = async () => {
-      setIsLoading(true);
-      try {
-        const eventsPromises = Object.entries(participantData.emails).map(
-          async ([emailId, data]) => {
-            const email = await getEmail(experiment.id, emailId);
-            return {
-              email,
-              events: data.events.map((event: UserEvent) => ({
-                ...event,
-                emailTitle: email?.title || "Unknown Email",
-                emailId,
-              })),
-            };
-          }
-        );
-
-        const resolvedData = await Promise.all(eventsPromises);
-        const events = resolvedData.flatMap((d) => d.events);
-        const emailMap = resolvedData.reduce((acc, d) => {
-          if (d.email) {
-            acc[d.email.id] = d.email;
-          }
-          return acc;
-        }, {} as Record<string, ResearcherEmail>);
-        setEmailEvents(events);
-        setEmails(emailMap);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchEmailData();
-  }, [experiment.id, participantData.emails]);
   if (!participantData) {
     return <Text>Participant not found</Text>;
-  }
-  if (isLoading) {
-    return (
-      <Container size="lg" py="xl">
-        <Group justify="center">
-          <Loader />
-          <Text>Loading participant data...</Text>
-        </Group>
-      </Container>
-    );
   }
 
   return (
@@ -98,11 +48,6 @@ export default function ParticipantDetail({
       <Title order={2} mb="lg">
         Participant: {participantId}
       </Title>
-      <Text>Group: {groupName}</Text>
-      <Text>
-        Logged In: {new Date(participantData.loggedIn).toLocaleString()}
-      </Text>
-
       <Tabs defaultValue="timeline" mt="md">
         <Tabs.List>
           <Tabs.Tab value="timeline" leftSection={<IconClock size={16} />}>
@@ -116,7 +61,7 @@ export default function ParticipantDetail({
         <Tabs.Panel value="timeline" pt="xs">
           {Object.entries(participantData.emails).map(
             ([emailId, emailData]) => {
-              const email = emails[emailId];
+              const email = experimentEmails[emailId];
 
               const emailEvents = emailData.events.map((event) => ({
                 ...event,
@@ -127,65 +72,14 @@ export default function ParticipantDetail({
               return (
                 <ExperimentEmailEventsTimeline
                   key={emailId}
-                  email={email}
                   emailEvents={emailEvents}
                 />
               );
             }
           )}
         </Tabs.Panel>
-
         <Tabs.Panel value="emails" pt="xs">
-          {Object.entries(participantData.emails).map(([emailId, data]) => {
-            const emailStats = data as EmailStats;
-            const email = emails[emailId];
-            if (!email) return null;
-            return (
-              <Card
-                key={emailId}
-                shadow="sm"
-                padding="lg"
-                radius="md"
-                withBorder
-                mb="md"
-              >
-                <Text fw={500}>{email.title}</Text>
-                <Text size="sm" c="dimmed">
-                  From: {`${email.senderName} <${email.senderAddress}>`}
-                </Text>
-                <Text size="sm" mt="xs">
-                  Replies: {emailStats.replies.length}
-                </Text>
-                {emailStats.replies.map((reply, index) => (
-                  <Text key={index} size="sm" mt="xs">
-                    Reply at {new Date(reply.createdAt).toLocaleString()}:{" "}
-                    {reply.content}
-                  </Text>
-                ))}
-                <Text size="sm" mt="xs">
-                  Events: {data.events.length}
-                </Text>
-                {emailStats.events.map((event, index) => (
-                  <Group key={index} gap={4} mt="xs">
-                    <Badge>{event.type}</Badge>
-                    <Text size="xs">
-                      {new Date(event.timestamp).toLocaleString()}
-                    </Text>
-                  </Group>
-                ))}
-                <EmailHeatmapOverlay
-                  emailId={emailId}
-                  participantId={participantId}
-                  eventType={UserEventType.HEATMAP}
-                />
-                <EmailHeatmapOverlay
-                  emailId={emailId}
-                  participantId={participantId}
-                  eventType={UserEventType.CLICK}
-                />
-              </Card>
-            );
-          })}
+          <EmailSelector participantId={participantId} />
         </Tabs.Panel>
       </Tabs>
     </Paper>
@@ -207,6 +101,8 @@ export function EmailHeatmapOverlay({
   const emailData = experimentEmails[emailId];
   const heatmapContainerRef = useRef<HTMLDivElement>(null);
   const heatmapInstanceRef = useRef<HeatMap | null>(null);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   const heatmapData = useMemo(() => {
     const heatmapEvents =
       experimentStats[participantId].emails[emailId]?.events?.filter(
@@ -231,8 +127,8 @@ export function EmailHeatmapOverlay({
     }, []);
 
     return allDataPoints;
-  }, [experimentStats, emailId]);
-  
+  }, [experimentStats, emailId, participantId]);
+
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {
       return;
@@ -289,22 +185,191 @@ export function EmailHeatmapOverlay({
   }, [heatmapData, emailId, participantId]);
 
   if (!heatmapData.length) {
-    return <Text>No data for {eventType}</Text>;
+    return (
+      <Box p="md">
+        <Title order={4} c="blue.5">
+          Heatmap for {emailData.title}
+        </Title>
+        <Text>No data for {eventType}</Text>
+      </Box>
+    );
   }
+
   return (
-    <div ref={heatmapContainerRef}>
-      <ExperimentEmailPreview emailData={{
-        metadata: {
-          title: emailData.title,
-          senderName: emailData.senderName,
-          senderEmail: emailData.senderAddress,
-          content: emailData.content,
-          scheduledFor: emailData.scheduledFor,
-          groups: [],
-          isPhishing: false,
-        },
-        files: [],
-      }} />
-    </div>
+    <Box p="md">
+      <Group justify="space-between" align="center" mb="sm">
+        <Title order={4} c="blue.5">
+          Heatmap for {emailData.title} ({eventType})
+        </Title>
+        <Button
+          variant="subtle"
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          rightSection={
+            isCollapsed ? (
+              <IconChevronDown size={16} />
+            ) : (
+              <IconChevronUp size={16} />
+            )
+          }
+        >
+          {isCollapsed ? "Show Heatmap" : "Hide Heatmap"}
+        </Button>
+      </Group>
+      <Divider c="blue.5" />
+      <Collapse in={!isCollapsed}>
+        <div ref={heatmapContainerRef}>
+          <ExperimentEmailPreview
+            emailData={{
+              metadata: {
+                title: emailData.title,
+                senderName: emailData.senderName,
+                senderEmail: emailData.senderAddress,
+                content: emailData.content,
+                scheduledFor: emailData.scheduledFor,
+                groups: [],
+                isPhishing: false,
+              },
+              files: [],
+            }}
+          />
+        </div>
+      </Collapse>
+    </Box>
+  );
+}
+
+export function EmailSelector({ participantId }: { participantId: string }) {
+  const { experimentStats, experimentEmails } = useExperimentStatsContext();
+  const [selectedEmailId, setSelectedEmailId] = useState<string | null>(null);
+
+  const emailOptions = Object.entries(experimentEmails).map(
+    ([emailId, email]) => ({
+      value: emailId,
+      label: email.title,
+      disabled:
+        !experimentStats[participantId]?.emails[emailId]?.events?.length,
+      isPhishing: email.isPhishing,
+    })
+  );
+
+  const selectedEmail = selectedEmailId
+    ? experimentEmails[selectedEmailId]
+    : null;
+  const emailStats = selectedEmailId
+    ? (experimentStats[participantId]?.emails[selectedEmailId] as EmailStats)
+    : null;
+
+  return (
+    <Box p="md">
+      <Group align="center" gap="xs" mb="md">
+        <Title order={4} c="blue.5">
+          Selected Email
+        </Title>
+        <Select
+          variant="filled"
+          placeholder="Choose an email to view details"
+          data={[
+            {
+              group: "Phishing",
+              items: emailOptions.filter(
+                (email) => email.isPhishing && !email.disabled
+              ),
+            },
+            {
+              group: "Non-Phishing",
+              items: emailOptions.filter(
+                (email) => !email.isPhishing && !email.disabled
+              ),
+            },
+            {
+              group: "No Data",
+              items: emailOptions.filter((email) => email.disabled),
+            },
+          ]}
+          value={selectedEmailId}
+          nothingFoundMessage="No emails found"
+          flex={1}
+          onChange={setSelectedEmailId}
+          searchable
+          rightSection={<IconChevronDown size={16} />}
+        />
+      </Group>
+      {selectedEmail && emailStats ? (
+        <Card shadow="none" radius="md" p="0">
+          <Stack>
+            <Group>
+              <Text size="sm" c="dimmed">
+                From:{" "}
+                {`${selectedEmail.senderName} <${selectedEmail.senderAddress}>`}
+              </Text>
+              {selectedEmail.isPhishing && <Badge color="red">Phishing</Badge>}
+              {selectedEmail.groups.length > 0 && (
+                <Badge color="blue">
+                  {selectedEmail.groups.map((group) => group).join(", ")}
+                </Badge>
+              )}
+            </Group>
+
+            <Group flex={1} align="flex-start">
+              <Box style={{ flex: 1 }}>
+                {emailStats.replies.length > 0 ? (
+                  <Stack gap="sm" mt="xs" align="flex-start">
+                    {emailStats.replies.map((reply, index) => (
+                      <Paper
+                        key={index}
+                        shadow="xs"
+                        p="sm"
+                        radius="md"
+                        withBorder
+                        style={{ width: "100%" }}
+                      >
+                        <Group align="center" gap="xs">
+                          <MessageCircleDashed size={16} color="gray" />
+                          <Stack gap={4}>
+                            <Text size="xs" fw={500} c="dimmed">
+                              {new Date(reply.createdAt).toLocaleString()}
+                            </Text>
+                            <Text size="sm" style={{ lineHeight: 1.5 }}>
+                              {reply.content}
+                            </Text>
+                          </Stack>
+                        </Group>
+                      </Paper>
+                    ))}
+                  </Stack>
+                ) : (
+                  <Text size="sm" c="dimmed" mt="xs">
+                    No replies available.
+                  </Text>
+                )}
+              </Box>
+              <ScrollArea h={350}>
+                <ExperimentEmailEventsTimeline
+                  collapsable={false}
+                  emailEvents={emailStats.events.map((event) => ({
+                    ...event,
+                    emailTitle: selectedEmail.title,
+                    emailId: selectedEmailId!,
+                  }))}
+                />
+              </ScrollArea>
+            </Group>
+
+            <EmailHeatmapOverlay
+              emailId={selectedEmailId!}
+              participantId={participantId}
+              eventType={UserEventType.HEATMAP}
+            />
+            <EmailHeatmapOverlay
+              emailId={selectedEmailId!}
+              participantId={participantId}
+              eventType={UserEventType.CLICK}
+            />
+          </Stack>
+        </Card>
+      ) : (
+        <Text c="dimmed">Select an email to view its details.</Text>
+      )}
+    </Box>
   );
 }
