@@ -8,12 +8,15 @@ import {
   Modal,
   Stack,
   Text,
+  ThemeIcon,
   Timeline,
+  Tooltip,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconClock, IconEye, IconMail } from "@tabler/icons-react";
-import { EmailStatusBadge } from "../ExperimentBadges";
+import { EmailStatusBadge, GroupsBadge } from "../ExperimentBadges";
+import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
 
 export default function ExperimentEmailTimeline({
@@ -21,6 +24,7 @@ export default function ExperimentEmailTimeline({
 }: {
   emails: ResearcherEmail[];
 }) {
+  const experiment = useExperimentContext();
   const [opened, { open, close }] = useDisclosure(false);
 
   const sortedEmails = [...emails].sort(
@@ -61,11 +65,7 @@ export default function ExperimentEmailTimeline({
 
   return (
     <>
-      <Button
-        variant="outline"
-        leftSection={<IconClock size={18} />}
-        onClick={open}
-      >
+      <Button leftSection={<IconClock size={18} />} onClick={open}>
         View Timeline
       </Button>
       <Modal
@@ -82,7 +82,7 @@ export default function ExperimentEmailTimeline({
         <Stack>
           <Container size="sm" px={0}>
             <Timeline
-              active={emails.length - 1}
+              active={emails.length}
               bulletSize={32}
               lineWidth={2}
               color="blue"
@@ -92,27 +92,34 @@ export default function ExperimentEmailTimeline({
                   key={email.id}
                   bullet={<IconMail size={18} />}
                   title={
-                    <Group justify="space-between" align="flex-start">
+                    <Group justify="space-between">
                       <div style={{ flex: 1 }}>
-                        <Text size="md" fw={500} mb={4}>
+                        <Text size="md" fw={600}>
                           {email.title}
                         </Text>
-                        <Text size="xs" c="dimmed">
-                          {formatScheduledTime(email.scheduledFor)}
-                        </Text>
                       </div>
-                      <ActionIcon
-                        variant="light"
-                        size="sm"
-                        color="blue"
-                        onClick={() => openModal(email)}
-                      >
-                        <IconEye size={14} />
-                      </ActionIcon>
+                      <Tooltip label={"View email"}>
+                        <ActionIcon
+                          variant="light"
+                          size="sm"
+                          color="blue"
+                          onClick={() => openModal(email)}
+                        >
+                          <IconEye size={14} />
+                        </ActionIcon>
+                      </Tooltip>
                     </Group>
                   }
                 >
                   <Stack gap="sm" mt="xs" pl="md">
+                    <Group gap="xs">
+                      <Text size="xs" c="dimmed" fw={500}>
+                        Time:
+                      </Text>
+                      <Text size="xs" c="blue.5" fw={600}>
+                        {formatScheduledTime(email.scheduledFor)}
+                      </Text>
+                    </Group>
                     <Group gap="xs">
                       <Text size="xs" c="dimmed" fw={500}>
                         From:
@@ -128,9 +135,28 @@ export default function ExperimentEmailTimeline({
                       </Text>
                       <EmailStatusBadge isPhishing={email.isPhishing} />
                     </Group>
+                    <Group gap="xs" align="center">
+                      <Text size="xs" c="dimmed" fw={500}>
+                        Groups:
+                      </Text>
+                      <GroupsBadge groups={email.groups} maxNumOfGroups={2} />
+                    </Group>
                   </Stack>
                 </Timeline.Item>
               ))}
+              <Timeline.Item
+                bullet={
+                  <ThemeIcon color="red" radius="xl">
+                    <IconClock size={22} />
+                  </ThemeIcon>
+                }
+                color="red"
+                title={
+                  <Text size="md" fw={600}>
+                    Experiment ended after {experiment.duration} minutes
+                  </Text>
+                }
+              />
             </Timeline>
           </Container>
         </Stack>

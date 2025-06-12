@@ -3,10 +3,12 @@ import { Badge, Group, Tooltip } from "@mantine/core";
 
 export default function GroupsBadge({
   groups,
+  maxNumOfGroups = 1,
 }: {
   groups: ResearcherEmail["groups"];
+  maxNumOfGroups?: number;
 }) {
-  if (groups.length > 1) {
+  if (groups.length > maxNumOfGroups) {
     return (
       <Tooltip
         bg={"gray.2"}
@@ -27,5 +29,9 @@ export default function GroupsBadge({
       </Tooltip>
     );
   }
-  return <Badge variant="light">{groups[0].name}</Badge>;
+  return groups.map((group) => (
+    <Badge key={group.id} variant="light">
+      {group.name}
+    </Badge>
+  ));
 }
