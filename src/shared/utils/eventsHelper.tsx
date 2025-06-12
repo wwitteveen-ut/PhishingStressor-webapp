@@ -5,7 +5,7 @@ import {
   Link,
   MailOpen,
   MailX,
-  MousePointer,
+  MousePointer2,
   MousePointerClick,
   SquareArrowOutUpRight,
 } from "lucide-react";
@@ -36,7 +36,7 @@ export function getEventStyle(
     case UserEventType.HEATMAP:
       return {
         color: "orange.5",
-        icon: <MousePointer size={size} />,
+        icon: <MousePointer2 size={size} />,
         text: "Heatmap",
       };
     case UserEventType.CLICK:
