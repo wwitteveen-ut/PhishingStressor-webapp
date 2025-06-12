@@ -48,7 +48,7 @@ export default function ExperimentEmailTimeline({
               senderName: email.senderName,
               senderEmail: email.senderAddress,
               groups: [],
-              content: "",
+              content: email.content,
               isPhishing: false,
               scheduledFor: 0,
             },
