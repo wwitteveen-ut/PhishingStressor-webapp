@@ -65,7 +65,7 @@ export default function ExperimentStatsOverview() {
               <Table.Td>
                 <Button
                   component={Link}
-                  href={`/researcher/experiments/${experiment.id}/statistics/${stat.participantId}`}
+                  href={`/researcher/experiments/${experiment.id}/statistics/participants/${stat.participantId}`}
                   variant="outline"
                   size="xs"
                 >

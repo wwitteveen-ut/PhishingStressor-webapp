@@ -4,6 +4,7 @@ import { Box, Collapse, Group, ThemeIcon, UnstyledButton } from "@mantine/core";
 import { IconChevronRight, TablerIcon } from "@tabler/icons-react";
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import classes from "./LinksGroup.module.css";
 
@@ -26,6 +27,7 @@ export default function LinksGroup({
 }: LinksGroupProps) {
   const hasLinks = !mainLink && links.length > 0;
   const [opened, setOpened] = useState(initiallyOpened);
+  const pathname = usePathname();
 
   if (mainLink) {
     return (
@@ -50,7 +52,7 @@ export default function LinksGroup({
     <>
       <UnstyledButton
         onClick={() => setOpened((o) => !o)}
-        className={classes.control}
+        className={`${classes.control} ${active ? classes.active : ""}`}
       >
         <Group justify="space-between" gap={0}>
           <Group style={{ display: "flex", alignItems: "center" }}>
@@ -80,6 +82,8 @@ export default function LinksGroup({
               component={Link}
               href={link.link}
               key={link.label}
+              fw={pathname === link.link ? 600 : 500}
+              c={pathname === link.link ? "blue" : ""}
             >
               {link.label}
             </UnstyledButton>

@@ -29,7 +29,7 @@ export default function ExperimentSidebar() {
   const pathname = usePathname();
   const experiment = useExperimentContext();
 
-  const mockdata: MenuItem[] = [
+  const menuItems: MenuItem[] = [
     {
       label: "Overview",
       icon: SquareGanttChart,
@@ -38,21 +38,32 @@ export default function ExperimentSidebar() {
     {
       label: "Emails",
       icon: Mail,
-      mainLink: `/researcher/experiments/${experiment.id}/emails`,
+      initiallyOpened: pathname.includes("/emails"),
+      links: [
+        {
+          label: "Emails",
+          link: `/researcher/experiments/${experiment.id}/emails`,
+        },
+        {
+          label: "Email Timeline",
+          link: `/researcher/experiments/${experiment.id}/emails/timeline`,
+        },
+      ],
     },
     {
       label: "Statistics",
       icon: ChartArea,
-      mainLink: `/researcher/experiments/${experiment.id}/statistics`,
-      // initiallyOpened: true,
-      // links: [
-      //   {
-      //     label: "Overview",
-      //     link: `/researcher/experiments/${experiment.id}/statistics`,
-      //   },
-      //   { label: "Second statistic", link: "/" },
-      //   { label: "Third statistic", link: "/" },
-      // ],
+      initiallyOpened: pathname.includes("/statistics"),
+      links: [
+        {
+          label: "Overview",
+          link: `/researcher/experiments/${experiment.id}/statistics/overview`,
+        },
+        {
+          label: "Participant Statistics",
+          link: `/researcher/experiments/${experiment.id}/statistics/participants`,
+        },
+      ],
     },
   ];
 
@@ -112,13 +123,16 @@ export default function ExperimentSidebar() {
       </Button>
       <Divider />
       <ScrollArea style={{ flex: 1, padding: "8px" }}>
-        {mockdata.map((item) => (
+        {menuItems.map((item) => (
           <LinksGroup
             key={item.label}
             icon={item.icon}
             label={item.label}
             initiallyOpened={item.initiallyOpened}
-            active={pathname === item.mainLink}
+            active={
+              pathname === item.mainLink ||
+              item.links?.some((link) => pathname.includes(link.link))
+            }
             mainLink={item.mainLink}
             links={item.links}
           />

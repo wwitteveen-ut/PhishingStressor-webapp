@@ -5,6 +5,11 @@ import { IconClock, IconMail } from "@tabler/icons-react";
 import Link from "next/link";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
+import {
+  EmailStats,
+  ExperimentGlobalStats,
+  GlobalStats,
+} from "../ExperimentStatsCard/ExperimentStatsCard";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
 export default function ParticipantDetail({
@@ -56,6 +61,12 @@ export default function ParticipantDetail({
           )}
         </Tabs.Panel>
         <Tabs.Panel value="emails" pt="xs">
+          <GlobalStats participantId={participantId} />
+          <EmailStats
+            participantId={participantId}
+            emailId={Object.keys(participantData.emails)[0]}
+          />
+          <ExperimentGlobalStats />
           {Object.entries(participantData.emails).map(([emailId]) => (
             <Button
               component={Link}
