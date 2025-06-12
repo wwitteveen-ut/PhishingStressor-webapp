@@ -13,7 +13,7 @@ interface ExtendedParticipantStats extends Omit<ParticipantStats, "groupId"> {
 
 export default function ExperimentStatsOverview() {
   const experiment = useExperimentContext();
-  const experimentStats = useExperimentStatsContext();
+  const { experimentStats } = useExperimentStatsContext();
 
   const stats: ExtendedParticipantStats[] = Object.entries(experimentStats).map(
     ([participantId, participantStats]) => {
