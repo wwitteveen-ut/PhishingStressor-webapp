@@ -8,14 +8,13 @@ import { UserEvent, UserEventType, ZustandEmail } from "./types";
 type SimpleEventType =
   | UserEventType.TIME_OPENED
   | UserEventType.TIME_CLOSED
-  | UserEventType.LINK_CLICK
+  | UserEventType.LINK_CLICKED
   | UserEventType.ATTACHMENT_OPENED
-  | UserEventType.ATTACHMENT_DOWNLOADED
   | UserEventType.ATTACHMENT_CLOSED;
 
 type ComplexEventType =
   | UserEventType.HEATMAP
-  | UserEventType.LINK_HOVER
+  | UserEventType.LINK_HOVERED
   | UserEventType.CLICK;
 
 export interface ParticipantSlice {

@@ -45,19 +45,19 @@ export function getEventStyle(
         icon: <MousePointerClick size={size} />,
         text: "Click",
       };
-    case UserEventType.LINK_CLICK:
+    case UserEventType.LINK_CLICKED:
       return {
         color: "red.4",
         icon: <SquareArrowOutUpRight size={size} />,
-        text: "Link Click",
+        text: "Link Clicked",
       };
-    case UserEventType.LINK_HOVER:
+    case UserEventType.LINK_HOVERED:
       return {
         color: "yellow.4",
         icon: <Link size={size} />,
-        text: "Link Hover",
+        text: "Link Hovered",
       };
-    case UserEventType.ATTACHMENT_DOWNLOADED:
+    case UserEventType.ATTACHMENT_OPENED:
       return {
         color: "violet.4",
         icon: <FileDown size={size} />,

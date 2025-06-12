@@ -87,7 +87,7 @@ export default function ExperimentEmailTimeline({
               lineWidth={2}
               color="blue"
             >
-              {sortedEmails.map((email, index) => (
+              {sortedEmails.map((email) => (
                 <Timeline.Item
                   key={email.id}
                   bullet={<IconMail size={18} />}

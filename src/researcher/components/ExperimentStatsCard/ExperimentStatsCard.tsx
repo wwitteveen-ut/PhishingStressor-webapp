@@ -1,3 +1,4 @@
+import { UserEventType } from "@/mail/store/types";
 import { ExperimentStats, ResearcherEmail } from "@/researcher/store/types";
 import {
   Group,
@@ -17,7 +18,6 @@ import {
   TextCursor,
 } from "lucide-react";
 import { ReactNode } from "react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
 interface StatsCardProps {
@@ -71,7 +71,6 @@ export default function ExperimentStatsCard({
 }
 
 export function GlobalStats({ participantId }: { participantId: string }) {
-  const theme = useMantineTheme();
   const { experimentStats } = useExperimentStatsContext();
   const participantData = experimentStats?.[participantId];
 
@@ -93,19 +92,21 @@ export function GlobalStats({ participantId }: { participantId: string }) {
 
   emailIds.forEach((emailId) => {
     const email = emailData[emailId];
-    if (email.events.some((event) => event.type === "TIME_OPENED")) {
+    if (
+      email.events.some((event) => event.type === UserEventType.TIME_OPENED)
+    ) {
       totalEmailsOpened += 1;
     }
     totalReplies += email.replies.length;
     email.events.forEach((event) => {
       totalEvents += 1;
-      if (event.type === "LINK_CLICK") {
+      if (event.type === UserEventType.LINK_CLICKED) {
         totalLinkClicks += 1;
-      } else if (event.type === "ATTACHMENT_DOWNLOADED") {
+      } else if (event.type === UserEventType.ATTACHMENT_OPENED) {
         totalAttachments += 1;
-      } else if (event.type === "CLICK") {
+      } else if (event.type === UserEventType.CLICK) {
         totalClicks += 1;
-      } else if (event.type === "LINK_HOVERED" && event.extra) {
+      } else if (event.type === UserEventType.LINK_HOVERED && event.extra) {
         const duration = JSON.parse(event.extra).duration;
         if (typeof duration === "number") {
           totalHoverTime += duration;
@@ -201,8 +202,12 @@ export function EmailStats({
   }
 
   // Calculate time spent open
-  const openEvent = emailData.events.find((e) => e.type === "TIME_OPENED");
-  const closeEvent = emailData.events.find((e) => e.type === "TIME_CLOSED");
+  const openEvent = emailData.events.find(
+    (e) => e.type === UserEventType.TIME_OPENED
+  );
+  const closeEvent = emailData.events.find(
+    (e) => e.type === UserEventType.TIME_CLOSED
+  );
   let timeOpen = "N/A";
   if (openEvent) {
     const openTime = new Date(openEvent.timestamp).getTime();
@@ -223,11 +228,11 @@ export function EmailStats({
   const interactionCount = emailData.events
     .filter((e) =>
       [
-        "CLICK",
-        "LINK_CLICK",
-        "LINK_HOVERED",
-        "HEATMAP",
-        "ATTACHMENT_DOWNLOADED",
+        UserEventType.CLICK,
+        UserEventType.LINK_CLICKED,
+        UserEventType.LINK_HOVERED,
+        UserEventType.HEATMAP,
+        UserEventType.ATTACHMENT_OPENED,
       ].includes(e.type)
     )
     .length.toString();
@@ -278,11 +283,8 @@ export function EmailStats({
 }
 
 export function ExperimentGlobalStats() {
-  const theme = useMantineTheme();
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
-  const experiment = useExperimentContext();
 
-  // Efficiently compute aggregates
   const computeStats = (stats: ExperimentStats, emails: ResearcherEmail[]) => {
     let totalEmailsOpened = 0;
     let totalReplies = 0;
@@ -303,25 +305,24 @@ export function ExperimentGlobalStats() {
 
       emailIds.forEach((emailId) => {
         const email = emailData[emailId];
-        // Emails opened
-        if (email.events.some((event) => event.type === "TIME_OPENED")) {
+        if (
+          email.events.some((event) => event.type === UserEventType.TIME_OPENED)
+        ) {
           totalEmailsOpened += 1;
         }
-        // Replies
         totalReplies += email.replies.length;
-        // Events processing
         email.events.forEach((event) => {
           totalEvents += 1;
-          if (event.type === "LINK_CLICK") {
+          if (event.type === UserEventType.LINK_CLICKED) {
             totalLinkClicks += 1;
             if (phishingEmailIds.has(emailId)) {
               participantsWithPhishingClicks.add(participant.groupId);
             }
-          } else if (event.type === "ATTACHMENT_DOWNLOADED") {
+          } else if (event.type === UserEventType.ATTACHMENT_OPENED) {
             totalAttachments += 1;
-          } else if (event.type === "CLICK") {
+          } else if (event.type === UserEventType.CLICK) {
             totalClicks += 1;
-          } else if (event.type === "LINK_HOVERED" && event.extra) {
+          } else if (event.type === UserEventType.LINK_HOVERED && event.extra) {
             const duration = JSON.parse(event.extra).duration;
             if (typeof duration === "number") {
               totalHoverTime += duration;

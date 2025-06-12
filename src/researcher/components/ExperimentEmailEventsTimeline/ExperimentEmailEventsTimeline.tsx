@@ -17,6 +17,7 @@ export default function ExperimentEmailEventsTimeline({
   }[];
   collapsable?: boolean;
 }) {
+  console.log(emailEvents);
   const [opened, { toggle }] = useDisclosure(!collapsable);
   return (
     <Card shadow="none" padding="lg" radius="md" pl="0">

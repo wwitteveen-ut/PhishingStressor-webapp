@@ -39,7 +39,7 @@ export default function EmailAttachmentListItem({
     if (isDownloading) return;
 
     setIsDownloading(true);
-    addSimpleEvent(UserEventType.ATTACHMENT_DOWNLOADED);
+    addSimpleEvent(UserEventType.ATTACHMENT_OPENED);
 
     try {
       const { buffer, contentType, filename } = await downloadAttachment(

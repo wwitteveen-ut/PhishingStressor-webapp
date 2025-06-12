@@ -106,7 +106,7 @@ export function ResearcherSidebarHeader() {
         <Stack gap={0}>
           <Title order={4}>PhishingStressor</Title>
           <Title order={4} c={"blue.6"}>
-            Dashboard
+            DASHBOARD
           </Title>
         </Stack>
       </Group>

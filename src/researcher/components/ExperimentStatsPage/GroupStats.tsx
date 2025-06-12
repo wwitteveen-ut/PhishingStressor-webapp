@@ -1,6 +1,7 @@
 "use client";
+import { UserEventType } from "@/mail/store/types";
 import { ExperimentStats, ResearcherEmail } from "@/researcher/store/types"; // Adjust import path for types
-import { SimpleGrid, useMantineTheme } from "@mantine/core";
+import { SimpleGrid } from "@mantine/core";
 import {
   Clock,
   Link,
@@ -10,7 +11,6 @@ import {
   Shield,
   TextCursor,
 } from "lucide-react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext"; // Adjust import path as needed
 import ExperimentStatsCard from "../ExperimentStatsCard";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
@@ -19,12 +19,8 @@ interface GroupStatsProps {
 }
 
 export function GroupStats({ groupId }: GroupStatsProps) {
-  const theme = useMantineTheme();
-  const experiment = useExperimentContext();
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
-  const group = experiment?.groups.find((g) => g.id === groupId);
 
-  // Efficiently compute aggregates for the group
   const computeStats = (stats: ExperimentStats, emails: ResearcherEmail[]) => {
     let totalEmailsOpened = 0;
     let totalReplies = 0;
@@ -40,28 +36,30 @@ export function GroupStats({ groupId }: GroupStatsProps) {
     const participantsWithPhishingClicks = new Set<string>();
 
     Object.entries(stats).forEach(([participantId, participant]) => {
-      if (participant.groupId !== groupId) return; // Filter by groupId
+      if (participant.groupId !== groupId) return;
       const emailData = participant.emails;
       const emailIds = Object.keys(emailData);
 
       emailIds.forEach((emailId) => {
         const email = emailData[emailId];
-        if (email.events.some((event) => event.type === "TIME_OPENED")) {
+        if (
+          email.events.some((event) => event.type === UserEventType.TIME_OPENED)
+        ) {
           totalEmailsOpened += 1;
         }
         totalReplies += email.replies.length;
         email.events.forEach((event) => {
           totalEvents += 1;
-          if (event.type === "LINK_CLICK") {
+          if (event.type === UserEventType.LINK_CLICKED) {
             totalLinkClicks += 1;
             if (phishingEmailIds.has(emailId)) {
               participantsWithPhishingClicks.add(participantId);
             }
-          } else if (event.type === "ATTACHMENT_DOWNLOADED") {
+          } else if (event.type === UserEventType.ATTACHMENT_OPENED) {
             totalAttachments += 1;
-          } else if (event.type === "CLICK") {
+          } else if (event.type === UserEventType.CLICK) {
             totalClicks += 1;
-          } else if (event.type === "LINK_HOVERED" && event.extra) {
+          } else if (event.type === UserEventType.LINK_HOVERED && event.extra) {
             const duration = JSON.parse(event.extra).duration;
             if (typeof duration === "number") {
               totalHoverTime += duration;

@@ -3,6 +3,7 @@
 import { UserEventType } from "@/mail/store/types";
 import { EmailStats } from "@/researcher/store/types";
 import {
+  ActionIcon,
   Card,
   Divider,
   Group,
@@ -12,14 +13,15 @@ import {
   Stack,
   Text,
   Title,
+  Tooltip,
 } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
-import { MessageCircleDashed } from "lucide-react";
+import { Eye, MessageCircleDashed } from "lucide-react";
 import { useRouter } from "next/navigation";
 import EmailHeatmapOverlay from "../EmailHeatmapOverlay";
-import EmailInfo from "../EmailInfo";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
+import EmailInfo from "../ExperimentEmailInfo";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
 interface ParticipantEmailStatsPageProps {
@@ -112,6 +114,11 @@ export default function ParticipantEmailStatsOverview({
           searchable
           rightSection={<IconChevronDown size={16} />}
         />
+        <Tooltip label="View Email">
+          <ActionIcon variant="light" size="lg">
+            <Eye size={20} />
+          </ActionIcon>
+        </Tooltip>
       </Group>
       <Divider mb="md" />
       {selectedEmail && emailStats ? (

@@ -47,7 +47,7 @@ export default function ExperimentSidebar() {
       links: [
         {
           label: "Overview",
-          link: `/researcher/experiments/${experiment.id}/statistics/overview`,
+          link: `/researcher/experiments/${experiment.id}/statistics`,
         },
         {
           label: "Participant Statistics",

@@ -2,7 +2,11 @@ import { ResearcherEmail } from "@/researcher/store/types";
 import { Accordion, Box, Group, Stack, Text, Title } from "@mantine/core";
 import { EmailStatusBadge, GroupsBadge } from "../ExperimentBadges";
 
-export default function EmailInfo({ email }: { email: ResearcherEmail }) {
+export default function ExperimentEmailInfo({
+  email,
+}: {
+  email: ResearcherEmail;
+}) {
   return (
     <Accordion variant="contained" defaultValue={null}>
       <Accordion.Item value={email.id}>

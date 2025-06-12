@@ -2,7 +2,7 @@
 
 import { UserEventType } from "@/mail/store/types";
 import { getEventStyle } from "@/shared/utils/eventsHelper";
-import { Box, Button, Collapse, Group, Tooltip } from "@mantine/core";
+import { Box, Button, Collapse, Group, Paper, Tooltip } from "@mantine/core";
 import { IconChevronDown, IconChevronUp } from "@tabler/icons-react";
 import HeatMap, { DataPoint } from "heatmap-ts";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -37,7 +37,9 @@ export default function EmailHeatmapOverlay({
         if (event?.extra && typeof event.extra === "string") {
           const parsed = JSON.parse(event.extra);
           if (Array.isArray(parsed)) {
-            return res.concat(parsed);
+            return res.concat(parsed as DataPoint[]);
+          } else {
+            return res.concat([parsed as DataPoint]);
           }
         }
       } catch (error) {
@@ -50,7 +52,7 @@ export default function EmailHeatmapOverlay({
     }, []);
 
     return allDataPoints;
-  }, [experimentStats, emailId, participantId]);
+  }, [experimentStats, emailId, eventType, participantId]);
 
   useEffect(() => {
     if (!heatmapContainerRef.current || !heatmapData.length) {
@@ -71,7 +73,7 @@ export default function EmailHeatmapOverlay({
           container: heatmapContainerRef.current!,
           maxOpacity: 0.6,
           width: width,
-          height: height,
+          height: height + 30,
           radius: 30,
           blur: 0.9,
         });
@@ -126,11 +128,15 @@ export default function EmailHeatmapOverlay({
 
   return (
     <Box py="md">
-      <Group justify="space-between" align="center" mb="sm">
+      <Group justify="space-between" align="center">
         <Button
-          variant="subtle"
+          variant={isCollapsed ? "light" : "filled"}
           onClick={() => setIsCollapsed(!isCollapsed)}
           leftSection={getEventStyle(eventType, 16).icon}
+          style={{
+            borderBottomLeftRadius: 0,
+            borderBottomRightRadius: 0,
+          }}
           rightSection={
             isCollapsed ? (
               <IconChevronDown size={16} />
@@ -143,22 +149,33 @@ export default function EmailHeatmapOverlay({
         </Button>
       </Group>
       <Collapse in={!isCollapsed}>
-        <div ref={heatmapContainerRef}>
-          <ExperimentEmailPreview
-            emailData={{
-              metadata: {
-                title: emailData.title,
-                senderName: emailData.senderName,
-                senderEmail: emailData.senderAddress,
-                content: emailData.content,
-                scheduledFor: emailData.scheduledFor,
-                groups: [],
-                isPhishing: false,
-              },
-              files: [],
-            }}
-          />
-        </div>
+        <Paper
+          pb="md"
+          withBorder
+          radius="sm"
+          shadow="xs"
+          style={{
+            borderColor: "var(--mantine-color-blue-5)",
+            borderTopLeftRadius: "0",
+          }}
+        >
+          <Box ref={heatmapContainerRef}>
+            <ExperimentEmailPreview
+              emailData={{
+                metadata: {
+                  title: emailData.title,
+                  senderName: emailData.senderName,
+                  senderEmail: emailData.senderAddress,
+                  content: emailData.content,
+                  scheduledFor: emailData.scheduledFor,
+                  groups: [],
+                  isPhishing: false,
+                },
+                files: [],
+              }}
+            />
+          </Box>
+        </Paper>
       </Collapse>
     </Box>
   );
