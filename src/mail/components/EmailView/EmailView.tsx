@@ -38,6 +38,26 @@ export default function EmailView() {
   const hoverStartTime = useRef<number | null>(null);
   const lastMousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
+  const handleHoverEnd = useCallback(() => {
+    if (currentHoveredLink.current && hoverStartTime.current) {
+      const duration = Date.now() - hoverStartTime.current;
+      const linkHref = currentHoveredLink.current.split("-").slice(1).join("-");
+
+      if (duration > 50) {
+        addComplexEvent(
+          UserEventType.LINK_HOVERED,
+          JSON.stringify({
+            duration_ms: duration,
+            href: linkHref,
+          })
+        );
+      }
+    }
+
+    currentHoveredLink.current = null;
+    hoverStartTime.current = null;
+  }, [addComplexEvent]);
+
   useEffect(() => {
     latestCoords.current = { x, y };
     lastMousePosition.current = { x, y };
@@ -60,31 +80,11 @@ export default function EmailView() {
         handleHoverEnd();
       }
     }
-  }, [x, y]);
+  }, [x, y, currentHoveredLink, contentRef, handleHoverEnd]);
 
   useEffect(() => {
     handleHoverEnd();
-  }, [emailId]);
-
-  const handleHoverEnd = useCallback(() => {
-    if (currentHoveredLink.current && hoverStartTime.current && email) {
-      const duration = Date.now() - hoverStartTime.current;
-      const linkHref = currentHoveredLink.current.split("-").slice(1).join("-");
-
-      if (duration > 50) {
-        addComplexEvent(
-          UserEventType.LINK_HOVERED,
-          JSON.stringify({
-            duration_ms: duration,
-            href: linkHref,
-          })
-        );
-      }
-    }
-
-    currentHoveredLink.current = null;
-    hoverStartTime.current = null;
-  }, [email, addComplexEvent]);
+  }, [emailId, handleHoverEnd]);
 
   useEffect(() => {
     if (heatmapInterval.current) {
@@ -117,7 +117,7 @@ export default function EmailView() {
         clearInterval(heatmapInterval.current);
       }
     };
-  }, [email, addHeatmapData, ref]);
+  }, [email, addHeatmapData, ref, handleHoverEnd]);
 
   const handleLinkClick = useCallback(
     (event: MouseEvent) => {
@@ -236,6 +236,8 @@ export default function EmailView() {
     handleLinkMouseEnter,
     handleLinkMouseLeave,
     handleGeneralClick,
+    handleHoverEnd,
+    ref,
   ]);
 
   useEffect(() => {

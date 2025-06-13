@@ -11,7 +11,7 @@ export const fetchAndSetEmails = async (
   try {
     const session = await getSession();
     if (!session) {
-      await signOut({ redirectTo: "/login?warning=The+experiment+has+ended!" });
+      throw new Error("No session found");
     }
     const response = await fetch(getApiUrl("/emails"));
     if (response.ok) {
@@ -20,8 +20,10 @@ export const fetchAndSetEmails = async (
       startTransition(() => {
         setEmails(emails);
       });
+    } else {
+      throw new Error("Failed to fetch emails");
     }
-  } catch (err) {
-    console.error("Error fetching emails:", err);
+  } catch {
+    await signOut({ redirectTo: "/login?warning=The+experiment+has+ended!" });
   }
 };
