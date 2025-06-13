@@ -15,7 +15,7 @@ export default function EmailListFilters() {
     <div className="p-3 border-b border-gray-200">
       <Input
         variant="filled"
-        placeholder="Search Mails"
+        placeholder="Search Emails"
         leftSection={<SearchIcon size={18} />}
         onInput={(e) => handleSearchChange(e.currentTarget.value)}
       />

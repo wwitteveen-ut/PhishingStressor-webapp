@@ -65,7 +65,13 @@ export default function ExperimentEmailTimeline({
 
   return (
     <>
-      <Button leftSection={<IconClock size={18} />} onClick={open}>
+      <Button
+        leftSection={<IconClock size={18} />}
+        variant="outline"
+        bg="white"
+        color="blue"
+        onClick={open}
+      >
         View Timeline
       </Button>
       <Modal

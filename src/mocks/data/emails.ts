@@ -32,6 +32,7 @@ export const mockEmails: ResearcherEmail[] = [
       <div style="font-family: Arial, sans-serif;">
         <p>Hi there,</p>
         <p>Just checking in about our meeting next week. Let me know what time works best!</p>
+        <a href="https://www.google.com">Google</a>
         <p>Best regards,<br>Jane Doe</p>
       </div>
     `,

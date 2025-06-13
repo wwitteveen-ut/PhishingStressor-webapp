@@ -3,6 +3,7 @@ import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
 import { UserEventType } from "@/mail/store/types";
 import {
   Box,
+  Center,
   Container,
   Group,
   Stack,
@@ -10,7 +11,7 @@ import {
   TypographyStylesProvider,
 } from "@mantine/core";
 import { useMouse } from "@mantine/hooks";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import EmailAttachmentList from "../EmailAttachmentList";
 import EmailReplySection from "../EmailReplySection";
 import TrashActionButton from "../TrashActionButton";
@@ -28,16 +29,71 @@ export default function EmailView() {
   const addComplexEvent = useEmailClientStore((state) => state.addComplexEvent);
 
   const { ref, x, y } = useMouse({ resetOnExit: true });
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const latestCoords = useRef({ x: 0, y: 0 });
-  const hoverStartTime = useRef<{ [key: string]: number }>({});
+  const heatmapInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const currentHoveredLink = useRef<string | null>(null);
+  const hoverStartTime = useRef<number | null>(null);
+  const lastMousePosition = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
   useEffect(() => {
     latestCoords.current = { x, y };
+    lastMousePosition.current = { x, y };
+
+    if (currentHoveredLink.current && contentRef.current) {
+      const elementAtPoint = document.elementFromPoint(
+        lastMousePosition.current.x +
+          (contentRef.current.getBoundingClientRect().left || 0),
+        lastMousePosition.current.y +
+          (contentRef.current.getBoundingClientRect().top || 0)
+      );
+
+      const linkAtPoint = elementAtPoint?.closest("a");
+      const currentLinkHref = currentHoveredLink.current
+        .split("-")
+        .slice(1)
+        .join("-");
+
+      if (!linkAtPoint || linkAtPoint.href !== currentLinkHref) {
+        handleHoverEnd();
+      }
+    }
   }, [x, y]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (!email) return;
+    handleHoverEnd();
+  }, [emailId]);
+
+  const handleHoverEnd = useCallback(() => {
+    if (currentHoveredLink.current && hoverStartTime.current && email) {
+      const duration = Date.now() - hoverStartTime.current;
+      const linkHref = currentHoveredLink.current.split("-").slice(1).join("-");
+
+      if (duration > 50) {
+        addComplexEvent(
+          UserEventType.LINK_HOVERED,
+          JSON.stringify({
+            duration_ms: duration,
+            href: linkHref,
+          })
+        );
+      }
+    }
+
+    currentHoveredLink.current = null;
+    hoverStartTime.current = null;
+  }, [email, addComplexEvent]);
+
+  useEffect(() => {
+    if (heatmapInterval.current) {
+      clearInterval(heatmapInterval.current);
+    }
+
+    if (!email) return;
+
+    heatmapInterval.current = setInterval(() => {
       if (
         ref.current &&
         (latestCoords.current.x !== 0 || latestCoords.current.y !== 0)
@@ -56,52 +112,75 @@ export default function EmailView() {
       }
     }, 100);
 
-    return () => clearInterval(interval);
-  }, [addHeatmapData, email, ref]);
-  useEffect(() => {
-    const handleLinkClick = (event: MouseEvent) => {
-      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
-      addSimpleEvent(UserEventType.LINK_CLICKED);
-    };
-
-    const handleMouseEnter = (event: MouseEvent) => {
-      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
-      hoverStartTime.current[event.target.href] = Date.now();
-    };
-
-    const handleMouseLeave = (event: MouseEvent) => {
-      if (!email || !(event.target instanceof HTMLAnchorElement)) return;
-
-      const href = event.target.href;
-      const startTime = hoverStartTime.current[href];
-      if (startTime) {
-        const duration = Date.now() - startTime;
-        addComplexEvent(
-          UserEventType.LINK_HOVERED,
-          JSON.stringify({ duration })
-        );
-        delete hoverStartTime.current[href];
+    return () => {
+      if (heatmapInterval.current) {
+        clearInterval(heatmapInterval.current);
       }
     };
+  }, [email, addHeatmapData, ref]);
 
-    const links = ref.current?.querySelectorAll("a");
+  const handleLinkClick = useCallback(
+    (event: MouseEvent) => {
+      if (!email) return;
 
-    links?.forEach((link: HTMLAnchorElement) => {
-      link.addEventListener("click", handleLinkClick);
-      link.addEventListener("mouseenter", handleMouseEnter);
-      link.addEventListener("mouseleave", handleMouseLeave);
-    });
+      const target = event.target as HTMLElement;
+      const link = target.closest("a");
 
-    return () => {
-      links?.forEach((link: HTMLAnchorElement) => {
-        link.removeEventListener("click", handleLinkClick);
-        link.removeEventListener("mouseenter", handleMouseEnter);
-        link.removeEventListener("mouseleave", handleMouseLeave);
-      });
-    };
-  }, [addHeatmapData, email, ref, addComplexEvent, addSimpleEvent]);
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
+      if (link) {
+        handleHoverEnd();
+
+        addSimpleEvent(UserEventType.LINK_CLICKED);
+      }
+    },
+    [email, addSimpleEvent, handleHoverEnd]
+  );
+
+  const handleLinkMouseEnter = useCallback(
+    (event: MouseEvent) => {
+      if (!email) return;
+
+      const target = event.target as HTMLElement;
+      const link = target.closest("a");
+
+      if (link?.href) {
+        const linkId = `${email.id}-${link.href}`;
+
+        if (
+          currentHoveredLink.current &&
+          currentHoveredLink.current !== linkId
+        ) {
+          handleHoverEnd();
+        }
+
+        if (currentHoveredLink.current !== linkId) {
+          currentHoveredLink.current = linkId;
+          hoverStartTime.current = Date.now();
+        }
+      }
+    },
+    [email, handleHoverEnd]
+  );
+
+  const handleLinkMouseLeave = useCallback(
+    (event: MouseEvent) => {
+      if (!email) return;
+
+      const target = event.target as HTMLElement;
+      const link = target.closest("a");
+
+      if (link?.href) {
+        const linkId = `${email.id}-${link.href}`;
+
+        if (currentHoveredLink.current === linkId) {
+          handleHoverEnd();
+        }
+      }
+    },
+    [email, handleHoverEnd]
+  );
+
+  const handleGeneralClick = useCallback(
+    (event: MouseEvent) => {
       if (!email || !ref.current) return;
 
       const rect = ref.current.getBoundingClientRect();
@@ -120,21 +199,61 @@ export default function EmailView() {
           })
         );
       }
-    };
+    },
+    [email, addComplexEvent, ref]
+  );
 
-    const currentRef = ref.current;
-    currentRef?.addEventListener("click", handleClick);
-    return () => currentRef?.removeEventListener("click", handleClick);
-  }, [addHeatmapData, email, ref, addComplexEvent]);
+  useEffect(() => {
+    const contentElement = contentRef.current;
+    const mainElement = ref.current;
+
+    if (!email || !contentElement || !mainElement) return;
+
+    contentElement.addEventListener("click", handleLinkClick, false);
+    contentElement.addEventListener("mouseenter", handleLinkMouseEnter, true);
+    contentElement.addEventListener("mouseleave", handleLinkMouseLeave, true);
+    mainElement.addEventListener("click", handleGeneralClick, false);
+
+    return () => {
+      contentElement.removeEventListener("click", handleLinkClick, false);
+      contentElement.removeEventListener(
+        "mouseenter",
+        handleLinkMouseEnter,
+        true
+      );
+      contentElement.removeEventListener(
+        "mouseleave",
+        handleLinkMouseLeave,
+        true
+      );
+      mainElement.removeEventListener("click", handleGeneralClick, false);
+
+      handleHoverEnd();
+    };
+  }, [
+    email,
+    handleLinkClick,
+    handleLinkMouseEnter,
+    handleLinkMouseLeave,
+    handleGeneralClick,
+  ]);
+
+  useEffect(() => {
+    return () => {
+      if (heatmapInterval.current) {
+        clearInterval(heatmapInterval.current);
+      }
+      handleHoverEnd();
+    };
+  }, [handleHoverEnd]);
 
   if (!email) {
     return (
-      <div
-        className="flex-1 flex items-center justify-center bg-gray-50 text-gray-500"
-        ref={ref}
-      >
-        <p>Select an email to view</p>
-      </div>
+      <Center bg="gray.0" h={"100vh"}>
+        <Text fw={600} c="dimmed">
+          Select an email to view
+        </Text>
+      </Center>
     );
   }
 
@@ -185,6 +304,7 @@ export default function EmailView() {
             <Container fluid p={0} mt="xl">
               <TypographyStylesProvider>
                 <div
+                  ref={contentRef}
                   dangerouslySetInnerHTML={{
                     __html: email.content,
                   }}
