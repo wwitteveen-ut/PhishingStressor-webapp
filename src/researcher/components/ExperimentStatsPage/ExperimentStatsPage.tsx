@@ -21,8 +21,8 @@ export default function ExperimentStatsPage() {
 
   return (
     <>
-      <Group justify="space-between" align="center">
-        <Title order={2} c="gray.9" mb="lg">
+      <Group justify="space-between" align="center" mb="lg">
+        <Title order={2} c="gray.9">
           Global Experiment Statistics
         </Title>
         <Button onClick={handleDownload} leftSection={<Download size={18} />}>
