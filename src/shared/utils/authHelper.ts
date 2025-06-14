@@ -18,7 +18,6 @@ export async function makeAuthenticatedRequest(
   }
 
   const url = await getExternalApiUrl(endpoint);
-
   return fetch(url, {
     ...options,
     headers: {

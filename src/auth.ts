@@ -100,7 +100,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         token.username = credentials.username;
         token.role = Role.PARTICIPANT;
-        console.log(participantExperiment.data);
         return {
           ...token,
           token: undefined,

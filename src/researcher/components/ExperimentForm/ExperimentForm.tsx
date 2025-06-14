@@ -42,12 +42,12 @@ export default function ExperimentForm({
       groups: [{ name: "", capacity: 0 }],
     },
     validate: {
-      name: hasLength({ min: 2, max: 20 }, "Name must be 2-10 characters long"),
+      name: hasLength({ min: 2, max: 30 }, "Name must be 2-30 characters long"),
       duration: isInRange({ min: 1 }, "Minimum duration is 1 minute"),
       groups: {
         name: hasLength(
           { min: 2, max: 20 },
-          "Name must be 2-10 characters long"
+          "Name must be 2-20 characters long"
         ),
         capacity: isInRange({ min: 1 }, "Minimum capacity is 1"),
       },
@@ -153,7 +153,7 @@ export default function ExperimentForm({
                   onChange={(event) =>
                     form.setFieldValue("name", event.currentTarget.value)
                   }
-                  error={form.errors.name && "Invalid name"}
+                  error={form.errors.name}
                 />
                 <NumberInput
                   label="Duration"
@@ -179,7 +179,7 @@ export default function ExperimentForm({
                 onChange={(values) =>
                   form.setFieldValue("researcherIds", values)
                 }
-                error={form.errors.researchers && "Invalid name"}
+                error={form.errors.researcherIds}
               />
               <Box>
                 <Text size="md" fw={600}>
