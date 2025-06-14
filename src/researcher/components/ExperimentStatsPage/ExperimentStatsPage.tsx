@@ -2,11 +2,11 @@
 import { getExperimentStats } from "@/researcher/actions/actions";
 import { Button, Group, Paper, Tabs, Title } from "@mantine/core";
 import { Download } from "lucide-react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext"; // Adjust import path as needed
-import { ExperimentGlobalStats } from "../ExperimentStatsCard/ExperimentStatsCard"; // Adjust import path as needed
-import { GroupStats } from "./GroupStats";
+import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import ExperimentGlobalStats from "./ExperimentGlobalStats";
+import GroupStats from "./GroupStats";
 
-export function ExperimentStatsPage() {
+export default function ExperimentStatsPage() {
   const experiment = useExperimentContext();
 
   const handleDownload = async () => {

@@ -2,17 +2,20 @@
 
 import {
   Button,
-  Container,
   Divider,
+  Group,
   Paper,
+  SimpleGrid,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { IconChevronLeft, IconMail } from "@tabler/icons-react";
 import Link from "next/link";
+import { EmailStatusBadge } from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import { GlobalStats } from "../ExperimentStatsCard/ExperimentStatsCard";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
+import { ParticipantGlobalStats } from "../ExperimentStatsPage";
 
 export default function ParticipantDetail({
   participantId,
@@ -24,46 +27,81 @@ export default function ParticipantDetail({
   const participantData = experimentStats[participantId];
 
   if (!participantData) {
-    return <Text>Participant not found</Text>;
+    return (
+      <Paper p="md" shadow="sm" radius="md">
+        <Text c="red.6" fw={500}>
+          Participant not found
+        </Text>
+      </Paper>
+    );
   }
 
   return (
-    <Paper p="lg" shadow="md" radius={"sm"}>
-      <Title order={2} mb="lg">
-        Participant: {participantId}
-      </Title>
-      <GlobalStats participantId={participantId} />
-      <Divider mb="lg" />
-      <Container size="xs" ml="0">
-        <Stack gap="xs">
-          <Title order={3} mb="sm">
-            All Emails statistics ({Object.keys(participantData.emails).length})
+    <Paper p="xl" shadow="md" radius="md" withBorder>
+      <Stack gap="lg">
+        <Group justify="flex-start" align="center">
+          <Button
+            variant="outline"
+            leftSection={<IconChevronLeft size={16} />}
+            color="gray"
+            component={Link}
+            href={`/researcher/experiments/${experiment.id}/statistics/participants`}
+          >
+            Participants
+          </Button>
+          <Title order={2}>Participant data: {participantId}</Title>
+        </Group>
+        <ParticipantGlobalStats participantId={participantId} />
+        <Divider />
+        <Stack gap="md">
+          <Title order={3} style={{ fontSize: "1.2rem", color: "#1f2937" }}>
+            Email Statistics
           </Title>
-          {Object.entries(participantData.emails).map(([emailId]) => {
-            const email = experimentEmails[emailId];
-            return (
-              <Paper key={emailId} withBorder p="xs" pl="0" shadow="none">
+          <SimpleGrid cols={{ base: 1, sm: 2, lg: 3 }} spacing="md">
+            {Object.entries(participantData.emails).map(([emailId]) => {
+              const email = experimentEmails[emailId];
+              return (
                 <Button
+                  key={emailId}
                   component={Link}
-                  variant="subtle"
-                  fullWidth
+                  variant="outline"
                   href={`/researcher/experiments/${experiment.id}/statistics/participants/${participantId}/${emailId}`}
-                  pl="0"
+                  leftSection={<IconMail size={28} stroke={1.5} />}
+                  h="100%"
+                  py="xs"
+                  ta="left"
+                  color={email.isPhishing ? "red" : "blue"}
+                  justify="flex-start"
+                  pl="md"
                 >
-                  <Stack gap={2} align="flex-start" justify="start">
-                    <Text size="sm" fw={500}>
-                      {email.title}
-                    </Text>
-                    <Text size="xs" c="dimmed">
-                      From: {email.senderName} ({email.senderAddress})
-                    </Text>
-                  </Stack>
+                  <Group w="100%" gap="sm" align="flex-start">
+                    <Stack gap={0}>
+                      <Text size="md" fw={600}>
+                        {email.title}
+                      </Text>
+                      <Text size="sm" c="dimmed">
+                        From: {email.senderName} ({email.senderAddress})
+                      </Text>
+                      <Text size="sm" c="dimmed">
+                        Scheduled:{" "}
+                        {email.scheduledFor === 0
+                          ? "Immediate"
+                          : `${email.scheduledFor} min after login`}
+                      </Text>
+                      <Group justify="flex-start">
+                        <Text size="sm" c="dimmed">
+                          Status:
+                        </Text>
+                        <EmailStatusBadge isPhishing={email.isPhishing} />
+                      </Group>
+                    </Stack>
+                  </Group>
                 </Button>
-              </Paper>
-            );
-          })}
+              );
+            })}
+          </SimpleGrid>
         </Stack>
-      </Container>
+      </Stack>
     </Paper>
   );
 }

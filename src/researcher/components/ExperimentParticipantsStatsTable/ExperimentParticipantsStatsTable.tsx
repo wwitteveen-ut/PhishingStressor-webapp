@@ -1,7 +1,7 @@
 "use client";
 
 import { IGroup, ParticipantStats } from "@/researcher/store/types";
-import { Button, Group, Paper, Table } from "@mantine/core";
+import { Button, Paper, Table } from "@mantine/core";
 import Link from "next/link";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
@@ -11,7 +11,7 @@ interface ExtendedParticipantStats extends Omit<ParticipantStats, "groupId"> {
   group: IGroup;
 }
 
-export default function ExperimentStatsOverview() {
+export default function ExperimentParticipantsStatsTable() {
   const experiment = useExperimentContext();
   const { experimentStats } = useExperimentStatsContext();
 
@@ -35,12 +35,10 @@ export default function ExperimentStatsOverview() {
       <Table striped highlightOnHover>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>
-              <Group gap={4}>Participant</Group>
-            </Table.Th>
+            <Table.Th>Participant</Table.Th>
             <Table.Th>Logged In At</Table.Th>
             <Table.Th>Group</Table.Th>
-            <Table.Th>Details</Table.Th>
+            <Table.Th ta="right">Details</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -62,7 +60,7 @@ export default function ExperimentStatsOverview() {
                 })}
               </Table.Td>
               <Table.Td>{stat.group.name}</Table.Td>
-              <Table.Td>
+              <Table.Td align="right">
                 <Button
                   component={Link}
                   href={`/researcher/experiments/${experiment.id}/statistics/participants/${stat.participantId}`}

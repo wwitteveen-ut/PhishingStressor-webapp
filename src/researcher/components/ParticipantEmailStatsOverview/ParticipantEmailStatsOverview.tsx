@@ -4,7 +4,9 @@ import { UserEventType } from "@/mail/store/types";
 import { EmailStats } from "@/researcher/store/types";
 import {
   ActionIcon,
+  Button,
   Card,
+  Collapse,
   Divider,
   Group,
   Paper,
@@ -15,14 +17,17 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconChevronDown } from "@tabler/icons-react";
-import { Eye, MessageCircleDashed } from "lucide-react";
+import { IconChevronDown, IconChevronLeft } from "@tabler/icons-react";
+import { ChevronDown, ChevronUp, Eye, MessageCircleDashed } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import EmailHeatmapOverlay from "../EmailHeatmapOverlay";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
 import EmailInfo from "../ExperimentEmailInfo";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
+import { ExperimentEmailStats } from "../ExperimentStatsPage";
 
 interface ParticipantEmailStatsPageProps {
   participantId: string;
@@ -36,6 +41,7 @@ export default function ParticipantEmailStatsOverview({
   const router = useRouter();
   const experiment = useExperimentContext();
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
+  const [statsOpen, setStatsOpen] = useState(true);
 
   const emailOptions = Object.entries(experimentEmails).map(
     ([emailId, email]) => ({
@@ -73,6 +79,16 @@ export default function ParticipantEmailStatsOverview({
       style={{ overflow: "hidden" }}
     >
       <Group align="center" gap="xs" mb="md">
+        <Button
+          variant="outline"
+          leftSection={<IconChevronLeft size={16} />}
+          color="gray"
+          component={Link}
+          href={`/researcher/experiments/${experiment.id}/statistics/participants/${participantId}`}
+        >
+          Participant
+        </Button>
+        <Divider orientation="vertical" />
         <Title order={5} c="blue.4">
           Selected Email:
         </Title>
@@ -120,7 +136,8 @@ export default function ParticipantEmailStatsOverview({
           </ActionIcon>
         </Tooltip>
       </Group>
-      <Divider mb="md" />
+
+      <Divider mb="md" mt={statsOpen ? "md" : 0} />
       {selectedEmail && emailStats ? (
         <Card
           shadow="0"
@@ -137,6 +154,26 @@ export default function ParticipantEmailStatsOverview({
                 type="always"
                 scrollbarSize={4}
               >
+                <Button
+                  variant="light"
+                  rightSection={
+                    statsOpen ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    )
+                  }
+                  mb="md"
+                  onClick={() => setStatsOpen((o) => !o)}
+                >
+                  Email Statistics
+                </Button>
+                <Collapse in={statsOpen}>
+                  <ExperimentEmailStats
+                    participantId={participantId}
+                    emailId={emailId}
+                  />
+                </Collapse>
                 {emailStats.replies.length > 0 ? (
                   <>
                     <Title order={5} c="blue.4">
@@ -174,7 +211,7 @@ export default function ParticipantEmailStatsOverview({
                     </Stack>
                   </>
                 ) : (
-                  <Text size="md" c="dimmed" fw={600} mt="xs" ml="sm">
+                  <Text size="md" c="dimmed" fw={600} mt="xs">
                     No replies available.
                   </Text>
                 )}

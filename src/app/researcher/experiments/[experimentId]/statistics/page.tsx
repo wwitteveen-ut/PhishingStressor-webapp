@@ -1,5 +1,5 @@
 import { Role } from "@/auth";
-import { ExperimentStatsPage } from "@/researcher/components/ExperimentStatsPage/ExperimentStatsPage";
+import { ExperimentStatsPage } from "@/researcher/components/ExperimentStatsPage";
 import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 
 export default async function ExperimentOverview() {

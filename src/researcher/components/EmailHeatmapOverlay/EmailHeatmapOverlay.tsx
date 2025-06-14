@@ -119,7 +119,7 @@ export default function EmailHeatmapOverlay({
             onClick={() => setIsCollapsed(!isCollapsed)}
             leftSection={getEventStyle(eventType, 16).icon}
           >
-            Heatmap for {emailData.title} ({eventType})
+            Heatmap data {emailData.title} ({eventType})
           </Button>
         </Tooltip>
       </Box>
@@ -134,8 +134,8 @@ export default function EmailHeatmapOverlay({
           onClick={() => setIsCollapsed(!isCollapsed)}
           leftSection={getEventStyle(eventType, 16).icon}
           style={{
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
+            borderBottomLeftRadius: isCollapsed ? "0.3rem" : 0,
+            borderBottomRightRadius: isCollapsed ? "0.3rem" : 0,
           }}
           rightSection={
             isCollapsed ? (

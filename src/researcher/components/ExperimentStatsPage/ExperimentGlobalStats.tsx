@@ -1,4 +1,3 @@
-"use client";
 import { UserEventType } from "@/mail/store/types";
 import { ExperimentStats, ResearcherEmail } from "@/researcher/store/types";
 import { SimpleGrid } from "@mantine/core";
@@ -7,27 +6,18 @@ import {
   Link,
   Mail,
   MessageCircle,
-  MousePointerClick,
   Paperclip,
   Shield,
   TextCursor,
   Users,
 } from "lucide-react";
-import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import ExperimentStatsCard from "../ExperimentStatsCard";
+import ExperimentStatsCard from "../ExperimentStatsCard/ExperimentStatsCard";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
-interface GroupStatsProps {
-  groupId: string;
-}
-
-export default function GroupStats({ groupId }: GroupStatsProps) {
+export default function ExperimentGlobalStats() {
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
-  const experiment = useExperimentContext();
-  const group = experiment.groups.find((g) => g.id === groupId);
 
   const computeStats = (stats: ExperimentStats, emails: ResearcherEmail[]) => {
-    let participantCount = 0;
     let totalEmailsOpened = 0;
     let totalReplies = 0;
     let totalLinkClicks = 0;
@@ -36,19 +26,22 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
     let totalHoverTime = 0;
     let hoverCount = 0;
     let totalEvents = 0;
+    let phishingEmails = 0;
+    let phishingInteractions = 0;
+    const participantsWithPhishingInteraction = new Set<string>();
+    const totalParticipants = Object.keys(stats).length;
+
     const phishingEmailIds = new Set(
       emails.filter((e) => e.isPhishing).map((e) => e.id)
     );
-    const compromisedParticipants = new Set<string>();
 
-    Object.entries(stats).forEach(([participantId, participant]) => {
-      if (participant.groupId !== groupId) return;
-      participantCount += 1;
+    Object.values(stats).forEach((participant) => {
       const emailData = participant.emails;
       const emailIds = Object.keys(emailData);
 
       emailIds.forEach((emailId) => {
         const email = emailData[emailId];
+        let hasInteraction = false;
         if (
           email.events.some((event) => event.type === UserEventType.TIME_OPENED)
         ) {
@@ -56,19 +49,19 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
         }
         totalReplies += email.replies.length;
         if (phishingEmailIds.has(emailId)) {
-          compromisedParticipants.add(participantId);
+          phishingEmails += 1;
         }
         email.events.forEach((event) => {
           totalEvents += 1;
           if (event.type === UserEventType.LINK_CLICKED) {
             totalLinkClicks += 1;
             if (phishingEmailIds.has(emailId)) {
-              compromisedParticipants.add(participantId);
+              hasInteraction = true;
             }
           } else if (event.type === UserEventType.ATTACHMENT_OPENED) {
             totalAttachments += 1;
             if (phishingEmailIds.has(emailId)) {
-              compromisedParticipants.add(participantId);
+              hasInteraction = true;
             }
           } else if (event.type === UserEventType.CLICK) {
             totalClicks += 1;
@@ -80,18 +73,27 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
             }
           }
         });
+        if (hasInteraction) {
+          phishingInteractions += 1;
+          participantsWithPhishingInteraction.add(participant.groupId);
+        }
       });
     });
 
     const avgHoverTime =
       hoverCount > 0 ? (totalHoverTime / hoverCount / 1000).toFixed(1) : "0";
-    const phishingSusceptibility =
-      participantCount > 0
-        ? Math.round((compromisedParticipants.size / participantCount) * 100)
+    const phishingInteractionRate =
+      phishingEmails > 0
+        ? Math.round((phishingInteractions / phishingEmails) * 100)
+        : 0;
+    const participantPhishingInteractionRate =
+      totalParticipants > 0
+        ? Math.round(
+            (participantsWithPhishingInteraction.size / totalParticipants) * 100
+          )
         : 0;
 
     return {
-      participantCount,
       totalEmailsOpened,
       totalReplies,
       totalLinkClicks,
@@ -99,12 +101,13 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
       totalClicks,
       avgHoverTime,
       totalEvents,
-      phishingSusceptibility,
+      phishingInteractionRate,
+      participantPhishingInteractionRate,
+      totalParticipants,
     };
   };
 
   const {
-    participantCount,
     totalEmailsOpened,
     totalReplies,
     totalLinkClicks,
@@ -112,7 +115,9 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
     totalClicks,
     avgHoverTime,
     totalEvents,
-    phishingSusceptibility,
+    phishingInteractionRate,
+    participantPhishingInteractionRate,
+    totalParticipants,
   } = computeStats(
     experimentStats || {},
     Object.values(experimentEmails || {})
@@ -120,70 +125,79 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
 
   const stats = [
     {
-      title: "Group Capacity",
-      icon: Users,
-      value: group?.capacity.toString() || "0",
-      caption: "Total participants in the group",
-    },
-    {
-      title: "Participants",
-      icon: Users,
-      value: participantCount.toString(),
-      caption: "Total participants participated in the experiment",
-    },
-    {
       title: "Emails Opened",
       icon: Mail,
       value: totalEmailsOpened.toString(),
+      diff: 0,
       caption: "Total emails viewed",
     },
     {
       title: "Replies Sent",
       icon: MessageCircle,
       value: totalReplies.toString(),
-      caption: "Total replies sent",
+      diff: 0,
+      caption: "Total responses sent",
     },
     {
       title: "Link Clicks",
       icon: Link,
       value: totalLinkClicks.toString(),
+      diff: 0,
       caption: "Total links clicked",
     },
     {
       title: "Clicks",
-      icon: MousePointerClick,
+      icon: TextCursor,
       value: totalClicks.toString(),
+      diff: 0,
       caption: "General click events",
     },
     {
       title: "Attachments",
       icon: Paperclip,
       value: totalAttachments.toString(),
+      diff: 0,
       caption: "Total attachments downloaded",
     },
     {
       title: "Avg Hover Time",
       icon: Clock,
       value: `${avgHoverTime}s`,
+      diff: 0,
       caption: "Average link hover duration",
     },
     {
       title: "Total Events",
       icon: TextCursor,
       value: totalEvents.toString(),
+      diff: 0,
       caption: "All recorded events",
     },
     {
-      title: "Phishing Susceptibility",
+      title: "Phishing Interaction Rate",
       icon: Shield,
-      value: `${phishingSusceptibility}%`,
-      caption:
-        "Participants clicking phishing links, downloading attachments, and sending replies",
+      value: `${phishingInteractionRate}%`,
+      diff: 0,
+      caption: "Phishing emails with link clicks or attachments opened",
+    },
+    {
+      title: "Participants with Phishing Interaction",
+      icon: Shield,
+      value: `${participantPhishingInteractionRate}%`,
+      diff: 0,
+      caption: "Participants who interacted with phishing emails",
+    },
+    {
+      title: "Total Participants",
+      icon: Users,
+      value: totalParticipants.toString(),
+      diff: 0,
+      caption: "Participants in the experiment",
     },
   ] as const;
 
   return (
-    <SimpleGrid cols={{ base: 1, xs: 3 }}>
+    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4, lg: 5 }}>
       {stats.map((stat) => (
         <ExperimentStatsCard
           key={stat.title}
