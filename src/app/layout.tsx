@@ -4,6 +4,7 @@ import "@mantine/tiptap/styles.css";
 import type { Metadata } from "next";
 import "./globals.css";
 
+import { server } from "@/mocks";
 import {
   ColorSchemeScript,
   MantineProvider,
@@ -16,7 +17,9 @@ export const metadata: Metadata = {
   title: "PhishingStressor",
 };
 
-// server.listen();
+if (process.env.API_MOCKING === "enabled") {
+  server.listen();
+}
 
 export default function RootLayout({
   children,
