@@ -1,4 +1,4 @@
-import { UserEventType } from "@/mail/store/types";
+import { InternalUserEventType, UserEventType } from "@/mail/store/types";
 import {
   CircleDot,
   FileDown,
@@ -7,6 +7,7 @@ import {
   MailX,
   MousePointer2,
   MousePointerClick,
+  Reply,
   SquareArrowOutUpRight,
 } from "lucide-react";
 
@@ -17,7 +18,7 @@ interface EventStyle {
 }
 
 export function getEventStyle(
-  eventType: UserEventType,
+  eventType: UserEventType | InternalUserEventType,
   size: number = 16
 ): EventStyle {
   switch (eventType) {
@@ -62,6 +63,12 @@ export function getEventStyle(
         color: "violet.4",
         icon: <FileDown size={size} />,
         text: "Attachment Downloaded",
+      };
+    case InternalUserEventType.REPLY:
+      return {
+        color: "grape.4",
+        icon: <Reply size={size} />,
+        text: "Reply",
       };
     default:
       return {

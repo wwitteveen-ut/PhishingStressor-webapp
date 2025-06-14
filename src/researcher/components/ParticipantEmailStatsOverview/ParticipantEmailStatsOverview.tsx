@@ -1,13 +1,15 @@
 "use client";
 
-import { UserEventType } from "@/mail/store/types";
+import { InternalUserEventType, UserEventType } from "@/mail/store/types";
 import { EmailStats } from "@/researcher/store/types";
 import {
   ActionIcon,
+  Box,
   Button,
   Card,
   Collapse,
   Divider,
+  Flex,
   Group,
   Paper,
   ScrollArea,
@@ -17,8 +19,15 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
-import { IconChevronDown, IconChevronLeft } from "@tabler/icons-react";
-import { ChevronDown, ChevronUp, Eye, MessageCircleDashed } from "lucide-react";
+import {
+  BarChart,
+  ChevronDown,
+  ChevronLeft,
+  ChevronUp,
+  Eye,
+  MessageCircle,
+  MessageCircleDashed,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -42,6 +51,7 @@ export default function ParticipantEmailStatsOverview({
   const experiment = useExperimentContext();
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
   const [statsOpen, setStatsOpen] = useState(true);
+  const [repliesOpen, setRepliesOpen] = useState(true);
 
   const emailOptions = Object.entries(experimentEmails).map(
     ([emailId, email]) => ({
@@ -70,25 +80,47 @@ export default function ParticipantEmailStatsOverview({
     }
   };
 
+  const timelineEvents: {
+    emailTitle: string;
+    emailId: string;
+    type: UserEventType | InternalUserEventType;
+    timestamp: string;
+    extra?: string;
+  }[] = [
+    ...emailStats.events.map((event) => ({
+      ...event,
+      emailTitle: selectedEmail.title,
+      emailId: emailId,
+    })),
+    ...emailStats.replies.map((reply) => ({
+      type: InternalUserEventType.REPLY,
+      timestamp: new Date(reply.createdAt).toISOString(),
+      emailTitle: selectedEmail.title,
+      emailId: emailId,
+      content: reply.content,
+    })),
+  ].sort(
+    (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+  );
+
   return (
     <Paper
       shadow="sm"
       p="lg"
       radius="sm"
       h="93vh"
-      style={{ overflow: "hidden" }}
+      style={{ display: "flex", flexDirection: "column", overflow: "hidden" }}
     >
       <Group align="center" gap="xs" mb="md">
         <Button
           variant="outline"
-          leftSection={<IconChevronLeft size={16} />}
+          leftSection={<ChevronLeft size={16} />}
           color="gray"
           component={Link}
           href={`/researcher/experiments/${experiment.id}/statistics/participants/${participantId}`}
         >
           Participant
         </Button>
-        <Divider orientation="vertical" />
         <Title order={5} c="blue.4">
           Selected Email:
         </Title>
@@ -128,7 +160,7 @@ export default function ParticipantEmailStatsOverview({
           value={emailId}
           nothingFoundMessage="No emails found"
           searchable
-          rightSection={<IconChevronDown size={16} />}
+          rightSection={<ChevronDown size={16} />}
         />
         <Tooltip label="View Email">
           <ActionIcon variant="light" size="lg">
@@ -137,25 +169,26 @@ export default function ParticipantEmailStatsOverview({
         </Tooltip>
       </Group>
 
-      <Divider mb="md" mt={statsOpen ? "md" : 0} />
       {selectedEmail && emailStats ? (
         <Card
           shadow="0"
           radius="md"
           p="0"
-          style={{ height: "calc(100% - 80px)", overflow: "hidden" }}
+          style={{ flex: 1, overflow: "hidden" }}
         >
-          <Stack h="100%" style={{ overflow: "hidden" }}>
+          <Stack h="100%" gap="md">
             <EmailInfo email={selectedEmail} />
+            <Divider />
 
-            <Group align="flex-start" style={{ height: "calc(100% - 60px)" }}>
+            <Flex flex={1} direction="row" style={{ overflow: "hidden" }}>
               <ScrollArea
-                style={{ height: "100%", flex: 1, minWidth: 0 }}
+                style={{ flex: 1, minWidth: 0 }}
                 type="always"
                 scrollbarSize={4}
               >
                 <Button
-                  variant="light"
+                  variant={statsOpen ? "filled" : "light"}
+                  leftSection={<BarChart size={18} />}
                   rightSection={
                     statsOpen ? (
                       <ChevronUp size={18} />
@@ -169,16 +202,30 @@ export default function ParticipantEmailStatsOverview({
                   Email Statistics
                 </Button>
                 <Collapse in={statsOpen}>
-                  <ExperimentEmailStats
-                    participantId={participantId}
-                    emailId={emailId}
-                  />
+                  <Box mb="md">
+                    <ExperimentEmailStats
+                      participantId={participantId}
+                      emailId={emailId}
+                    />
+                  </Box>
                 </Collapse>
-                {emailStats.replies.length > 0 ? (
-                  <>
-                    <Title order={5} c="blue.4">
-                      Replies
-                    </Title>
+
+                <Button
+                  variant={repliesOpen ? "filled" : "light"}
+                  leftSection={<MessageCircle size={18} />}
+                  rightSection={
+                    repliesOpen ? (
+                      <ChevronUp size={18} />
+                    ) : (
+                      <ChevronDown size={18} />
+                    )
+                  }
+                  onClick={() => setRepliesOpen((o) => !o)}
+                >
+                  Replies
+                </Button>
+                <Collapse in={repliesOpen}>
+                  <Box mb="md">
                     <Stack gap="sm" mt="xs" align="flex-start">
                       {emailStats.replies.map((reply, index) => (
                         <Paper
@@ -209,12 +256,9 @@ export default function ParticipantEmailStatsOverview({
                         </Paper>
                       ))}
                     </Stack>
-                  </>
-                ) : (
-                  <Text size="md" c="dimmed" fw={600} mt="xs">
-                    No replies available.
-                  </Text>
-                )}
+                  </Box>
+                </Collapse>
+
                 <EmailHeatmapOverlay
                   emailId={emailId}
                   participantId={participantId}
@@ -226,14 +270,9 @@ export default function ParticipantEmailStatsOverview({
                   eventType={UserEventType.CLICK}
                 />
               </ScrollArea>
-              <Divider
-                size="xs"
-                mx="xs"
-                orientation="vertical"
-                style={{ flexShrink: 0 }}
-              />
+              <Divider size="xs" mx="xs" orientation="vertical" />
               <ScrollArea
-                style={{ height: "100%", width: "300px", flexShrink: 0 }}
+                style={{ width: "300px" }}
                 type="always"
                 scrollbarSize={5}
               >
@@ -242,14 +281,10 @@ export default function ParticipantEmailStatsOverview({
                 </Title>
                 <ExperimentEmailEventsTimeline
                   collapsable={false}
-                  emailEvents={emailStats.events.map((event) => ({
-                    ...event,
-                    emailTitle: selectedEmail.title,
-                    emailId: emailId,
-                  }))}
+                  emailEvents={timelineEvents}
                 />
               </ScrollArea>
-            </Group>
+            </Flex>
           </Stack>
         </Card>
       ) : (

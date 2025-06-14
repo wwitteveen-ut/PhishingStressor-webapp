@@ -1,4 +1,4 @@
-import { UserEventType } from "@/mail/store/types";
+import { InternalUserEventType, UserEventType } from "@/mail/store/types";
 import { getEventStyle } from "@/shared/utils/eventsHelper";
 import { Button, Card, Collapse, Group, Text, Timeline } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,13 +11,12 @@ export default function ExperimentEmailEventsTimeline({
   emailEvents: {
     emailTitle: string;
     emailId: string;
-    type: UserEventType;
+    type: UserEventType | InternalUserEventType;
     timestamp: string;
     extra?: string;
   }[];
   collapsable?: boolean;
 }) {
-  console.log(emailEvents);
   const [opened, { toggle }] = useDisclosure(!collapsable);
   return (
     <Card shadow="none" padding="lg" radius="md" pl="0">
@@ -45,20 +44,26 @@ export default function ExperimentEmailEventsTimeline({
       </Group>
       <Collapse in={opened}>
         <Timeline active={emailEvents.length - 1} bulletSize={24} lineWidth={2}>
-          {emailEvents.map((event, index) => {
-            const { color, icon } = getEventStyle(event.type);
-            return (
-              <Timeline.Item key={index} color={color} bullet={icon}>
-                <Text size="sm">{getEventStyle(event.type).text}</Text>
-                <Text size="xs" c="dimmed">
-                  {new Date(event.timestamp).toLocaleString()}
-                </Text>
-                {event.type === UserEventType.HEATMAP && (
-                  <Text size="xs">Heatmap points: {event.extra?.length}</Text>
-                )}
-              </Timeline.Item>
-            );
-          })}
+          {emailEvents
+            .sort(
+              (a, b) =>
+                new Date(a.timestamp).getTime() -
+                new Date(b.timestamp).getTime()
+            )
+            .map((event, index) => {
+              const { color, icon } = getEventStyle(event.type);
+              return (
+                <Timeline.Item key={index} color={color} bullet={icon}>
+                  <Text size="sm">{getEventStyle(event.type).text}</Text>
+                  <Text size="xs" c="dimmed">
+                    {new Date(event.timestamp).toLocaleString()}
+                  </Text>
+                  {event.type === UserEventType.HEATMAP && (
+                    <Text size="xs">Heatmap points: {event.extra?.length}</Text>
+                  )}
+                </Timeline.Item>
+              );
+            })}
         </Timeline>
       </Collapse>
     </Card>

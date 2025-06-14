@@ -106,7 +106,7 @@ export default function EmailView() {
           addHeatmapData({
             x: x / width,
             y: y / height,
-            value: 10,
+            value: 20,
           });
         }
       }

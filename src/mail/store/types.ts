@@ -27,6 +27,10 @@ export interface ZustandEmail
   sendAt: Date;
 }
 
+export enum InternalUserEventType {
+  REPLY = "REPLY",
+}
+
 export enum UserEventType {
   TIME_OPENED = "TIME_OPENED",
   TIME_CLOSED = "TIME_CLOSED",

@@ -111,7 +111,7 @@ export default function EmailHeatmapOverlay({
 
   if (!heatmapData.length) {
     return (
-      <Box py="md">
+      <Box>
         <Tooltip label="No data for this event type">
           <Button
             variant="transparent"
