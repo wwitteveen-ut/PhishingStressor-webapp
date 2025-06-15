@@ -42,7 +42,7 @@ export default function EmailView() {
     if (currentHoveredLink.current && hoverStartTime.current) {
       const duration = Date.now() - hoverStartTime.current;
 
-      if (duration > 50) {
+      if (duration > 25) {
         addComplexEvent(
           UserEventType.LINK_HOVERED,
           JSON.stringify({
@@ -57,6 +57,8 @@ export default function EmailView() {
   }, [addComplexEvent]);
 
   useEffect(() => {
+    if (!emailId) return;
+
     latestCoords.current = { x, y };
     lastMousePosition.current = { x, y };
 
@@ -78,7 +80,7 @@ export default function EmailView() {
         handleHoverEnd();
       }
     }
-  }, [x, y, currentHoveredLink, contentRef, handleHoverEnd]);
+  }, [x, y, currentHoveredLink, contentRef, handleHoverEnd, emailId]);
 
   useEffect(() => {
     handleHoverEnd();
@@ -108,7 +110,7 @@ export default function EmailView() {
           });
         }
       }
-    }, 100);
+    }, 50);
 
     return () => {
       if (heatmapInterval.current) {
@@ -249,7 +251,7 @@ export default function EmailView() {
 
   if (!email) {
     return (
-      <Center bg="gray.0" h={"100vh"}>
+      <Center bg="gray.0" h={"100vh"} ref={ref}>
         <Text fw={600} c="dimmed">
           Select an email to view
         </Text>
