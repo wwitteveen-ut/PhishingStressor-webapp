@@ -50,8 +50,14 @@ export default function ParticipantEmailStatsOverview({
   const router = useRouter();
   const experiment = useExperimentContext();
   const { experimentStats, experimentEmails } = useExperimentStatsContext();
+
+  const selectedEmail = emailId ? experimentEmails[emailId] : null;
+  const emailStats = emailId
+    ? (experimentStats[participantId]?.emails[emailId] as EmailStats)
+    : null;
+  const hasReplies = emailStats ? emailStats.replies.length > 0 : false;
   const [statsOpen, setStatsOpen] = useState(true);
-  const [repliesOpen, setRepliesOpen] = useState(true);
+  const [repliesOpen, setRepliesOpen] = useState(hasReplies);
 
   const emailOptions = Object.entries(experimentEmails).map(
     ([emailId, email]) => ({
@@ -62,11 +68,6 @@ export default function ParticipantEmailStatsOverview({
       isPhishing: email.isPhishing,
     })
   );
-
-  const selectedEmail = emailId ? experimentEmails[emailId] : null;
-  const emailStats = emailId
-    ? (experimentStats[participantId]?.emails[emailId] as EmailStats)
-    : null;
 
   if (!selectedEmail || !emailStats) {
     return notFound();
@@ -218,9 +219,10 @@ export default function ParticipantEmailStatsOverview({
                     <ChevronDown size={18} />
                   )
                 }
+                disabled={emailStats.replies.length === 0}
                 onClick={() => setRepliesOpen((o) => !o)}
               >
-                Replies
+                {emailStats.replies.length > 0 ? "Replies" : "No Replies"}
               </Button>
               <Collapse in={repliesOpen}>
                 <Box mb="md">

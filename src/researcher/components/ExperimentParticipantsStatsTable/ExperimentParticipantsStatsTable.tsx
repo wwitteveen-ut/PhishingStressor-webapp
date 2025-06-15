@@ -74,6 +74,13 @@ export default function ExperimentParticipantsStatsTable() {
               </Table.Td>
             </Table.Tr>
           ))}
+          {stats.length === 0 && (
+            <Table.Tr>
+              <Table.Td colSpan={4} style={{ textAlign: "center" }}>
+                No participants found
+              </Table.Td>
+            </Table.Tr>
+          )}
         </Table.Tbody>
       </Table>
     </Paper>
