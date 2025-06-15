@@ -11,20 +11,26 @@ async function makeAuthenticatedInternalRequest(
   options: RequestInit = {}
 ) {
   const cookieStore = await cookies();
-  const sessionCookie = cookieStore.get("authjs.session-token")?.value;
-  const session = await auth();
 
+  const regularCookie = cookieStore.get("authjs.session-token");
+  const secureCookie = cookieStore.get("__Secure-authjs.session-token");
+
+  const sessionCookie = regularCookie?.value || secureCookie?.value;
+  const cookieName = regularCookie
+    ? "authjs.session-token"
+    : "__Secure-authjs.session-token";
+
+  const session = await auth();
   if (!session || !sessionCookie) {
     throw new Error("Unauthorized");
   }
 
   const url = getApiUrl(endpoint);
-
   return fetch(url, {
     ...options,
     headers: {
       ...options.headers,
-      Cookie: `authjs.session-token=${sessionCookie}`,
+      Cookie: `${cookieName}=${sessionCookie}`,
       ...(options.body instanceof FormData
         ? {}
         : { "Content-Type": "application/json" }),
