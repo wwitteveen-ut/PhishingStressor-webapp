@@ -6,11 +6,11 @@ import {
   Link,
   Mail,
   MessageCircle,
+  MousePointerClick,
   Paperclip,
   ShieldAlert,
   ShieldUser,
   SquareStack,
-  TextCursor,
   Users,
 } from "lucide-react";
 import ExperimentStatsCard from "../ExperimentStatsCard/ExperimentStatsCard";
@@ -149,7 +149,7 @@ export default function ExperimentGlobalStats() {
     },
     {
       title: "Clicks",
-      icon: TextCursor,
+      icon: MousePointerClick,
       value: totalClicks.toString(),
       diff: 0,
       caption: "General click events",

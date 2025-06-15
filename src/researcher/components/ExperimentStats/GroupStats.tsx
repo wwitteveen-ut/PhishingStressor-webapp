@@ -2,6 +2,7 @@
 import { UserEventType } from "@/mail/store/types";
 import { ExperimentStats, ResearcherEmail } from "@/researcher/store/types";
 import { SimpleGrid } from "@mantine/core";
+import { IconUsersGroup } from "@tabler/icons-react";
 import {
   Clock,
   Link,
@@ -121,7 +122,7 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
   const stats = [
     {
       title: "Group Capacity",
-      icon: Users,
+      icon: IconUsersGroup,
       value: group?.capacity.toString() || "0",
       caption: "Total participants in the group",
     },
