@@ -7,10 +7,8 @@ import {
   MessageCircle,
   MousePointerClick,
   Paperclip,
-  Shield,
   ShieldAlert,
   SquareStack,
-  TextCursor,
 } from "lucide-react";
 import ExperimentStatsCard from "../ExperimentStatsCard/ExperimentStatsCard";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";

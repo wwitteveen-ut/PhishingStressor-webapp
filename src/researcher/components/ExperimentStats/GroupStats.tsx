@@ -11,7 +11,6 @@ import {
   Paperclip,
   ShieldAlert,
   SquareStack,
-  TextCursor,
   Users,
 } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
