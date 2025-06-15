@@ -87,7 +87,7 @@ export default function ExperimentEmailInfo({
             </Stack>
             {email.attachments.length > 0 && (
               <>
-                <Text size="sm" mt="xs" fw={500}>
+                <Text size="sm" mt="xs" fw={600}>
                   Attachments:
                 </Text>
                 {email.attachments.map((attachment) => (
