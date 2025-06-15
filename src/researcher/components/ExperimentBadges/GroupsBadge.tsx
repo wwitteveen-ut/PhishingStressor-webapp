@@ -18,7 +18,7 @@ export default function GroupsBadge({
         label={
           <Group>
             {groups.map((group) => (
-              <Badge radius={"xs"} variant="white" key={group.id}>
+              <Badge radius={"xs"} color="blue" variant="white" key={group.id}>
                 {group.name}
               </Badge>
             ))}

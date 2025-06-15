@@ -4,7 +4,11 @@ import { ResearcherEmail } from "@/researcher/store/types";
 import { ActionIcon, Group, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { Eye, Trash } from "lucide-react";
-import { EmailStatusBadge, GroupsBadge } from "../ExperimentBadges";
+import {
+  AttachmentsBadge,
+  EmailStatusBadge,
+  GroupsBadge,
+} from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailPreview from "../ExperimentEmailPreview";
 
@@ -37,7 +41,7 @@ export default function ExperimentEmailListItem({
 
   const openModal = (email: ResearcherEmail) => {
     modals.open({
-      title: "Email Details",
+      title: "Email Preview",
       size: "xl",
       children: (
         <ExperimentEmailPreview
@@ -74,6 +78,9 @@ export default function ExperimentEmailListItem({
       </Table.Td>
       <Table.Td>
         <Text c="dimmed">{`${email.senderName} (${email.senderAddress})`}</Text>
+      </Table.Td>
+      <Table.Td>
+        <AttachmentsBadge attachments={email.attachments} />
       </Table.Td>
       <Table.Td>
         <Group gap="xs">

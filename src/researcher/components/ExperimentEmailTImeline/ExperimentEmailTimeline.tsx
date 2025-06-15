@@ -42,7 +42,7 @@ export default function ExperimentEmailTimeline({
 
   const openModal = (email: ResearcherEmail) => {
     modals.open({
-      title: "Email Details",
+      title: "Email Preview",
       size: "xl",
       children: (
         <ExperimentEmailPreview

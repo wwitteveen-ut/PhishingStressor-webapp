@@ -12,7 +12,11 @@ import {
 } from "@mantine/core";
 import { IconChevronLeft, IconMail } from "@tabler/icons-react";
 import Link from "next/link";
-import { EmailStatusBadge } from "../ExperimentBadges";
+import {
+  AttachmentsBadge,
+  EmailStatusBadge,
+  GroupsBadge,
+} from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { ParticipantGlobalStats } from "../ExperimentStats";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
@@ -75,7 +79,7 @@ export default function ParticipantDetail({
                   pl="md"
                 >
                   <Group w="100%" gap="sm" align="flex-start">
-                    <Stack gap={0}>
+                    <Stack gap={2}>
                       <Text size="md" fw={600}>
                         {email.title}
                       </Text>
@@ -88,12 +92,26 @@ export default function ParticipantDetail({
                           ? "Immediate"
                           : `${email.scheduledFor} min after login`}
                       </Text>
-                      <Group justify="flex-start">
+                      <Group justify="space-between">
                         <Text size="sm" c="dimmed">
                           Status:
                         </Text>
                         <EmailStatusBadge isPhishing={email.isPhishing} />
                       </Group>
+                      <Group justify="space-between">
+                        <Text size="sm" c="dimmed">
+                          Groups:
+                        </Text>
+                        <GroupsBadge groups={email.groups} />
+                      </Group>
+                      {email.attachments.length > 0 && (
+                        <Group justify="space-between">
+                          <Text size="sm" c="dimmed">
+                            Attachments:
+                          </Text>
+                          <AttachmentsBadge attachments={email.attachments} />
+                        </Group>
+                      )}
                     </Stack>
                   </Group>
                 </Button>

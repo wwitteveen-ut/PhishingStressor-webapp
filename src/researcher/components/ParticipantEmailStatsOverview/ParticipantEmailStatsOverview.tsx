@@ -1,7 +1,7 @@
 "use client";
 
 import { InternalUserEventType, UserEventType } from "@/mail/store/types";
-import { EmailStats } from "@/researcher/store/types";
+import { EmailStats, ResearcherEmail } from "@/researcher/store/types";
 import {
   ActionIcon,
   Box,
@@ -19,6 +19,7 @@ import {
   Title,
   Tooltip,
 } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import {
   ChevronDown,
   ChevronLeft,
@@ -35,6 +36,7 @@ import EmailHeatmapOverlay from "../EmailHeatmapOverlay";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import ExperimentEmailEventsTimeline from "../ExperimentEmailEventsTimeline/ExperimentEmailEventsTimeline";
 import EmailInfo from "../ExperimentEmailInfo";
+import ExperimentEmailPreview from "../ExperimentEmailPreview";
 import { ExperimentEmailStats } from "../ExperimentStats";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
 
@@ -56,9 +58,31 @@ export default function ParticipantEmailStatsOverview({
     ? (experimentStats[participantId]?.emails[emailId] as EmailStats)
     : null;
   const hasReplies = emailStats ? emailStats.replies.length > 0 : false;
-  const [statsOpen, setStatsOpen] = useState(true);
+  const [statsOpen, setStatsOpen] = useState(false);
   const [repliesOpen, setRepliesOpen] = useState(hasReplies);
 
+  const openModal = (email: ResearcherEmail) => {
+    modals.open({
+      title: "Email Preview",
+      size: "xl",
+      children: (
+        <ExperimentEmailPreview
+          emailData={{
+            metadata: {
+              title: email.title,
+              senderName: email.senderName,
+              senderEmail: email.senderAddress,
+              groups: [],
+              content: email.content,
+              isPhishing: false,
+              scheduledFor: 0,
+            },
+            files: [],
+          }}
+        />
+      ),
+    });
+  };
   const emailOptions = Object.entries(experimentEmails).map(
     ([emailId, email]) => ({
       value: emailId,
@@ -164,7 +188,13 @@ export default function ParticipantEmailStatsOverview({
           rightSection={<ChevronDown size={16} />}
         />
         <Tooltip label="View Email">
-          <ActionIcon variant="light" size="lg">
+          <ActionIcon
+            variant="light"
+            size="lg"
+            onClick={() => {
+              openModal(selectedEmail);
+            }}
+          >
             <Eye size={20} />
           </ActionIcon>
         </Tooltip>

@@ -127,7 +127,7 @@ export default function EmailHeatmapOverlay({
   }
 
   return (
-    <Box py="md">
+    <Box py="md" maw="1000px">
       <Group justify="space-between" align="center">
         <Button
           variant={isCollapsed ? "light" : "filled"}

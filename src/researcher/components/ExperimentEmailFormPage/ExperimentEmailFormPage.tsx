@@ -39,6 +39,13 @@ export default function ExperimentEmailFormPage() {
       groups: hasLength({ min: 1 }, "At least one group is required"),
       content: hasLength({ min: 1 }, "Content is required"),
       scheduledFor: isInRange({ min: 0 }, "Schedule time must be non-negative"),
+      files: (files: File[]) => {
+        const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+        const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+        return totalSize <= maxSize
+          ? null
+          : "Total file size must not exceed 10MB";
+      },
     },
     transformValues(values): EmailCreatePayload {
       return {

@@ -12,6 +12,7 @@ import {
   MultiSelect,
   NumberInput,
   Stack,
+  Text,
   TextInput,
   Title,
 } from "@mantine/core";
@@ -72,6 +73,7 @@ export default function ExperimentEmailForm({
                 label="Email Subject"
                 placeholder="e.g. Welcome to Our Service!"
                 required
+                error={form.errors.title}
                 {...form.getInputProps("title")}
               />
               <NumberInput
@@ -79,6 +81,7 @@ export default function ExperimentEmailForm({
                 placeholder="0"
                 min={0}
                 required
+                error={form.errors.scheduledFor}
                 {...form.getInputProps("scheduledFor")}
               />
             </Group>
@@ -88,12 +91,14 @@ export default function ExperimentEmailForm({
                 label="Sender Name"
                 placeholder="e.g. John Doe"
                 required
+                error={form.errors.senderName}
                 {...form.getInputProps("senderName")}
               />
               <TextInput
                 label="Sender Email"
                 placeholder="e.g. john@example.com"
                 required
+                error={form.errors.senderEmail}
                 {...form.getInputProps("senderEmail")}
               />
             </Group>
@@ -104,8 +109,8 @@ export default function ExperimentEmailForm({
               checkIconPosition="right"
               searchable
               nothingFoundMessage="Nothing found..."
+              error={form.errors.groups}
               onChange={(values) => form.setFieldValue("groups", values)}
-              error={form.errors.groups && "At least one group is required"}
             />
 
             <ExperimentEmailComposer form={form} />
@@ -114,32 +119,44 @@ export default function ExperimentEmailForm({
               <Checkbox
                 label="This is a phishing email"
                 checked={form.values.isPhishing}
+                error={form.errors.isPhishing}
                 {...form.getInputProps("isPhishing", { type: "checkbox" })}
               />
-              {form.values.files?.length > 0 ? (
-                <Button
-                  variant="light"
-                  color="red"
-                  onClick={() => form.setFieldValue("files", [])}
-                  leftSection={<X size={16} />}
-                >
-                  Reset Attachments
-                </Button>
-              ) : (
-                <FileButton
-                  onChange={(payload: File[]) =>
-                    form.setFieldValue("files", payload)
-                  }
-                  accept="application/pdf,text/plain,image/png,image/jpeg,image/gif"
-                  multiple
-                >
-                  {(props) => (
-                    <Button {...props} leftSection={<Files size={16} />}>
-                      Select Attachments
-                    </Button>
-                  )}
-                </FileButton>
-              )}
+              <Stack gap="xs">
+                {form.errors.files ? (
+                  <Text fz="sm" c="red">
+                    {form.errors.files}
+                  </Text>
+                ) : (
+                  <Text fz="sm" c="dimmed">
+                    Attachments must be less than 10MB
+                  </Text>
+                )}
+                {form.values.files?.length > 0 ? (
+                  <Button
+                    variant="light"
+                    color="red"
+                    onClick={() => form.setFieldValue("files", [])}
+                    leftSection={<X size={16} />}
+                  >
+                    Reset Attachments
+                  </Button>
+                ) : (
+                  <FileButton
+                    onChange={(payload: File[]) =>
+                      form.setFieldValue("files", payload)
+                    }
+                    accept="application/pdf,text/plain,image/png,image/jpeg,image/gif"
+                    multiple
+                  >
+                    {(props) => (
+                      <Button {...props} leftSection={<Files size={16} />}>
+                        Select Attachments
+                      </Button>
+                    )}
+                  </FileButton>
+                )}
+              </Stack>
             </Group>
             <ExperimentEmailAttachmentList files={form.values.files} />
 
