@@ -41,14 +41,12 @@ export default function EmailView() {
   const handleHoverEnd = useCallback(() => {
     if (currentHoveredLink.current && hoverStartTime.current) {
       const duration = Date.now() - hoverStartTime.current;
-      const linkHref = currentHoveredLink.current.split("-").slice(1).join("-");
 
       if (duration > 50) {
         addComplexEvent(
           UserEventType.LINK_HOVERED,
           JSON.stringify({
-            duration_ms: duration,
-            href: linkHref,
+            duration: duration,
           })
         );
       }

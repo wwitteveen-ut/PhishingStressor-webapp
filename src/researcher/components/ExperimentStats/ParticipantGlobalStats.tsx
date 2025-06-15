@@ -67,6 +67,7 @@ export default function ParticipantGlobalStats({
           totalClicks += 1;
         } else if (event.type === UserEventType.LINK_HOVERED && event.extra) {
           const duration = JSON.parse(event.extra).duration;
+
           if (typeof duration === "number") {
             totalHoverTime += duration;
             hoverCount += 1;

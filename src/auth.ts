@@ -125,7 +125,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           credentials.password as string
         );
         if (!result.success) {
-          console.log("Authentication failed:", result.error);
           throw new InvalidLoginError();
         }
 

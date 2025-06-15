@@ -1,4 +1,4 @@
-import { UserEventType } from "@/mail/store/types";
+import { UserEvent, UserEventType } from "@/mail/store/types";
 import { SimpleGrid, Text } from "@mantine/core";
 import { Clock, Link, MessageCircle } from "lucide-react";
 import ExperimentStatsCard from "../ExperimentStatsCard/ExperimentStatsCard";
@@ -17,24 +17,33 @@ export default function ExperimentEmailStats({
   if (!emailData) {
     return <Text>No data available for email</Text>;
   }
+  
+  function calculateTotalOpenTime(events: UserEvent[]) {
+    const openEvents = events
+      .filter((e) => e.type === UserEventType.TIME_OPENED)
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
+    const closeEvents = events
+      .filter((e) => e.type === UserEventType.TIME_CLOSED)
+      .sort(
+        (a, b) =>
+          new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
 
-  const openEvent = emailData.events.find(
-    (e) => e.type === UserEventType.TIME_OPENED
-  );
-  const closeEvent = emailData.events.find(
-    (e) => e.type === UserEventType.TIME_CLOSED
-  );
-  let timeOpen = "N/A";
-  if (openEvent) {
-    const openTime = new Date(openEvent.timestamp).getTime();
-    const closeTime = closeEvent
-      ? new Date(closeEvent.timestamp).getTime()
-      : openTime + 5 * 60 * 1000;
-    const seconds = Math.round((closeTime - openTime) / 1000);
-    timeOpen =
-      seconds >= 60
-        ? `${Math.floor(seconds / 60)}m ${seconds % 60}s`
-        : `${seconds}s`;
+    let totalTime = 0;
+
+    for (let i = 0; i < Math.min(openEvents.length, closeEvents.length); i++) {
+      const openTime = new Date(openEvents[i].timestamp).getTime();
+      const closeTime = new Date(closeEvents[i].timestamp).getTime();
+
+      if (closeTime >= openTime) {
+        totalTime += closeTime - openTime;
+      }
+    }
+
+    return Math.round(totalTime / 1000);
   }
 
   const replyCount = emailData.replies.length.toString();
@@ -55,7 +64,7 @@ export default function ExperimentEmailStats({
     {
       title: "Time Open",
       icon: Clock,
-      value: timeOpen,
+      value: `${calculateTotalOpenTime(emailData.events)}s`,
       caption: "Duration email was open",
     },
     {
