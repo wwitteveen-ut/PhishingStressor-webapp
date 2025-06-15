@@ -56,10 +56,12 @@ export default function ExperimentEmailEventsTimeline({
                 <Timeline.Item key={index} color={color} bullet={icon}>
                   <Text size="sm">{getEventStyle(event.type).text}</Text>
                   <Text size="xs" c="dimmed">
-                    {new Date(event.timestamp).toLocaleString()}
+                    {new Date(event.timestamp).toDateString()}
                   </Text>
                   {event.type === UserEventType.HEATMAP && (
-                    <Text size="xs">Heatmap points: {event.extra?.length}</Text>
+                    <Text size="xs">
+                      Heatmap points: {JSON.parse(event.extra || "[]").length}
+                    </Text>
                   )}
                 </Timeline.Item>
               );
