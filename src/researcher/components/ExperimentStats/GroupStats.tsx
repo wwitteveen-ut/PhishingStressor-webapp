@@ -56,7 +56,7 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
           totalEmailsOpened += 1;
         }
         totalReplies += email.replies.length;
-        if (phishingEmailIds.has(emailId)) {
+        if (totalReplies > 0 && phishingEmailIds.has(emailId)) {
           compromisedParticipants.add(participantId);
         }
         email.events.forEach((event) => {

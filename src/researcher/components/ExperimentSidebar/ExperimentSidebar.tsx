@@ -71,7 +71,6 @@ export default function ExperimentSidebar() {
           justify="space-between"
           ta={"left"}
           h={60}
-          py={10}
         >
           <Stack gap={0} flex={1}>
             <Text c="dimmed" size="sm">
