@@ -28,7 +28,7 @@ export default function ExperimentEmailList({
       <Table.Tbody>
         {emails.length === 0 ? (
           <Table.Tr>
-            <Table.Td colSpan={8} style={{ textAlign: "center" }}>
+            <Table.Td colSpan={9} style={{ textAlign: "center" }}>
               No emails found
             </Table.Td>
           </Table.Tr>
