@@ -3,8 +3,8 @@ import { getExperimentStats } from "@/researcher/actions/actions";
 import { Button, Group, Paper, Tabs, Title } from "@mantine/core";
 import { Download } from "lucide-react";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
-import ExperimentGlobalStats from "./ExperimentGlobalStats";
-import GroupStats from "./GroupStats";
+import ExperimentGlobalStats from "../ExperimentStats/ExperimentGlobalStats";
+import GroupStats from "../ExperimentStats/GroupStats";
 
 export default function ExperimentStatsPage() {
   const experiment = useExperimentContext();

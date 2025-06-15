@@ -1,9 +1,10 @@
 "use client";
-
 import LinksGroup from "@/shared/components/LinksGroup";
 import {
+  Box,
   Button,
   Divider,
+  Flex,
   Group,
   Paper,
   ScrollArea,
@@ -21,7 +22,7 @@ import {
 import { signOut } from "next-auth/react";
 import { usePathname } from "next/navigation";
 
-interface MenuItem {
+export interface MenuItem {
   label: string;
   icon: LucideIcon;
   initiallyOpened?: boolean;
@@ -31,7 +32,6 @@ interface MenuItem {
 
 export default function ResearcherSidebar() {
   const pathname = usePathname();
-
   const mainMenu: MenuItem[] = [
     {
       label: "Experiments",
@@ -45,53 +45,25 @@ export default function ResearcherSidebar() {
     },
   ];
 
-  const footerComponent = (
-    <>
-      <Divider />
-      <div style={{ padding: "16px" }}>
-        <Button
-          variant="subtle"
-          color="red"
-          fullWidth
-          leftSection={<LogOut size={16} />}
-          onClick={() =>
-            signOut({
-              redirectTo: "/login/researcher",
-            })
-          }
-        >
-          Sign out
-        </Button>
-      </div>
-    </>
-  );
-
   return (
-    <Paper
-      shadow="xs"
-      withBorder
-      style={{
-        minWidth: 256,
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <ResearcherSidebarHeader />
-      <ScrollArea style={{ flex: 1, padding: "8px" }}>
-        {mainMenu.map((item) => (
-          <LinksGroup
-            key={item.label}
-            icon={item.icon}
-            label={item.label}
-            initiallyOpened={item.initiallyOpened}
-            active={pathname === item.mainLink}
-            mainLink={item.mainLink}
-            links={item.links}
-          />
-        ))}
-      </ScrollArea>
-      {footerComponent}
+    <Paper shadow="xs" withBorder miw={256} h="100vh">
+      <Flex direction="column" h="100%">
+        <ResearcherSidebarHeader />
+        <ScrollArea flex={1} p="8px">
+          {mainMenu.map((item) => (
+            <LinksGroup
+              key={item.label}
+              icon={item.icon}
+              label={item.label}
+              initiallyOpened={item.initiallyOpened}
+              active={pathname === item.mainLink}
+              mainLink={item.mainLink}
+              links={item.links}
+            />
+          ))}
+        </ScrollArea>
+        <ResearcherSidebarFooter />
+      </Flex>
     </Paper>
   );
 }
@@ -112,5 +84,28 @@ export function ResearcherSidebarHeader() {
       </Group>
       <Divider />
     </>
+  );
+}
+
+export function ResearcherSidebarFooter() {
+  return (
+    <Box>
+      <Divider />
+      <div style={{ padding: "16px" }}>
+        <Button
+          variant="subtle"
+          color="red"
+          fullWidth
+          leftSection={<LogOut size={16} />}
+          onClick={() =>
+            signOut({
+              redirectTo: "/login/researcher",
+            })
+          }
+        >
+          Sign out
+        </Button>
+      </div>
+    </Box>
   );
 }

@@ -1,1 +1,6 @@
-export { default, ResearcherSidebarHeader } from "./ResearcherSidebar";
+export {
+  default,
+  ResearcherSidebarFooter,
+  ResearcherSidebarHeader,
+  type MenuItem,
+} from "./ResearcherSidebar";

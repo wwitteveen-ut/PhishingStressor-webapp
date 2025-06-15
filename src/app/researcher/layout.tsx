@@ -1,13 +1,17 @@
 import { Role } from "@/auth";
 import { validateUserRoleAndGetSession } from "@/shared/utils/authHelper";
 import { SessionProvider } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  await validateUserRoleAndGetSession(Role.RESEARCHER);
+  const session = await validateUserRoleAndGetSession(Role.RESEARCHER);
+  if (!session) {
+    redirect("/login/researcher");
+  }
 
   return (
     <SessionProvider>
