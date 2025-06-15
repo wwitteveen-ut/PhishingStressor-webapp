@@ -9,7 +9,8 @@ import {
   MessageCircle,
   MousePointerClick,
   Paperclip,
-  Shield,
+  ShieldAlert,
+  SquareStack,
   TextCursor,
   Users,
 } from "lucide-react";
@@ -169,13 +170,13 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
     },
     {
       title: "Total Events",
-      icon: TextCursor,
+      icon: SquareStack,
       value: totalEvents.toString(),
       caption: "All recorded events",
     },
     {
       title: "Phishing Susceptibility",
-      icon: Shield,
+      icon: ShieldAlert,
       value: `${phishingSusceptibility}%`,
       caption:
         "Participants clicking phishing links, downloading attachments, and sending replies",
@@ -183,7 +184,7 @@ export default function GroupStats({ groupId }: GroupStatsProps) {
   ] as const;
 
   return (
-    <SimpleGrid cols={{ base: 1, xs: 3 }}>
+    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, lg: 4 }}>
       {stats.map((stat) => (
         <ExperimentStatsCard
           key={stat.title}

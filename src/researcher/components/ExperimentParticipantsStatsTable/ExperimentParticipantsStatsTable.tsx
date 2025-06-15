@@ -2,6 +2,7 @@
 
 import { IGroup, ParticipantStats } from "@/researcher/store/types";
 import { Button, Paper, Table } from "@mantine/core";
+import { Eye } from "lucide-react";
 import Link from "next/link";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
@@ -31,11 +32,11 @@ export default function ExperimentParticipantsStatsTable() {
   );
 
   return (
-    <Paper p="lg" shadow="md" radius={"sm"}>
-      <Table striped highlightOnHover>
+    <Paper p="lg" shadow="xs" radius="sm" withBorder>
+      <Table striped withRowBorders={true} verticalSpacing="sm">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Participant</Table.Th>
+            <Table.Th>Participant ID</Table.Th>
             <Table.Th>Logged In At</Table.Th>
             <Table.Th>Group</Table.Th>
             <Table.Th ta="right">Details</Table.Th>
@@ -46,26 +47,27 @@ export default function ExperimentParticipantsStatsTable() {
             <Table.Tr key={stat.participantId}>
               <Table.Td>{stat.participantId}</Table.Td>
               <Table.Td>
-                {new Date(stat.loggedIn).toLocaleDateString("en-EN", {
-                  weekday: "long",
+                {new Date(stat.loggedIn).toLocaleDateString("en-US", {
+                  weekday: "short",
                   year: "numeric",
-                  month: "long",
+                  month: "short",
                   day: "numeric",
-                })}{" "}
-                at{" "}
-                {new Date(stat.loggedIn).toLocaleTimeString("en-EN", {
+                })}
+                {", "}
+                {new Date(stat.loggedIn).toLocaleTimeString("en-US", {
                   hour: "2-digit",
                   minute: "2-digit",
                   hour12: false,
                 })}
               </Table.Td>
               <Table.Td>{stat.group.name}</Table.Td>
-              <Table.Td align="right">
+              <Table.Td ta="right">
                 <Button
                   component={Link}
                   href={`/researcher/experiments/${experiment.id}/statistics/participants/${stat.participantId}`}
-                  variant="outline"
+                  variant="light"
                   size="xs"
+                  leftSection={<Eye size={16} />}
                 >
                   View Details
                 </Button>

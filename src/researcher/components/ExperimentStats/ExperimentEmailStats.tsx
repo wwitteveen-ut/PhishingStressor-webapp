@@ -56,21 +56,18 @@ export default function ExperimentEmailStats({
       title: "Time Open",
       icon: Clock,
       value: timeOpen,
-      diff: 0,
       caption: "Duration email was open",
     },
     {
       title: "Replies",
       icon: MessageCircle,
       value: replyCount,
-      diff: 0,
       caption: "Responses sent",
     },
     {
       title: "Interactions",
       icon: Link,
       value: interactionCount,
-      diff: 0,
       caption: "Clicks, hovers, downloads",
     },
   ] as const;

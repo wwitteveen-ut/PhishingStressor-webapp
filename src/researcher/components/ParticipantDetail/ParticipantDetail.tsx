@@ -14,8 +14,8 @@ import { IconChevronLeft, IconMail } from "@tabler/icons-react";
 import Link from "next/link";
 import { EmailStatusBadge } from "../ExperimentBadges";
 import { useExperimentContext } from "../ExperimentContext/ExperimentContext";
+import { ParticipantGlobalStats } from "../ExperimentStats";
 import { useExperimentStatsContext } from "../ExperimentStatsContext/ExperimentStatsContext";
-import { ParticipantGlobalStats } from "../ExperimentStatsPage";
 
 export default function ParticipantDetail({
   participantId,

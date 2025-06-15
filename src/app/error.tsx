@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Container, Group, Text, Title } from "@mantine/core";
+import { Button, Group, Stack, Text, Title } from "@mantine/core";
 import { useEffect } from "react";
 
 export default function Error({
@@ -15,11 +15,12 @@ export default function Error({
   }, [error]);
 
   return (
-    <Container size="sm" py="xl">
-      <Title order={1} ta="center" mb="xl">
+    <Stack flex={1} gap={0} h="100vh" justify="center">
+      <Title order={1} ta="center" mb="xl" c="blue.6">
         Something went wrong!
       </Title>
-      <Text c="dimmed" size="lg" ta="center" mb="xl">
+      <Text c="red" size="lg" ta="center" mb="xl">
+        <span style={{ fontWeight: 600 }}>Error:</span>{" "}
         {error.message || "An unexpected error occurred"}
       </Text>
       <Group justify="center">
@@ -30,6 +31,6 @@ export default function Error({
           Go back home
         </Button>
       </Group>
-    </Container>
+    </Stack>
   );
 }

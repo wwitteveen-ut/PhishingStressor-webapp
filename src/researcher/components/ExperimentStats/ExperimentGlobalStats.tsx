@@ -7,7 +7,9 @@ import {
   Mail,
   MessageCircle,
   Paperclip,
-  Shield,
+  ShieldAlert,
+  ShieldUser,
+  SquareStack,
   TextCursor,
   Users,
 } from "lucide-react";
@@ -168,21 +170,21 @@ export default function ExperimentGlobalStats() {
     },
     {
       title: "Total Events",
-      icon: TextCursor,
+      icon: SquareStack,
       value: totalEvents.toString(),
       diff: 0,
       caption: "All recorded events",
     },
     {
       title: "Phishing Interaction Rate",
-      icon: Shield,
+      icon: ShieldAlert,
       value: `${phishingInteractionRate}%`,
       diff: 0,
       caption: "Phishing emails with link clicks or attachments opened",
     },
     {
       title: "Participants with Phishing Interaction",
-      icon: Shield,
+      icon: ShieldUser,
       value: `${participantPhishingInteractionRate}%`,
       diff: 0,
       caption: "Participants who interacted with phishing emails",
@@ -197,7 +199,7 @@ export default function ExperimentGlobalStats() {
   ] as const;
 
   return (
-    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, md: 4, lg: 5 }}>
+    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, lg: 4 }}>
       {stats.map((stat) => (
         <ExperimentStatsCard
           key={stat.title}

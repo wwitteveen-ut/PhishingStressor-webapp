@@ -8,6 +8,8 @@ import {
   MousePointerClick,
   Paperclip,
   Shield,
+  ShieldAlert,
+  SquareStack,
   TextCursor,
 } from "lucide-react";
 import ExperimentStatsCard from "../ExperimentStatsCard/ExperimentStatsCard";
@@ -108,62 +110,54 @@ export default function ParticipantGlobalStats({
       title: "Emails Opened",
       icon: Mail,
       value: totalEmailsOpened.toString(),
-      diff: 0,
       caption: "Total emails viewed",
     },
     {
       title: "Replies Sent",
       icon: MessageCircle,
       value: totalReplies.toString(),
-      diff: 0,
       caption: "Responses to emails",
     },
     {
       title: "Link Clicks",
       icon: Link,
       value: totalLinkClicks.toString(),
-      diff: 0,
       caption: "Clicked links in emails",
     },
     {
       title: "Clicks",
       icon: MousePointerClick,
       value: totalClicks.toString(),
-      diff: 0,
       caption: "General click events",
     },
     {
       title: "Attachments",
       icon: Paperclip,
       value: totalAttachments.toString(),
-      diff: 0,
       caption: "Downloaded attachments",
     },
     {
       title: "Avg Hover Time",
       icon: Clock,
       value: `${avgHoverTime}s`,
-      diff: 0,
       caption: "Average link hover duration",
     },
     {
       title: "Total Events",
-      icon: TextCursor,
+      icon: SquareStack,
       value: totalEvents.toString(),
-      diff: 0,
       caption: "All recorded events",
     },
     {
       title: "Phishing Interaction Rate",
-      icon: Shield,
+      icon: ShieldAlert,
       value: `${phishingInteractionRate}%`,
-      diff: 0,
       caption: "Phishing emails with link clicks or attachments opened",
     },
   ] as const;
 
   return (
-    <SimpleGrid cols={{ base: 3, xs: 3, sm: 3, md: 4, lg: 6, xl: 6 }}>
+    <SimpleGrid cols={{ base: 1, xs: 2, sm: 3, lg: 4 }}>
       {stats.map((stat) => (
         <ExperimentStatsCard
           key={stat.title}
