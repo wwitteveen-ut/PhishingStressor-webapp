@@ -55,7 +55,10 @@ export default function ExperimentListItem({
         <Text fw={500} size="lg" truncate>
           {experiment.name}
         </Text>
-        <Badge color="blue">{experiment.duration} minutes</Badge>
+        <Badge color="blue">
+          {experiment.duration}
+          {experiment.duration === 1 ? " minute" : " minutes"}
+        </Badge>
       </Group>
       <Stack gap="md">
         <div>
