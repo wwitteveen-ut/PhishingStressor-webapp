@@ -171,6 +171,13 @@ export const createParticipantSlice: StateCreator<
   processEventBatch: async (emailId: string) => {
     const state = get();
 
+    if (state.heatmapData.length > 0) {
+      state.addComplexEvent(
+        UserEventType.HEATMAP,
+        JSON.stringify(state.heatmapData)
+      );
+    }
+
     if (state.isProcessingEvents || state.userEvents.length === 0) {
       return;
     }

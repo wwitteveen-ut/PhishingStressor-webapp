@@ -14,7 +14,7 @@ async function EmailClientContainer() {
 
   return (
     <SessionProvider>
-      <EmailClient emails={emails} initialUsername={session.user?.username} />
+      <EmailClient emails={emails} />
     </SessionProvider>
   );
 }

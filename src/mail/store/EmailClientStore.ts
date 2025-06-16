@@ -28,7 +28,6 @@ const createEmailClientStore = () =>
             partialize: (state) =>
               ({
                 ...initialEmailClientState,
-                username: state.username,
                 emailProperties: state.emailProperties,
               } as EmailClientState),
           }
