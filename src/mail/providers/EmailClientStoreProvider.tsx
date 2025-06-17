@@ -30,8 +30,6 @@ export const EmailClientStoreProvider = ({
   }
 
   useEffect(() => {
-    const FLUSH_INTERVAL_MS = 15_000;
-
     const interval = setInterval(() => {
       const store = storeRef.current;
       if (!store) return;
@@ -44,7 +42,7 @@ export const EmailClientStoreProvider = ({
       ) {
         state.processEventBatch(state.selectedEmailId);
       }
-    }, FLUSH_INTERVAL_MS);
+    }, 15 * 1000);
 
     const handleUnload = () => {
       const store = storeRef.current;
