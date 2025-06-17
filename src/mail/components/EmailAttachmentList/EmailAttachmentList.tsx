@@ -1,10 +1,15 @@
-import { EmailAttachmentListProps } from "./types";
+import { EmailAttachmentData } from "@/mail/store/types";
 import EmailAttachmentListItem from "../EmailAttachmentListItem";
+
+interface IEmailAttachmentListProps {
+  emailId: string;
+  attachments: EmailAttachmentData[];
+}
 
 export default function EmailAttachmentList({
   emailId,
   attachments,
-}: EmailAttachmentListProps) {
+}: IEmailAttachmentListProps) {
   if (!attachments || attachments.length === 0) {
     return null;
   }

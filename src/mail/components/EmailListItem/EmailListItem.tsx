@@ -12,13 +12,15 @@ import { htmlToText } from "html-to-text";
 import { Paperclip, Trash, Undo } from "lucide-react";
 import classes from "./EmailListItem.module.css";
 
+interface IEmailListItemProps {
+  email: ZustandEmail;
+  isSelected: boolean;
+}
+
 export default function EmailListItem({
   email,
   isSelected,
-}: {
-  email: ZustandEmail;
-  isSelected: boolean;
-}) {
+}: IEmailListItemProps) {
   const selectEmailId = useEmailClientStore((state) => state.selectEmailId);
   const toggleEmailTrashed = useEmailClientStore(
     (state) => state.toggleEmailTrashed

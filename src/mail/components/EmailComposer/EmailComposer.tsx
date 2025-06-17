@@ -3,7 +3,7 @@
 import { CloseButton, Textarea } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form";
 
-interface EmailComposerProps {
+interface IEmailComposerProps {
   replyTo: string;
   form: UseFormReturnType<{ content: string }>;
   onCancel?: () => void;
@@ -13,7 +13,7 @@ export default function EmailComposer({
   replyTo,
   form,
   onCancel,
-}: EmailComposerProps) {
+}: IEmailComposerProps) {
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <div className="bg-gray-50 px-4 py-3 border-b border-gray-200">

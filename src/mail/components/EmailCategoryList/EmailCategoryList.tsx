@@ -1,12 +1,12 @@
 "use client";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
-import { Badge, Group, NavLink, ThemeIcon, Text, Stack } from "@mantine/core";
+import { Badge, Group, NavLink, Stack, Text, ThemeIcon } from "@mantine/core";
 import { InboxIcon, TrashIcon } from "lucide-react";
 
 export default function EmailCategoryList() {
   const selectCategory = useEmailClientStore((state) => state.selectCategory);
   const selectedCategory = useEmailClientStore(
-    (state) => state.selectedCategory,
+    (state) => state.selectedCategory
   );
   const unreadCount = useEmailClientStore((state) => state.getUnreadCount());
 

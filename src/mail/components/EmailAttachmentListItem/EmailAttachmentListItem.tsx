@@ -1,6 +1,6 @@
 import { downloadAttachment } from "@/mail/actions/actions";
 import { useEmailClientStore } from "@/mail/providers/EmailClientStoreProvider";
-import { UserEventType } from "@/mail/store/types";
+import { EmailAttachmentData, UserEventType } from "@/mail/store/types";
 import {
   Loader,
   MantineColorsTuple,
@@ -9,12 +9,16 @@ import {
 } from "@mantine/core";
 import { DownloadIcon } from "lucide-react";
 import { useState } from "react";
-import { EmailAttachmentListItemProps } from "./types";
+
+interface IEmailAttachmentListItemProps {
+  emailId: string;
+  attachmentData: EmailAttachmentData;
+}
 
 export default function EmailAttachmentListItem({
   emailId,
   attachmentData,
-}: EmailAttachmentListItemProps) {
+}: IEmailAttachmentListItemProps) {
   const theme = useMantineTheme();
   const [isDownloading, setIsDownloading] = useState(false);
   const { filename } = attachmentData;

@@ -7,7 +7,7 @@ import { Button, Container, Group, Text, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { Check, ReplyIcon, Send } from "lucide-react";
-import EmailComposer from "../EmailComposer/EmailComposer";
+import EmailComposer from "../EmailComposer";
 
 export default function EmailReplySection({ email }: { email: ZustandEmail }) {
   const isReplying = useEmailClientStore((state) => state.isReplying);

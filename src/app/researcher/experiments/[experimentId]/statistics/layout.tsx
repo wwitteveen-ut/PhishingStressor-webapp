@@ -1,4 +1,7 @@
-import { getExperimentEmails, getExperimentStats } from "@/researcher/actions/actions";
+import {
+  getExperimentEmails,
+  getExperimentStats,
+} from "@/researcher/actions/actions";
 import { ExperimentStatsProvider } from "@/researcher/components/ExperimentStatsContext/ExperimentStatsContext";
 import { ReactNode } from "react";
 
@@ -13,7 +16,10 @@ export default async function Layout({
   const experimentStats = await getExperimentStats(experimentId);
   const experimentEmails = await getExperimentEmails(experimentId);
   return (
-    <ExperimentStatsProvider experimentStats={experimentStats} experimentEmails={experimentEmails}>
+    <ExperimentStatsProvider
+      experimentStats={experimentStats}
+      experimentEmails={experimentEmails}
+    >
       {children}
     </ExperimentStatsProvider>
   );

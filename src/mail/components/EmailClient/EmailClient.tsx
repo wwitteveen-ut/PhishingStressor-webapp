@@ -9,7 +9,11 @@ import EmailList from "../EmailList";
 import EmailView from "../EmailView";
 import RefreshButton from "../RefreshButton";
 
-export function EmailClient({ emails = [] }: { emails: ZustandEmail[] }) {
+export interface IEmailClientProps {
+  emails: ZustandEmail[];
+}
+
+export function EmailClient({ emails = [] }: IEmailClientProps) {
   const setEmails = useEmailClientStore((state) => state.setEmails);
   const processEventBatch = useEmailClientStore(
     (state) => state.processEventBatch

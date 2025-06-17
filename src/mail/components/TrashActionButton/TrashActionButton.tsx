@@ -1,4 +1,4 @@
-import { Tooltip, ActionIcon } from "@mantine/core";
+import { ActionIcon, Tooltip } from "@mantine/core";
 import { Trash, Undo } from "lucide-react";
 
 interface ITrashActionButtonProps {
