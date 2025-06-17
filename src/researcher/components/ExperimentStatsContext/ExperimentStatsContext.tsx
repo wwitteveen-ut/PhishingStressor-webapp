@@ -3,12 +3,13 @@
 import { ExperimentStats, ResearcherEmail } from "@/researcher/store/types";
 import { createContext, useContext, useMemo } from "react";
 
-const ExperimentStatsContext = createContext<{
-  experimentStats: ExperimentStats;
-  experimentEmails: Record<string, ResearcherEmail>;
-} | undefined>(
-  undefined
-);
+const ExperimentStatsContext = createContext<
+  | {
+      experimentStats: ExperimentStats;
+      experimentEmails: Record<string, ResearcherEmail>;
+    }
+  | undefined
+>(undefined);
 
 type ExperimentProviderProps = {
   children: React.ReactNode;
@@ -20,14 +21,16 @@ export const ExperimentStatsProvider = ({
   children,
   experimentStats,
   experimentEmails,
-}: ExperimentProviderProps) => {  
+}: ExperimentProviderProps) => {
   const experimentEmailsDict = useMemo(() => {
     return Object.fromEntries(
-      experimentEmails.map(email => [email.id, email])
+      experimentEmails.map((email) => [email.id, email])
     );
   }, [experimentEmails]);
   return (
-    <ExperimentStatsContext value={{ experimentStats, experimentEmails: experimentEmailsDict }}>
+    <ExperimentStatsContext
+      value={{ experimentStats, experimentEmails: experimentEmailsDict }}
+    >
       {children}
     </ExperimentStatsContext>
   );

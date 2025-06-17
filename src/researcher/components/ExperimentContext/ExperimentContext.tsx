@@ -22,7 +22,7 @@ export const useExperimentContext = () => {
 
   if (!context) {
     throw new Error(
-      "useExperimentContext must be used within an ExperimentProvider",
+      "useExperimentContext must be used within an ExperimentProvider"
     );
   }
 

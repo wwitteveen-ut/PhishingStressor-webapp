@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  Text,
+  ActionIcon,
   Group,
   MantineColorsTuple,
   Paper,
+  Text,
   Title,
   useMantineTheme,
-  ActionIcon,
 } from "@mantine/core";
 import { Download } from "lucide-react";
 

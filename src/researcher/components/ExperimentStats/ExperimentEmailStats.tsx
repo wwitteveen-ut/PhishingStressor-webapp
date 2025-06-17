@@ -17,7 +17,7 @@ export default function ExperimentEmailStats({
   if (!emailData) {
     return <Text>No data available for email</Text>;
   }
-  
+
   function calculateTotalOpenTime(events: UserEvent[]) {
     const openEvents = events
       .filter((e) => e.type === UserEventType.TIME_OPENED)

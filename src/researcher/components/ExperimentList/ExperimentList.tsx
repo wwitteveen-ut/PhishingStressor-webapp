@@ -1,7 +1,7 @@
 import { Experiment } from "@/researcher/store/types";
-import ExperimentListItem from "../ExperimentListItem";
 import { Group, SimpleGrid, Stack, Title } from "@mantine/core";
 import { ExperimentForm } from "../ExperimentForm";
+import ExperimentListItem from "../ExperimentListItem";
 
 export default function ExperimentList({
   experiments,
