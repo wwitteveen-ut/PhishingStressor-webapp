@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+title: PhishingStressor-interface
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Wessel
+    family-names: Witteveen
+repository-code: >-
+  https://github.com/wwitteveen-ut/PhishingStressor-webapp.git
+abstract: >-
+  Phishing remains a widespread cyber threat, highlighting
+  the need for research environments that capture realistic
+  user behaviour to enhance tools to combat the issue.
+  Existing methods, such as surveys and quizzes, often fall
+  short because participants are aware that they are being
+  studied, leading to unnatural responses. This paper
+  presents a novel artifact to address these issues: a
+  scenario-based phishing simulation interface developed as
+  a TypeScript-based Next.js web application named
+  PhishingStressor, to be combined with the backend of a
+  separately created artifact. Following the Design Science
+  Methodology, an artifact is described featuring a
+  minimalist email client interface inspired by modern web
+  clients, offering a recognizable and comfortable
+  environment for participants. It enables researchers to
+  design and manage experiments with randomized control
+  groups and provides visualization tools to analyse user
+  behaviour.
+keywords:
+  - cybersecurity
+  - design science research
+  - phishing simulation
+  - user interface
+version: 1.0.0
