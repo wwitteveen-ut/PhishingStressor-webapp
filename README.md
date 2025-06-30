@@ -35,12 +35,12 @@ A Next.js-based web application for conducting and managing phishing research ex
 
 ## Development Setup
 
-1. Copy `.env.example` to `.env` and fill in the required environment variables.
-
-2. Install dependencies:
+1. Install dependencies:
    ```bash
    npm install
    ```
+
+2. Copy `.env.example` to `.env` and fill in the required environment variables.
 
 3. Run the development server:
    ```bash
