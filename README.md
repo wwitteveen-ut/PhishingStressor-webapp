@@ -37,24 +37,24 @@ A Next.js-based web application for conducting and managing phishing research ex
 
 1. Install dependencies:
    ```bash
-   npm install
+   yarn install
    ```
 
 2. Copy `.env.example` to `.env` and fill in the required environment variables.
 
 3. Run the development server:
    ```bash
-   npm run dev
+   yarn dev
    ```
 
 4. To build the project for production:
    ```bash
-   npm run build
+   yarn build
    ```
 
 5. To start the production server after building:
    ```bash
-   npm start
+   yarn start
    ```
 
 ## Technology Stack
